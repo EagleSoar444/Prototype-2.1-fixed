@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>VT Tracer Prototype v4.4.9.2 GitHub Load Fix</title>
+<title>VT Tracer Prototype v4.5 Command Architecture Reorg</title>
 <style>
 :root{--bg:#0f1510;--deep:#0b0f0b;--panel:#1a211b;--panel2:#202920;--border:#394339;--orange:#ff7a1a;--olive:#556b2f;--tan:#f4f1e8;--muted:#b4b0a2;--red:#ff4d2e;--blue:#6ba8ff;--purple:#b48cff}
 *{box-sizing:border-box}body{margin:0;font-family:Arial,system-ui,sans-serif;background:linear-gradient(135deg,#0f1510,#171d16);color:var(--tan);display:grid;grid-template-columns:280px 1fr;min-height:100vh}button,input,select,textarea{font:inherit}
@@ -1188,11 +1188,23 @@ padding:10px;
 .bootFallback{border:1px solid rgba(255,122,26,.55);border-radius:18px;background:rgba(255,122,26,.08);padding:14px;margin-bottom:18px}
 .githubLoadNote{font-size:12px;color:var(--muted)}
 
+
+.commandHubTabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.commandHubTabs button{border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--muted);border-radius:999px;padding:10px 14px;cursor:pointer}
+.commandHubTabs button.active{background:var(--orange);color:#15120d;border-color:var(--orange);font-weight:900}
+.architectureNotice{border:1px solid rgba(255,122,26,.55);border-radius:18px;background:rgba(255,122,26,.07);padding:14px;margin-bottom:18px}
+.architectureGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px}
+.architectureCard{border:1px solid var(--border);border-radius:16px;background:rgba(255,255,255,.04);padding:14px}
+.architectureCard strong{display:block;color:var(--orange);font-size:20px}
+.hunterCenterFocus{border:1px solid rgba(107,168,255,.45);border-radius:18px;background:rgba(107,168,255,.08);padding:14px;margin-bottom:18px}
+@media(max-width:950px){.architectureGrid{grid-template-columns:1fr 1fr}}
+@media(max-width:650px){.architectureGrid{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
 <aside class="sidebar">
-<div class="brand"><div class="logo">VT</div><div><strong>VenariTrace</strong><br><small>Prototype v4.4.9.2 GitHub Load Fix</small></div></div>
+<div class="brand"><div class="logo">VT</div><div><strong>VenariTrace</strong><br><small>Prototype v4.5 Command Architecture Reorg</small></div></div>
 <nav class="nav" id="nav"></nav>
 </aside>
 <main class="main" id="main"></main>
@@ -1206,25 +1218,29 @@ padding:10px;
 <nav class="bottom" id="bottom"></nav>
 <script>
 (function(){
-var simDistance=250;var simWind=6;var shotPopupOpen=false;var page="command";var propertySub="overview";var previousPage="command";var pageHistory=["command"];var quickOpen=false;var harvestRecordCreated=false;var ballisticMode="quick";var trackStatus="not_started";var standSub="overview";var hunterSub="overview";var hcmSub="overview";var sosConfirm=false;var sosActive=false;var trackingActive=false;var activeSub="command";var settingsSub="profile";
+var simDistance=250;var simWind=6;var shotPopupOpen=false;var commandSub="dashboard";var page="command";var propertySub="overview";var previousPage="command";var pageHistory=["command"];var quickOpen=false;var harvestRecordCreated=false;var ballisticMode="quick";var trackStatus="not_started";var standSub="overview";var hunterSub="overview";var hcmSub="overview";var sosConfirm=false;var sosActive=false;var trackingActive=false;var activeSub="command";var settingsSub="profile";
 var activePrefs={map:true,weather:true,feed:true,comms:true,ballistics:true,dope:true,media:true,alerts:true,graphs:true};
 var nav=[
-["command","Command Suite","COMMAND"],["feedHistory","Event Feed History","COMMAND"],["stabilize","Stabilization","COMMAND"],["refine","Operational Refinement","COMMAND"],
-["hunt","Hunt Command Manager","HUNT OPERATIONS"],
-["active","Active Hunt View","HUNT OPERATIONS"],["safety","SOS / Tracking","HUNT OPERATIONS"],
-["scouting","Scouting Mode","HUNT OPERATIONS"],
-["harvest","Harvest Suite","HUNT OPERATIONS"],
-["calendar","Calendar","HUNT OPERATIONS"],
-["intel","Intel & Collections","INTEL & AI"],
-["aiCamera","AI Camera Lab","INTEL & AI"],["deerIntel","Deer Intelligence","INTEL & AI"],
-["weather","Weather & Maps","MAPS & WEATHER"],
-["ballistics","Ballistic Suite","BALLISTICS"],
-["gallery","Media Vault","MEDIA"],["storage","Storage Vault","MEDIA"],
-["hunter","Hunter Center","HUNTERS"],
-["property","Property Suite","PROPERTY HQ"],["stands","Stand Management","PROPERTY HQ"],
-["comms","Communication","COMMUNICATIONS"],
-["seasons","Season Archive","ARCHIVES & REPORTS"],
-["reports","Reports","ARCHIVES & REPORTS"]
+["command","Command Suite","COMMAND"],
+["architecture","Architecture","COMMAND"],
+["hunt","Hunt Operations","HUNT OPERATIONS"],
+["active","Active Hunt","HUNT OPERATIONS"],
+["scouting","Scouting","HUNT OPERATIONS"],
+["safety","Tracking / SOS","HUNT OPERATIONS"],
+["harvest","Harvests","HUNT OPERATIONS"],
+["intel","AI Intel","INTEL & COLLECTIONS"],
+["aiCamera","Camera Intelligence","INTEL & COLLECTIONS"],
+["deerIntel","Deer Intelligence","INTEL & COLLECTIONS"],
+["feedHistory","Feed History","INTEL & COLLECTIONS"],
+["weather","Weather & Maps","WEATHER & MAPS"],
+["ballistics","Ballistics","BALLISTICS"],
+["property","Property Suite","PROPERTY"],
+["stands","Stand Management","PROPERTY"],
+["gallery","Media Vault","MEDIA VAULT"],
+["storage","Storage Vault","MEDIA VAULT"],
+["hunter","Hunter Center","HUNTER CENTER"],
+["seasons","Season Archive","ARCHIVES"],
+["reports","Reports","ARCHIVES"]
 ];
 var events=[["SPYPOINT Buck Alert","Split G2 detected near East Plot camera. Confidence 88%.","critical","6:42 AM","SPYPOINT · Target Buck"],["Command Cam Motion","Motion flagged at Creek Trail.","high","6:58 AM","Command Cam"],["Wind Shift Warning","Wind drifting toward lower access road.","high","7:02 AM","Weather"],["Live Sighting","Hunter 2 marked two does crossing Creek Trail.","info","7:11 AM","Sighting"],["Property Alert","Feeder refill is overdue.","high","8:04 AM","Property"],["Weather Warning","Wind shift advisory affecting stand selection.","high","8:12 AM","Weather Alert · Wind"],["SOS/Recovery Ready","SOS and Track Animal tools available in Active Hunt.","critical","8:18 AM","Safety · Recovery"],["Stand Needs Attention","North Box marked for maintenance/supplies issue.","high","8:24 AM","Stand Management"],["Harvest Record Created","Tracking outcome marked harvested and routed to Harvest Suite.","high","8:31 AM","Harvest · Tracking"],["Hit List Updated","Split G2 removed from active hit list and moved to Trophy Gallery.","high","8:34 AM","Hit List · Harvest"]];
 function esc(x){return String(x==null?"":x).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#039;",'"':"&quot;"}[c]||c})}
@@ -1313,11 +1329,11 @@ function scoutingMap(){
 return '<div class="map"><div class="windCone"></div><span class="pin hunterPin" style="left:23%;top:26%">Hunter 1</span><span class="pin sightPin" style="left:50%;top:56%">Deer Sighting</span><span class="pin scrapePin" style="left:43%;top:44%">Fresh Scrape</span><span class="pin rubPin" style="left:35%;top:62%">Large Rub</span><span class="pin hazardPin" style="left:62%;top:72%">Hazard</span><span class="pin notePin" style="left:74%;top:38%">Field Note</span><span class="pin" style="left:68%;top:65%">SPYPOINT</span></div>';
 }
 function scoutingMode(){
-return header("Scouting Mode","Manual Sightings, Deer Sign, Hazards, Notes & Map Intelligence","Log deer sightings, rubs, scrapes, tracks, bedding, food activity, hazards, property notes, and scouting observations. Records can become map layers, Intel events, Hunt Command alerts, or Property tasks.")+
+return header("Scouting Mode","Manual Sightings, Deer Sign, Hazards, Notes & Map Intelligence","Log deer sightings, rubs, scrapes, tracks, bedding, food activity, hazards, property notes, and scouting observations. Records can become map layers, Intel events, Hunt Operations alerts, or Property tasks.")+
 '<section class="scoutTypeGrid"><div class="scoutType"><strong>Deer</strong>Sighting</div><div class="scoutType"><strong>Rub</strong>Tree Sign</div><div class="scoutType"><strong>Scrape</strong>Ground Sign</div><div class="scoutType"><strong>Track</strong>Trail / Crossing</div><div class="scoutType"><strong>Bed</strong>Bedding Area</div><div class="scoutType"><strong>Hazard</strong>Safety / Access</div><div class="scoutType"><strong>Note</strong>Field Observation</div><div class="scoutType"><strong>Photo</strong>Manual Upload</div></section>'+
 '<section class="grid2"><div class="card"><h2>Manual Scouting Entry</h2><select><option>Type: Deer Sighting</option><option>Type: Rub</option><option>Type: Scrape</option><option>Type: Track</option><option>Type: Bedding Area</option><option>Type: Hazard</option><option>Type: Property Note</option></select><select><option>Species: Whitetail Buck</option><option>Doe</option><option>Turkey</option><option>Predator</option><option>Unknown</option></select><input placeholder="Location / stand / map pin label"><input placeholder="Date and time"><input placeholder="Wind / weather snapshot"><textarea placeholder="Notes: direction of travel, deer count, buck description, scrape freshness, rub size, hazard details, access notes"></textarea><button class="badge">Save Scouting Record Placeholder</button></div><div class="card"><h2>Attach To System</h2><div class="row">Create Intel Event</div><div class="row">Add to Map Layer</div><div class="row">Link to Deer Profile / Hit List</div><div class="row">Attach to Active Hunt</div><div class="row">Create Property Task if hazard or maintenance issue</div><div class="row">Use in Hunt Prediction Model</div><button class="badge2">Share With Active Hunters</button></div></section>'+
 '<section class="grid2"><div class="card"><h2>Scouting Map Layers</h2>'+scoutingMap()+'</div><div class="card"><h2>Scouting Timeline</h2><div class="timeline"><div class="row"><strong>7:11 AM · Deer Sighting</strong><br><small class="muted">Two does crossing Creek Trail · E wind · Hunter 2</small></div><div class="row"><strong>Yesterday · Fresh Scrape</strong><br><small class="muted">North Ridge trail junction · added to Intel</small></div><div class="row"><strong>Nov 2 · Large Rub</strong><br><small class="muted">West oak flat · likely mature buck travel route</small></div><div class="row"><strong>Oct 29 · Hazard</strong><br><small class="muted">Creek crossing washout · property task created</small></div></div></div></section>'+
-'<section class="grid2"><div class="card"><h2>Scouting Analysis</h2>'+line()+'</div><div class="card"><h2>Suite Integration</h2><div class="row">Intel & Collections: scouting sign improves prediction model.</div><div class="row">Weather & Maps: scouting records become map layers.</div><div class="row">Hunt Command: live sightings can feed active hunt display.</div><div class="row">Property Suite: hazards can create tasks.</div><div class="row">AI Camera Lab: manual sightings can match deer labels and hit list profiles.</div></div></section>';
+'<section class="grid2"><div class="card"><h2>Scouting Analysis</h2>'+line()+'</div><div class="card"><h2>Suite Integration</h2><div class="row">Intel & Collections: scouting sign improves prediction model.</div><div class="row">Weather & Maps: scouting records become map layers.</div><div class="row">Hunt Operations: live sightings can feed active hunt display.</div><div class="row">Property Suite: hazards can create tasks.</div><div class="row">AI Camera Lab: manual sightings can match deer labels and hit list profiles.</div></div></section>';
 }
 function liveSightingPanel(){
 return '<section class="grid2"><div class="card"><h2>Log Manual Sighting During Active Hunt</h2><select><option>Deer Sighting</option><option>Buck Sighting</option><option>Doe Group</option><option>Turkey</option><option>Predator</option><option>Rub / Scrape / Track</option><option>Hazard / Safety Issue</option></select><input placeholder="Location / stand / map pin"><input placeholder="Time observed"><select><option>Share with active hunt</option><option>Keep private</option><option>Send to Intel only</option><option>Create property task</option></select><textarea placeholder="Details: direction, distance, behavior, deer description, photos, weather notes"></textarea><button class="badge">Save Live Sighting Placeholder</button></div><div class="card"><h2>Live Map Transfer</h2>'+scoutingMap()+'<p class="muted">Manual sightings become map pins, Intel events, and active hunt feed items.</p></div></section>';
@@ -1521,7 +1537,7 @@ return '<section class="grid2"><div class="card"><h2>Apply Intel Output</h2><div
 
 
 function advancedCommsSuite(){
-return header("Communication Suite","Channels, Message Threads, Streams, Retention, Timers & Alerts","Build individual or group channels, view full message strings, save/edit/delete messages and streams, and configure timers or alarms that notify by audio, popup, ticker, feed item, or silent log.")+
+return header("Command Communications","Channels, Message Threads, Streams, Retention, Timers & Alerts","Build individual or group channels, view full message strings, save/edit/delete messages and streams, and configure timers or alarms that notify by audio, popup, ticker, feed item, or silent log.")+
 commsWorkspace()+timerAlarmPanel()+streamRetentionPanel()+messageRetentionPanel()+alertCustomizationPanel()
 }
 function commsWorkspace(){
@@ -1541,7 +1557,7 @@ return '<section class="grid2"><div class="card"><h2>Message Retention Rules</h2
 
 
 function expandedHuntCommandManager(){
-return header("Hunt Command Manager","Plan, Coordinate, Activate, Monitor, Complete & Analyze Hunts","Comprehensive hunt workflow suite for AI-assisted planning, gear/checklist readiness, hunter assignments, stand selection, map/weather/ballistics integration, active-hunt activation, completion, summaries, and season archive updates.")+
+return header("Hunt Operations","Plan, Coordinate, Activate, Monitor, Complete & Analyze Hunts","Comprehensive hunt workflow suite for AI-assisted planning, gear/checklist readiness, hunter assignments, stand selection, map/weather/ballistics integration, active-hunt activation, completion, summaries, and season archive updates.")+
 hcmTabs()+hcmContent()
 }
 function hcmTabs(){
@@ -1653,7 +1669,7 @@ return '<section class="card"><h2>Linked Records / Data Sources</h2><div class="
 function stabilizationDashboard(){
 return header("Prototype Stabilization","v4.3 Stable Prototype Candidate","Stabilization pass before production architecture and next build phase.")+
 stableBanner()+mvpCoreFlow()+standardSuiteTemplate()+linkedRecordsPanel()+
-'<section class="stabilizationGrid"><div class="stabilizationCard"><strong>MVP Core Locked</strong><p class="muted">Command → Hunt Command → Active Hunt → Complete → Season Archive.</p></div><div class="stabilizationCard"><strong>Duplicate Roles Reduced</strong><p class="muted">Command summarizes; Active Hunt executes; Intel analyzes; Property manages.</p></div><div class="stabilizationCard"><strong>Field Use Audit</strong><p class="muted">Active Hunt receives priority for mobile/stand usability.</p></div></section>'+
+'<section class="stabilizationGrid"><div class="stabilizationCard"><strong>MVP Core Locked</strong><p class="muted">Command → Hunt Operations → Active Hunt → Complete → Season Archive.</p></div><div class="stabilizationCard"><strong>Duplicate Roles Reduced</strong><p class="muted">Command summarizes; Active Hunt executes; Intel analyzes; Property manages.</p></div><div class="stabilizationCard"><strong>Field Use Audit</strong><p class="muted">Active Hunt receives priority for mobile/stand usability.</p></div></section>'+
 '<section class="grid2"><div class="card"><h2>Mobile Field-Use Audit</h2><div class="auditChecklist"><label><input type="checkbox" checked> Command quick return</label><label><input type="checkbox" checked> Active Hunt quick return</label><label><input type="checkbox" checked> SOS visible</label><label><input type="checkbox" checked> Log sighting fast action</label><label><input type="checkbox" checked> Ballistics quick access</label><label><input type="checkbox" checked> Low-light readability</label><label><input type="checkbox" checked> Large action buttons</label><label><input type="checkbox"> Final mobile device test</label></div></div><div class="card"><h2>Next Build Phase Readiness</h2><div class="row">Define production data schema.</div><div class="row">Convert to React/Vite components.</div><div class="row">Choose Supabase/Firebase backend.</div><div class="row">Design auth, roles, storage, realtime, and maps architecture.</div><div class="row">Integrate weather/maps/camera APIs after architecture is stable.</div></div></section>';
 }
 
@@ -1662,7 +1678,7 @@ function trueCalendarView(){
 return header("Calendar","Hunt Calendar, Reservations, Season Dates & Activity View","Calendar view showing hunts, hunters, stand reservations, harvests, scouting, property tasks, and legal hunting season dates.")+
 '<section class="calendarToolbar"><div><button class="badge2">Previous</button> <button class="badge">November 2026</button> <button class="badge2">Next</button></div><div><button class="badge2" data-page="hunt">Plan Hunt</button> <button class="badge2" data-page="stands">Reserve Stand</button></div></section>'+
 '<section class="calendarGridView"><div class="calendarCell"><strong>Mon 2</strong><div class="calendarEvent hunter">Hunter 1 · North Box AM</div></div><div class="calendarCell"><strong>Tue 3</strong><div class="calendarEvent">Scouting · Ridge Loop</div></div><div class="calendarCell"><strong>Wed 4</strong><div class="calendarEvent hunter">Hunter 2 · South Ladder PM</div></div><div class="calendarCell"><strong>Thu 5</strong><div class="calendarEvent">Camera Check · East Plot</div></div><div class="calendarCell"><strong>Fri 6</strong><div class="calendarEvent hunter">Group Hunt · 4 hunters</div></div><div class="calendarCell"><strong>Sat 7</strong><div class="calendarEvent harvest">Harvest · Split G2</div><div class="calendarEvent hunter">Hunter 1 · North Box</div></div><div class="calendarCell"><strong>Sun 8</strong><div class="calendarEvent">Food Plot Task</div></div><div class="calendarCell"><strong>Mon 9</strong><div class="calendarEvent hunter">Hunter 3 · Creek Crossing</div></div><div class="calendarCell"><strong>Tue 10</strong></div><div class="calendarCell"><strong>Wed 11</strong><div class="calendarEvent">Legal Season Reminder</div></div><div class="calendarCell"><strong>Thu 12</strong><div class="calendarEvent hunter">Hunter 1 · East Plot PM</div></div><div class="calendarCell"><strong>Fri 13</strong><div class="calendarEvent">Stand Maintenance</div></div><div class="calendarCell"><strong>Sat 14</strong><div class="calendarEvent hunter">Youth Hunt · Tower Blind</div></div><div class="calendarCell"><strong>Sun 15</strong><div class="calendarEvent">Season Report Snapshot</div></div></section>'+
-'<section class="grid2"><div class="card"><h2>Calendar Filters</h2><select><option>Show: All Activity</option><option>Hunts</option><option>Stand Reservations</option><option>Harvests</option><option>Scouting</option><option>Property Tasks</option></select><select><option>Hunter: All Hunters</option><option>Hunter 1</option><option>Hunter 2</option></select><select><option>Stand: All Stands</option><option>North Box</option><option>South Ladder</option><option>Creek Crossing</option></select></div><div class="card"><h2>Season / Legal Dates</h2><div class="row">Property deer season dates should populate by location and be editable.</div><div class="row">Legal shooting hours link to Weather & Maps sunrise/sunset.</div><div class="row">Stand reservations created in Hunt Command Manager display here.</div></div></section>';
+'<section class="grid2"><div class="card"><h2>Calendar Filters</h2><select><option>Show: All Activity</option><option>Hunts</option><option>Stand Reservations</option><option>Harvests</option><option>Scouting</option><option>Property Tasks</option></select><select><option>Hunter: All Hunters</option><option>Hunter 1</option><option>Hunter 2</option></select><select><option>Stand: All Stands</option><option>North Box</option><option>South Ladder</option><option>Creek Crossing</option></select></div><div class="card"><h2>Season / Legal Dates</h2><div class="row">Property deer season dates should populate by location and be editable.</div><div class="row">Legal shooting hours link to Weather & Maps sunrise/sunset.</div><div class="row">Stand reservations created in Hunt Operations display here.</div></div></section>';
 }
 function standDropDown(){
 return '<select><option>North Box · Tower Blind</option><option>South Ladder · Ladder Stand</option><option>Creek Crossing · Ground Blind</option><option>East Plot · 2 Man Tower</option><option>West Ridge · Saddle Seat</option><option>Add New Stand from Map...</option></select>';
@@ -1676,7 +1692,7 @@ return header("Stand Management","Stand Profiles, Reservations, Inventory, Maint
 }
 function standManagementContent(){
 if(standSub==="add")return '<section class="grid2"><div class="card"><h2>Add / Edit Stand</h2><input placeholder="Stand name"><select><option>Type: Tower Blind</option><option>Ladder Stand</option><option>Saddle Seat</option><option>Lock On</option><option>Ground Blind</option><option>Climber</option><option>Other</option></select><input placeholder="Map location / GPS / property zone"><select><option>Capacity: 1 Man</option><option>2 Man</option></select><input placeholder="# of chairs in stand"><select><option>Foodplot</option><option>Feeder</option><option>Both</option><option>Neither</option></select><textarea placeholder="Notes / stand description"></textarea><button class="badge">Save Stand Profile</button></div><div class="card"><h2>Stand Features</h2><div class="checklistGrid"><label><input type="checkbox"> Thermacell</label><label><input type="checkbox"> Fan</label><label><input type="checkbox"> Shooting Rest</label><label><input type="checkbox"> Organizer</label><label><input type="checkbox"> Shooting Bag</label><label><input type="checkbox"> Chairs</label><label><input type="checkbox"> Feeder View</label><label><input type="checkbox"> Food Plot View</label></div></div></section>';
-if(standSub==="reserve")return '<section class="grid2"><div class="card"><h2>Stand Reservation</h2>'+standDropDown()+'<select><option>Hunter: Hunter 1</option><option>Hunter 2</option><option>Hunter 3</option></select><input placeholder="Reservation date"><select><option>Morning Hunt</option><option>Evening Hunt</option><option>All Day</option><option>Scouting</option></select><textarea placeholder="Reservation notes"></textarea><button class="badge">Reserve Stand / Send to Calendar</button></div><div class="card"><h2>Reservation Effects</h2><div class="row">Adds stand reservation to Calendar.</div><div class="row">Links to Hunt Command Manager plan.</div><div class="row">Displays stand summary in Active Hunt View.</div><div class="row">Prevents duplicate stand assignment conflicts.</div></div></section>';
+if(standSub==="reserve")return '<section class="grid2"><div class="card"><h2>Stand Reservation</h2>'+standDropDown()+'<select><option>Hunter: Hunter 1</option><option>Hunter 2</option><option>Hunter 3</option></select><input placeholder="Reservation date"><select><option>Morning Hunt</option><option>Evening Hunt</option><option>All Day</option><option>Scouting</option></select><textarea placeholder="Reservation notes"></textarea><button class="badge">Reserve Stand / Send to Calendar</button></div><div class="card"><h2>Reservation Effects</h2><div class="row">Adds stand reservation to Calendar.</div><div class="row">Links to Hunt Operations plan.</div><div class="row">Displays stand summary in Active Hunt View.</div><div class="row">Prevents duplicate stand assignment conflicts.</div></div></section>';
 if(standSub==="maintenance")return '<section class="grid2"><div class="card"><h2>Maintenance Checklist</h2>'+standDropDown()+'<div class="checklistGrid"><label><input type="checkbox"> Check straps / ladder</label><label><input type="checkbox"> Clean windows</label><label><input type="checkbox"> Refill Thermacell</label><label><input type="checkbox"> Replace chair / cushion</label><label><input type="checkbox"> Check shooting rest</label><label><input type="checkbox"> Remove wasp nest</label><label><input type="checkbox"> Restock shooting bag</label><label><input type="checkbox"> Check feeder view lane</label></div><br><button class="badge needsAttention">Needs Attention</button></div><div class="card"><h2>Files / Pictures / Inventory</h2><input type="file" multiple><textarea placeholder="Stand issue, maintenance notes, supplies needed"></textarea><div class="standFilesGrid"><div class="standFile">Photo</div><div class="standFile">Repair Note</div><div class="standFile">Inventory</div><div class="standFile">Checklist</div></div></div></section>';
 if(standSub==="history")return '<section class="grid2"><div class="card"><h2>Stand Use / Harvest History</h2><div class="standHistoryTimeline"><div class="row"><strong>Nov 7 · Hunter 1</strong><br><small class="muted">North Box · Split G2 harvested</small></div><div class="row"><strong>Nov 4 · Hunter 2</strong><br><small class="muted">South Ladder · 2 does sighted</small></div><div class="row"><strong>Oct 30 · Maintenance</strong><br><small class="muted">North Box window latch repaired</small></div></div></div><div class="card"><h2>Stand Notes</h2>'+standDropDown()+'<textarea placeholder="Notes by stand: wind, access, maintenance, shooting lanes, inventory, hunter comments"></textarea><button class="badge">Save Stand Notes</button></div></section>';
 return '<section class="standCardGrid"><article class="standCard"><strong>North Box</strong><small class="muted">Tower Blind · 2 Man · 2 chairs</small><div class="standFeatureGrid"><span class="standFeature">Foodplot</span><span class="standFeature">Feeder</span><span class="standFeature">Thermacell</span><span class="standFeature">Fan</span><span class="standFeature">Shooting Rest</span><span class="standFeature">Organizer</span></div><button class="badge2">Open</button> <button class="badge needsAttention">Needs Attention</button></article><article class="standCard"><strong>South Ladder</strong><small class="muted">Ladder Stand · 1 Man</small><div class="standFeatureGrid"><span class="standFeature">Shooting Bag</span><span class="standFeature">Feeder</span><span class="standFeature">Rest</span></div><button class="badge2">Open</button> <button class="badge2">Reserve</button></article><article class="standCard"><strong>Creek Crossing</strong><small class="muted">Ground Blind · 2 Man</small><div class="standFeatureGrid"><span class="standFeature">Foodplot</span><span class="standFeature">Fan</span><span class="standFeature">Organizer</span></div><button class="badge2">Open</button> <button class="badge2">Reserve</button></article></section><section class="grid2"><div class="card"><h2>Stand Map</h2>'+activeHuntMapFixed()+'</div><div class="card"><h2>Stand Summary Display</h2>'+standSummaryBox()+'</div></section>';
@@ -1852,10 +1868,35 @@ return '<section class="feedMetricGrid"><div class="feedMetric"><strong>5</stron
 '<section class="grid2"><div class="card"><h2>Feeder Usage Record</h2><select><option>Feeder: East Plot Feeder</option><option>Creek Crossing Feeder</option><option>West Clover Feeder</option></select><input placeholder="Amount added / used pounds"><input placeholder="Date"><input placeholder="Feed type"><input placeholder="Cost allocation"><textarea placeholder="Feeder notes, battery, timer, camera activity"></textarea><button class="badge">Save Feeder Usage</button></div><div class="card"><h2>Linked Records</h2><div class="row">Feeder data links to stand activity, deer movement, camera events, property costs, season archive, and AI Intel.</div><div class="row">Feed usage can help compare deer activity by feeder, crop, stand, weather and season.</div></div></section>';
 }
 
+
+function architectureNotice(){
+return '<section class="architectureNotice"><strong>Navigation Architecture Update</strong><p class="muted">Command is now the operational center. Communications and Calendar live inside Command. Hunt Operations is now Hunt Operations. Hunter Center remains separate as the personal identity, settings, gear, profile and preference area.</p></section>';
+}
+function commandHubTabs(){
+return '<section class="commandHubTabs"><button class="'+(commandSub==="dashboard"?"active":"")+'" data-commandtab="dashboard">Dashboard</button><button class="'+(commandSub==="operations"?"active":"")+'" data-commandtab="operations">Operations</button><button class="'+(commandSub==="communications"?"active":"")+'" data-commandtab="communications">Communications</button><button class="'+(commandSub==="calendar"?"active":"")+'" data-commandtab="calendar">Calendar</button><button class="'+(commandSub==="alerts"?"active":"")+'" data-commandtab="alerts">Alerts / Feeds</button><button class="'+(commandSub==="reports"?"active":"")+'" data-commandtab="reports">Reports</button><button class="'+(commandSub==="maps"?"active":"")+'" data-commandtab="maps">Live Maps</button><button class="'+(commandSub==="hunters"?"active":"")+'" data-commandtab="hunters">Hunter Status</button></section>';
+}
+function commandHub(){
+if(commandSub==="communications")return header("Command Suite","Communications Hub","Operational messaging, channels, alert delivery, timers and stream/message retention inside Command.")+architectureNotice()+commandHubTabs()+advancedCommsSuite();
+if(commandSub==="calendar")return header("Command Suite","Master Calendar","Hunts, stand reservations, season dates, property tasks and activity calendar inside Command.")+architectureNotice()+commandHubTabs()+trueCalendarView();
+if(commandSub==="alerts")return header("Command Suite","Alerts & Event Feeds","Current and former event feed history, filtering, sorting, saved feed views and notification routing.")+architectureNotice()+commandHubTabs()+eventFeedArchiveSuite();
+if(commandSub==="reports")return header("Command Suite","Reports","Command-level reports and season/activity summaries.")+architectureNotice()+commandHubTabs()+reports();
+if(commandSub==="maps")return header("Command Suite","Live Maps","Operational live map view with weather, radar, hunters, stands and activity overlays.")+architectureNotice()+commandHubTabs()+weather();
+if(commandSub==="hunters")return header("Command Suite","Hunter Status Overview","Operational hunter status without replacing Hunter Center personal settings.")+architectureNotice()+commandHubTabs()+'<section class="architectureGrid"><div class="architectureCard"><strong>Hunter 1</strong>North Box · Online · Location Sharing</div><div class="architectureCard"><strong>Hunter 2</strong>South Ladder · Checked In</div><div class="architectureCard"><strong>Hunter 3</strong>Scouting · Available</div><div class="architectureCard"><strong>Emergency</strong>No active SOS</div><div class="architectureCard"><strong>Readiness</strong>4 hunters ready</div><div class="architectureCard"><strong>Comms</strong>Active Hunt Room online</div></section>';
+if(commandSub==="operations")return header("Command Suite","Operations Overview","Command-level view of hunt operations, active hunts, stand reservations and field coordination.")+architectureNotice()+commandHubTabs()+expandedHuntCommandManager();
+return architectureNotice()+commandHubTabs()+cleanCommandDashboard();
+}
+function architectureOverviewPage(){
+return header("Architecture","Command-Centered Navigation Architecture","Recommended structure for the next production build phase.")+
+architectureNotice()+
+'<section class="architectureGrid"><div class="architectureCard"><strong>Command</strong>Dashboard, Communications, Calendar, Alerts, Reports, Live Maps, Hunter Status</div><div class="architectureCard"><strong>Hunt Operations</strong>Planned Hunts, Active Hunt, Completed Hunts, Scouting, Tracking, Harvests</div><div class="architectureCard"><strong>Intel & Collections</strong>AI Intel, Deer Intelligence, Camera Intelligence, Hit List, Predictions, Analytics</div><div class="architectureCard"><strong>Property</strong>Assets, Equipment, Feeders, Food Plots, Stands, Maintenance, Inventory, Documents, Contacts</div><div class="architectureCard"><strong>Media Vault</strong>Master Gallery, Trophy Gallery, Hunter Galleries, Camera Uploads, AI Tagged Media</div><div class="architectureCard"><strong>Hunter Center</strong>Profile, Settings, Preferences, Gear, Personal Stats, Journals, Notifications</div></section>'+
+'<section class="hunterCenterFocus"><h2>Hunter Center Decision</h2><p>Hunter Center remains separate because it is personal identity, settings, preferences, gear, stats, privacy and notifications. Command stays shared and operational.</p></section>';
+}
+
 function content(){
   try{
     var routes={
-      command:function(){return command()},
+      command:function(){return commandHub()},
+      architecture:function(){return architectureOverviewPage()},
       feedHistory:function(){return eventFeedArchiveSuite()},
       stabilize:function(){return stabilizationDashboard()},
       refine:function(){return operationalRefinementSuite()},
@@ -1912,6 +1953,9 @@ document.querySelectorAll("[data-settings]").forEach(function(b){b.addEventListe
 document.querySelectorAll("[data-huntertab]").forEach(function(b){b.addEventListener("click",function(){hunterSub=b.getAttribute("data-huntertab");render();window.scrollTo(0,0)})});
 document.querySelectorAll("[data-hcm]").forEach(function(b){b.addEventListener("click",function(){hcmSub=b.getAttribute("data-hcm");render();window.scrollTo(0,0)})});
 document.querySelectorAll("[data-standtab]").forEach(function(b){b.addEventListener("click",function(){standSub=b.getAttribute("data-standtab");render();window.scrollTo(0,0)})});
+
+document.querySelectorAll("[data-commandtab]").forEach(function(b){b.addEventListener("click",function(){commandSub=b.getAttribute("data-commandtab");page="command";render();window.scrollTo(0,0)})});
+
 document.querySelectorAll("[data-pmtab]").forEach(function(b){b.addEventListener("click",function(){propertySub=b.getAttribute("data-pmtab");page="property";render();window.scrollTo(0,0)})});document.querySelectorAll("[data-pref]").forEach(function(i){i.addEventListener("change",function(){activePrefs[i.getAttribute("data-pref")]=i.checked;render()})});
 var ss=document.getElementById("sosStart");if(ss){ss.addEventListener("click",function(){sosConfirm=true;render();});}
 var sy=document.getElementById("sosYes");if(sy){sy.addEventListener("click",function(){sosActive=true;sosConfirm=false;render();});}
