@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>VT Tracer Prototype v4.2 Operational Refinement</title>
+<title>VT Tracer Prototype v4.2.1.1 Menu Route Fix</title>
 <style>
 :root{--bg:#0f1510;--deep:#0b0f0b;--panel:#1a211b;--panel2:#202920;--border:#394339;--orange:#ff7a1a;--olive:#556b2f;--tan:#f4f1e8;--muted:#b4b0a2;--red:#ff4d2e;--blue:#6ba8ff;--purple:#b48cff}
 *{box-sizing:border-box}body{margin:0;font-family:Arial,system-ui,sans-serif;background:linear-gradient(135deg,#0f1510,#171d16);color:var(--tan);display:grid;grid-template-columns:280px 1fr;min-height:100vh}button,input,select,textarea{font:inherit}
@@ -893,7 +893,7 @@ max-width:210px!important;
 </head>
 <body>
 <aside class="sidebar">
-<div class="brand"><div class="logo">VT</div><div><strong>VenariTrace</strong><br><small>Prototype v4.2 Operational Refinement</small></div></div>
+<div class="brand"><div class="logo">VT</div><div><strong>VenariTrace</strong><br><small>Prototype v4.2.1.1 Menu Route Fix</small></div></div>
 <nav class="nav" id="nav"></nav>
 </aside>
 <main class="main" id="main"></main>
@@ -1315,22 +1315,58 @@ return header("Operational Refinement","Command Mode, Active Cockpit, Deer Intel
 commandModeRefinement()+activeCockpitRefinement()+deerIntelRefinement()+ballisticRefinement()+mapEngineRefinement()+mediaCollectionsRefinement();
 }
 
-function content(){if(page==="refine")return operationalRefinementSuite();if(page==="hunt")return hunt();if(page==="scouting")return scoutingMode();if(page==="active")return activeHunt();if(page==="safety")return safetyRecoverySuite();if(page==="harvest")return harvestSuite();if(page==="seasons")return seasonArchive();if(page==="hunter")return hunter();if(page==="account")return accountSettings();if(page==="intel")return intel();if(page==="aiCamera")return aiCameraLab();if(page==="deerIntel")return deerIntelligenceHub();if(page==="weather")return weather();if(page==="comms")return comms();if(page==="ballistics")return ballistics();if(page==="property")return property();if(page==="gallery")return gallery();if(page==="storage")return storageVault();if(page==="calendar")return calendar();if(page==="reports")return reports();return command()}
-function renderNav(){
-var currentGroup="";
-var navHtml="";
-nav.forEach(function(n){
-  var group=n[2]||"";
-  if(group!==currentGroup){
-    currentGroup=group;
-    navHtml+='<div class="navGroupTitle">'+group+'</div>';
+
+function content(){
+  try{
+    var routes={
+      command:function(){return command()},
+      refine:function(){return operationalRefinementSuite()},
+      hunt:function(){return hunt()},
+      active:function(){return activeHunt()},
+      scouting:function(){return scoutingMode()},
+      safety:function(){return safetyRecoverySuite()},
+      harvest:function(){return harvestSuite()},
+      calendar:function(){return calendar()},
+      intel:function(){return intel()},
+      aiCamera:function(){return aiCameraLab()},
+      deerIntel:function(){return deerIntelligenceHub()},
+      weather:function(){return weather()},
+      ballistics:function(){return ballistics()},
+      gallery:function(){return gallery()},
+      storage:function(){return storageVault()},
+      hunter:function(){return hunter()},
+      property:function(){return property()},
+      comms:function(){return comms()},
+      seasons:function(){return seasonArchive()},
+      reports:function(){return reports()}
+    };
+    if(routes[page]){return routes[page]();}
+    return command();
+  }catch(err){
+    return '<section class="hero"><div><p class="muted">Route Error</p><h1>Suite Load Issue</h1><p>The selected suite could not render. Error: '+esc(err.message || err)+'</p></div><div class="pill">Debug</div></section><section class="card"><h2>Fallback</h2><div class="row">Selected page: '+esc(page)+'</div><div class="row">Use Command or Active Hunt buttons to continue.</div><button class="badge" data-page="command">Return to Command</button></section>';
   }
-  navHtml+='<button class="'+(page===n[0]?'active':'')+'" data-page="'+n[0]+'">'+n[1]+'</button>';
-});
-document.getElementById("nav").innerHTML=navHtml;
-var bottomItems=[["command","Command"],["active","Active"],["hunt","Hunt"],["hunter","Hunter"],["property","Property"]];
-document.getElementById("bottom").innerHTML=bottomItems.map(function(n){return '<button class="'+(page===n[0]?'active':'')+'" data-page="'+n[0]+'">'+n[1]+'</button>'}).join('');
 }
+
+
+function renderNav(){
+  var navEl=document.getElementById("nav");
+  var bottomEl=document.getElementById("bottom");
+  if(!navEl || !bottomEl){return;}
+  var currentGroup="";
+  var navHtml="";
+  nav.forEach(function(n){
+    var group=n[2]||"OTHER";
+    if(group!==currentGroup){
+      currentGroup=group;
+      navHtml+='<div class="navGroupTitle">'+esc(group)+'</div>';
+    }
+    navHtml+='<button class="'+(page===n[0]?'active':'')+'" data-page="'+n[0]+'">'+esc(n[1])+'</button>';
+  });
+  navEl.innerHTML=navHtml;
+  var bottomItems=[["command","Command"],["active","Active"],["hunt","Hunt"],["hunter","Hunter"],["property","Property"]];
+  bottomEl.innerHTML=bottomItems.map(function(n){return '<button class="'+(page===n[0]?'active':'')+'" data-page="'+n[0]+'">'+n[1]+'</button>'}).join('');
+}
+
 function bind(){document.querySelectorAll("[data-page]").forEach(function(b){b.addEventListener("click",function(){page=b.getAttribute("data-page");quickOpen=false;render();window.scrollTo(0,0)})});
 var qt=document.getElementById("quickToggle");if(qt){qt.addEventListener("click",function(){quickOpen=!quickOpen;render();});}document.querySelectorAll("[data-active]").forEach(function(b){b.addEventListener("click",function(){activeSub=b.getAttribute("data-active");render();window.scrollTo(0,0)})});
 document.querySelectorAll("[data-settings]").forEach(function(b){b.addEventListener("click",function(){settingsSub=b.getAttribute("data-settings");render();window.scrollTo(0,0)})});
