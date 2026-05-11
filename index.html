@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>VT Tracer Prototype v4.2.1.1 Menu Route Fix</title>
+<title>VT Tracer Prototype v4.3.1 Menu Route Fix</title>
 <style>
 :root{--bg:#0f1510;--deep:#0b0f0b;--panel:#1a211b;--panel2:#202920;--border:#394339;--orange:#ff7a1a;--olive:#556b2f;--tan:#f4f1e8;--muted:#b4b0a2;--red:#ff4d2e;--blue:#6ba8ff;--purple:#b48cff}
 *{box-sizing:border-box}body{margin:0;font-family:Arial,system-ui,sans-serif;background:linear-gradient(135deg,#0f1510,#171d16);color:var(--tan);display:grid;grid-template-columns:280px 1fr;min-height:100vh}button,input,select,textarea{font:inherit}
@@ -889,11 +889,60 @@ max-width:210px!important;
 @media(max-width:1050px){.modeStrip,.activeWidgetGrid,.deerIntelTabs,.ballisticLayerGrid,.mapEngineGrid,.mediaEngineGrid{grid-template-columns:1fr 1fr}.priorityLayout{grid-template-columns:1fr}}
 @media(max-width:650px){.modeStrip,.activeWidgetGrid,.deerIntelTabs,.ballisticLayerGrid,.mapEngineGrid,.mediaEngineGrid{grid-template-columns:1fr}}
 
+
+.activeFixedGrid{display:grid;grid-template-columns:1.25fr .85fr;gap:18px;margin-bottom:18px}
+.activeFixedCards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+.activeFixedCard{border:1px solid var(--border);border-radius:16px;background:rgba(255,255,255,.04);padding:14px}
+.activeFixedCard strong{display:block;color:var(--orange);font-size:24px}
+.activeActionGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.activeActionGrid button{border:1px solid var(--border);border-radius:14px;background:rgba(255,255,255,.05);color:var(--tan);padding:12px;cursor:pointer;font-weight:900}
+.activeActionGrid .danger{background:rgba(255,77,46,.16);border-color:rgba(255,77,46,.65);color:#ffd5d0}
+.activeActionGrid .primary{background:var(--orange);border-color:var(--orange);color:#15120d}
+.activeMapFixed{height:360px;border-radius:18px;border:1px solid var(--border);position:relative;overflow:hidden;background:repeating-linear-gradient(45deg,rgba(255,255,255,.04) 0 1px,transparent 1px 18px),linear-gradient(135deg,rgba(85,107,47,.3),rgba(0,0,0,.2))}
+.activeFeedList{max-height:420px;overflow:auto}
+.activeFeedItem{border:1px solid rgba(255,255,255,.07);border-left:5px solid var(--orange);border-radius:14px;background:rgba(255,255,255,.04);padding:10px;margin-bottom:10px}
+.activeFeedItem.critical{border-left-color:var(--red)}
+.activeFeedItem.info{border-left-color:var(--blue)}
+.compactDope{overflow:auto;border:1px solid var(--border);border-radius:14px}
+.compactDope table{min-width:560px}
+@media(max-width:1000px){.activeFixedGrid{grid-template-columns:1fr}.activeFixedCards,.activeActionGrid{grid-template-columns:1fr 1fr}}
+@media(max-width:650px){.activeFixedCards,.activeActionGrid{grid-template-columns:1fr}}
+
+
+.stableBanner{
+border:2px solid rgba(255,122,26,.65);
+border-radius:20px;
+background:linear-gradient(135deg,rgba(255,122,26,.12),rgba(85,107,47,.08));
+padding:16px;
+margin-bottom:18px;
+box-shadow:0 12px 28px rgba(0,0,0,.2);
+}
+.stableBanner strong{display:block;color:var(--orange);font-size:24px}
+.mvpFlow{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:18px}
+.mvpStep{border:1px solid var(--border);border-radius:16px;background:rgba(255,255,255,.045);padding:12px;text-align:center;position:relative}
+.mvpStep strong{display:block;color:var(--orange);font-size:22px}
+.mvpStep:after{content:"→";position:absolute;right:-12px;top:50%;transform:translateY(-50%);color:var(--orange);font-weight:900}
+.mvpStep:last-child:after{display:none}
+.standardSuiteGrid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:18px}
+.standardSuiteBox{border:1px solid var(--border);border-radius:14px;background:rgba(255,255,255,.04);padding:12px;text-align:center}
+.standardSuiteBox strong{display:block;color:#d9c896}
+.linkedSourcesGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
+.linkedSource{border:1px solid var(--border);border-radius:14px;background:rgba(255,255,255,.04);padding:12px}
+.linkedSource strong{display:block;color:var(--orange)}
+.stabilizationGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px}
+.stabilizationCard{border:1px solid var(--border);border-radius:16px;background:rgba(255,255,255,.04);padding:14px}
+.stabilizationCard strong{display:block;color:var(--orange);font-size:18px}
+.auditChecklist{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.auditChecklist label{border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.035);padding:9px;display:flex;gap:7px;align-items:center}
+.auditChecklist input{width:auto;margin:0}
+@media(max-width:1050px){.mvpFlow,.standardSuiteGrid,.linkedSourcesGrid,.stabilizationGrid{grid-template-columns:1fr 1fr}}
+@media(max-width:650px){.mvpFlow,.standardSuiteGrid,.linkedSourcesGrid,.stabilizationGrid,.auditChecklist{grid-template-columns:1fr}.mvpStep:after{display:none}}
+
 </style>
 </head>
 <body>
 <aside class="sidebar">
-<div class="brand"><div class="logo">VT</div><div><strong>VenariTrace</strong><br><small>Prototype v4.2.1.1 Menu Route Fix</small></div></div>
+<div class="brand"><div class="logo">VT</div><div><strong>VenariTrace</strong><br><small>Prototype v4.3.1 Menu Route Fix</small></div></div>
 <nav class="nav" id="nav"></nav>
 </aside>
 <main class="main" id="main"></main>
@@ -910,7 +959,7 @@ max-width:210px!important;
 var page="command";var quickOpen=false;var hunterSub="overview";var hcmSub="overview";var sosConfirm=false;var sosActive=false;var trackingActive=false;var activeSub="command";var settingsSub="profile";
 var activePrefs={map:true,weather:true,feed:true,comms:true,ballistics:true,dope:true,media:true,alerts:true,graphs:true};
 var nav=[
-["command","Command Suite","COMMAND"],["refine","Operational Refinement","COMMAND"],
+["command","Command Suite","COMMAND"],["stabilize","Stabilization","COMMAND"],["refine","Operational Refinement","COMMAND"],
 ["hunt","Hunt Command Manager","HUNT OPERATIONS"],
 ["active","Active Hunt View","HUNT OPERATIONS"],["safety","SOS / Tracking","HUNT OPERATIONS"],
 ["scouting","Scouting Mode","HUNT OPERATIONS"],
@@ -1177,7 +1226,7 @@ function cleanSourceCards(){
 return '<section class="sourceCardGrid"><div class="sourceCard"><strong>Camera Intelligence</strong><div class="row">Split G2 · East Plot · 6:42 AM</div><small class="muted">From SPYPOINT / AI Camera Lab</small></div><div class="sourceCard"><strong>Hunter Activity</strong><div class="row">Hunter 1 checked in · North Box</div><small class="muted">From Active Hunt / Hunter Center</small></div><div class="sourceCard"><strong>Weather / Wind</strong><div class="row">E/NE wind · North Box ideal</div><small class="muted">From Weather & Maps</small></div></section>';
 }
 function cleanCommandDashboard(){
-return header("Command Suite","Command Dashboard","Operational overview with source-labeled data, compact branding, current alerts, map views, recent harvests, and decision support.")+
+return stableBanner()+header("Command Suite","Command Dashboard","Operational overview with source-labeled data, compact branding, current alerts, map views, recent harvests, and decision support.")+
 cleanCommandTop()+cleanCommandMetrics()+commandModeRefinement()+cleanSourceCards()+
 '<div class="commandSectionTitle"><h2>Live Operations</h2><span>map + weather + alerts</span></div>'+
 '<section class="cleanCommandGrid"><div class="card"><h2>Live Activity Map</h2>'+map()+'<div class="dataSourceLine">Sources: Hunter location, stand locations, camera pins, scouting records, weather/wind overlay.</div></div><div>'+weatherAlertsPanel()+ '</div></section>'+
@@ -1186,7 +1235,7 @@ radarPanel()+
 '<div class="commandSectionTitle"><h2>Movement & Activity</h2><span>AI + camera + manual records</span></div>'+
 '<section class="grid2"><div class="card"><h2>Movement Graph</h2>'+line()+'<div class="dataSourceLine">Sources: AI Camera Lab, manual sightings, scouting records, deer profiles.</div></div><div class="card"><h2>Activity Breakdown</h2>'+chart()+'<div class="dataSourceLine">Sources: species labels, camera events, manual sightings, harvest and scouting records.</div></div></section>'+
 '<div class="commandSectionTitle"><h2>Decision Support</h2><span>current recommendations</span></div>'+
-'<section class="grid2"><div class="card"><h2>Recommended Actions</h2><div class="row">Hold North Box while E/NE wind remains stable.</div><div class="row">Avoid East Plot approach during current wind shift window.</div><div class="row">Monitor Split G2 camera pattern for next 90 minutes.</div><div class="row">Replace North Ridge camera battery after active hunt closes.</div><div class="dataSourceLine">Sources: Weather, stand wind rules, AI Deer Intel, Property HQ.</div></div>'+feed(5)+'</section>';
+'<section class="grid2"><div class="card"><h2>Recommended Actions</h2><div class="row">Hold North Box while E/NE wind remains stable.</div><div class="row">Avoid East Plot approach during current wind shift window.</div><div class="row">Monitor Split G2 camera pattern for next 90 minutes.</div><div class="row">Replace North Ridge camera battery after active hunt closes.</div><div class="dataSourceLine">Sources: Weather, stand wind rules, AI Deer Intel, Property HQ.</div></div>'+feed(5)+'</section>'+linkedRecordsPanel();
 }
 
 
@@ -1316,13 +1365,56 @@ commandModeRefinement()+activeCockpitRefinement()+deerIntelRefinement()+ballisti
 }
 
 
+
+function safeDopeTable(){
+return '<div class="compactDope"><table><tr><th>Range</th><th>Drop</th><th>MOA</th><th>MIL</th><th>Clicks</th><th>Wind</th></tr><tr><td>100</td><td>0</td><td>0</td><td>0</td><td>0</td><td>.8 in</td></tr><tr><td>200</td><td>3.1 in</td><td>1.5</td><td>.44</td><td>6</td><td>2.4 in</td></tr><tr><td>250</td><td>7.4 in</td><td>2.8</td><td>.81</td><td>11</td><td>3.2 in</td></tr><tr><td>300</td><td>12.9 in</td><td>4.1</td><td>1.19</td><td>16</td><td>4.8 in</td></tr></table></div>';
+}
+function activeHuntMapFixed(){
+return '<div class="activeMapFixed"><div class="windCone"></div><span class="pin hunterPin" style="left:25%;top:30%">Hunter 1 · North Box</span><span class="pin hunterPin" style="left:72%;top:34%">Hunter 2 · South Ladder</span><span class="pin sightPin" style="left:48%;top:58%">Live Sighting</span><span class="pin" style="left:67%;top:64%">SPYPOINT East</span><span class="pin scrapePin" style="left:42%;top:44%">Scrape</span><span class="pin rubPin" style="left:34%;top:68%">Rub</span><span class="pin hazardPin" style="left:62%;top:76%">Hazard</span></div>';
+}
+function activeHuntTickerFixed(){
+return '<section class="activeTicker"><div class="tickerHeader"><strong>ACTIVE HUNT LIVE FEED</strong><div class="alertIconGroup"><div class="alertIcon">⚠ Alerts<span class="badgeCount">3</span></div><div class="alertIcon">📷 Cameras<span class="badgeCount">2</span></div><div class="alertIcon">💬 Comms<span class="badgeCount">5</span></div></div></div><div class="tickerTrack"><div class="tickerText"><span class="tickerItem"><strong>WEATHER:</strong> Wind shift advisory</span><span class="tickerItem"><strong>CAMERA:</strong> Split G2 at East Plot</span><span class="tickerItem"><strong>SIGHTING:</strong> Does crossing Creek Trail</span><span class="tickerItem"><strong>SAFETY:</strong> SOS ready</span><span class="tickerItem"><strong>BALLISTICS:</strong> .308 DOPE loaded</span></div></div></section>';
+}
+function activeHuntFeedFixed(){
+return '<div class="activeFeedList"><div class="activeFeedItem critical"><strong>Weather Alert</strong><br><small class="muted">Wind shift advisory affecting East Plot approach.</small></div><div class="activeFeedItem"><strong>SPYPOINT Buck Alert</strong><br><small class="muted">Split G2 detected at East Plot · 6:42 AM · 88% confidence.</small></div><div class="activeFeedItem info"><strong>Manual Sighting</strong><br><small class="muted">Hunter 2 reported two does crossing Creek Trail.</small></div><div class="activeFeedItem info"><strong>Hunter Check-In</strong><br><small class="muted">Hunter 1 checked in at North Box.</small></div><div class="activeFeedItem critical"><strong>SOS / Recovery Ready</strong><br><small class="muted">Emergency contact and active hunter alert routing available.</small></div></div>';
+}
+function activeHuntFixed(){
+return stableBanner()+header("Active Hunt View","Active Hunt Cockpit","Live operational field screen for current hunt: map, alerts, weather, comms, ballistics, SOS, animal tracking, sightings, and hunter coordination.")+
+activeHuntTickerFixed()+
+'<section class="activeFixedCards"><div class="activeFixedCard"><strong>4</strong>Hunters Online<br><small class="muted">location sharing active</small></div><div class="activeFixedCard"><strong>North Box</strong>Best Stand<br><small class="muted">E/NE wind ideal</small></div><div class="activeFixedCard"><strong>5:48–6:12</strong>Legal Hours<br><small class="muted">30 min rule</small></div><div class="activeFixedCard"><strong>3</strong>Active Alerts<br><small class="muted">weather/camera/safety</small></div></section>'+
+'<section class="activeFixedGrid"><div class="card"><h2>Live Active Hunt Map</h2>'+activeHuntMapFixed()+'<div class="dataSourceLine">Sources: hunter locations, stands, camera alerts, scouting pins, wind overlay.</div></div><div class="card"><h2>Recent Event Feed</h2>'+activeHuntFeedFixed()+'</div></section>'+
+'<section class="activeFixedGrid"><div class="card sosPanel"><h2>SOS / Emergency</h2><button class="sosButton" id="sosStart">SOS</button><div class="row">Requires yes/no confirmation. If activated: alerts hunters and emergency contact, shares location, starts emergency tracking.</div></div><div class="card"><h2>Fast Actions</h2><div class="activeActionGrid"><button class="primary" data-page="scouting">Log Sighting</button><button data-page="ballistics">Ballistics</button><button data-page="comms">Message</button><button data-page="safety">Track Animal</button><button data-page="harvest">Log Harvest</button><button class="danger" data-page="safety">SOS / Recovery</button></div></div></section>'+
+'<section class="activeFixedGrid"><div class="card"><h2>Ballistic Quick Card</h2>'+safeDopeTable()+'</div><div class="card"><h2>Current Conditions</h2><div class="row">44°F · E/NE wind 6 mph · gust 11</div><div class="row">Sunrise 6:18 AM · Sunset 5:42 PM</div><div class="row">Moon: Waning crescent · 34%</div><div class="row">Precipitation chance: 18%</div></div></section>';
+}
+
+
+function stableBanner(){
+return '<section class="stableBanner"><strong>v4.3 Stable Prototype Candidate</strong><p class="muted">This build is intended to stabilize the prototype before the next build phase. Focus is workflow clarity, suite consistency, linked data sources, and field usability rather than adding major new features.</p></section>';
+}
+function mvpCoreFlow(){
+return '<section class="mvpFlow"><div class="mvpStep"><strong>1</strong>Command</div><div class="mvpStep"><strong>2</strong>Plan Hunt</div><div class="mvpStep"><strong>3</strong>Active Hunt</div><div class="mvpStep"><strong>4</strong>Complete / Harvest</div><div class="mvpStep"><strong>5</strong>Season Archive</div></section>';
+}
+function standardSuiteTemplate(){
+return '<section class="card"><h2>Standard Suite Pattern</h2><div class="standardSuiteGrid"><div class="standardSuiteBox"><strong>Overview</strong>summary</div><div class="standardSuiteBox"><strong>Actions</strong>what to do</div><div class="standardSuiteBox"><strong>Data</strong>records</div><div class="standardSuiteBox"><strong>Map / Media</strong>visuals</div><div class="standardSuiteBox"><strong>Archive</strong>history</div></div><p class="muted">Each suite should now follow this same pattern so the app feels consistent and easier to navigate.</p></section>';
+}
+function linkedRecordsPanel(){
+return '<section class="card"><h2>Linked Records / Data Sources</h2><div class="linkedSourcesGrid"><div class="linkedSource"><strong>Hunter</strong>profiles, preferences, gear, stats</div><div class="linkedSource"><strong>Hunt</strong>plans, active hunts, completed hunts</div><div class="linkedSource"><strong>Camera</strong>SPYPOINT, Command, manual uploads</div><div class="linkedSource"><strong>Weather</strong>wind, radar, moon, legal hours</div><div class="linkedSource"><strong>Map</strong>stands, sightings, hazards, tracks</div><div class="linkedSource"><strong>Media</strong>photos, streams, documents, storage</div><div class="linkedSource"><strong>Deer Intel</strong>labels, hit list, movement, AI</div><div class="linkedSource"><strong>Property</strong>tasks, inventory, equipment, food plots</div></div></section>';
+}
+function stabilizationDashboard(){
+return header("Prototype Stabilization","v4.3 Stable Prototype Candidate","Stabilization pass before production architecture and next build phase.")+
+stableBanner()+mvpCoreFlow()+standardSuiteTemplate()+linkedRecordsPanel()+
+'<section class="stabilizationGrid"><div class="stabilizationCard"><strong>MVP Core Locked</strong><p class="muted">Command → Hunt Command → Active Hunt → Complete → Season Archive.</p></div><div class="stabilizationCard"><strong>Duplicate Roles Reduced</strong><p class="muted">Command summarizes; Active Hunt executes; Intel analyzes; Property manages.</p></div><div class="stabilizationCard"><strong>Field Use Audit</strong><p class="muted">Active Hunt receives priority for mobile/stand usability.</p></div></section>'+
+'<section class="grid2"><div class="card"><h2>Mobile Field-Use Audit</h2><div class="auditChecklist"><label><input type="checkbox" checked> Command quick return</label><label><input type="checkbox" checked> Active Hunt quick return</label><label><input type="checkbox" checked> SOS visible</label><label><input type="checkbox" checked> Log sighting fast action</label><label><input type="checkbox" checked> Ballistics quick access</label><label><input type="checkbox" checked> Low-light readability</label><label><input type="checkbox" checked> Large action buttons</label><label><input type="checkbox"> Final mobile device test</label></div></div><div class="card"><h2>Next Build Phase Readiness</h2><div class="row">Define production data schema.</div><div class="row">Convert to React/Vite components.</div><div class="row">Choose Supabase/Firebase backend.</div><div class="row">Design auth, roles, storage, realtime, and maps architecture.</div><div class="row">Integrate weather/maps/camera APIs after architecture is stable.</div></div></section>';
+}
+
 function content(){
   try{
     var routes={
       command:function(){return command()},
+      stabilize:function(){return stabilizationDashboard()},
       refine:function(){return operationalRefinementSuite()},
       hunt:function(){return hunt()},
-      active:function(){return activeHunt()},
+      active:function(){return activeHuntFixed()},
       scouting:function(){return scoutingMode()},
       safety:function(){return safetyRecoverySuite()},
       harvest:function(){return harvestSuite()},
