@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>VT Tracer Prototype v4.4.3.1 Menu Route Fix</title>
+<title>VT Tracer Prototype v4.4.7.1 Menu Route Fix</title>
 <style>
 :root{--bg:#0f1510;--deep:#0b0f0b;--panel:#1a211b;--panel2:#202920;--border:#394339;--orange:#ff7a1a;--olive:#556b2f;--tan:#f4f1e8;--muted:#b4b0a2;--red:#ff4d2e;--blue:#6ba8ff;--purple:#b48cff}
 *{box-sizing:border-box}body{margin:0;font-family:Arial,system-ui,sans-serif;background:linear-gradient(135deg,#0f1510,#171d16);color:var(--tan);display:grid;grid-template-columns:280px 1fr;min-height:100vh}button,input,select,textarea{font:inherit}
@@ -1006,11 +1006,147 @@ box-shadow:0 12px 28px rgba(0,0,0,.2);
 @media(max-width:900px){.trophyGalleryGrid,.hitListStatusGrid{grid-template-columns:1fr 1fr}}
 @media(max-width:650px){.trophyGalleryGrid,.hitListStatusGrid{grid-template-columns:1fr}}
 
+
+.navControlBar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:10px;
+flex-wrap:wrap;
+margin-bottom:16px;
+padding:10px 12px;
+border:1px solid var(--border);
+border-radius:16px;
+background:rgba(255,255,255,.04)
+}
+.backBtn{
+border:1px solid rgba(255,122,26,.55);
+background:rgba(255,122,26,.14);
+color:var(--tan);
+border-radius:999px;
+padding:10px 16px;
+cursor:pointer;
+font-weight:900
+}
+.breadcrumbTrail{
+display:flex;
+gap:8px;
+flex-wrap:wrap;
+align-items:center;
+color:var(--muted);
+font-size:13px
+}
+.breadcrumbTrail span{
+border:1px solid var(--border);
+background:rgba(255,255,255,.035);
+padding:5px 10px;
+border-radius:999px
+}
+
+
+.autoCalcGrid{display:grid;grid-template-columns:1.15fr .85fr;gap:18px;margin-bottom:18px}
+.autoCalcPanel{border:1px solid rgba(255,122,26,.5);border-radius:18px;background:rgba(255,122,26,.06);padding:14px}
+.calcResultGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:12px 0}
+.calcResult{border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.04);padding:10px}
+.calcResult strong{display:block;color:var(--orange);font-size:20px}
+.linkedInputGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
+.linkedInput{border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.04);padding:10px}
+.linkedInput strong{display:block;color:#d9c896}
+.holdMarker{position:absolute;width:22px;height:22px;border:2px solid white;border-radius:50%;left:50%;top:42%;transform:translate(-50%,-50%);box-shadow:0 0 12px rgba(255,255,255,.8)}
+.impactMarker{position:absolute;width:22px;height:22px;border:2px solid #ff4d2e;border-radius:50%;left:50%;top:50%;transform:translate(-50%,-50%);box-shadow:0 0 12px rgba(255,77,46,.8)}
+.calcScope{height:340px;border-radius:16px;background:#111811;border:1px solid var(--border);position:relative;overflow:hidden;display:grid;place-items:center}
+.calcScope:before{content:"";position:absolute;left:50%;top:0;width:2px;height:100%;background:rgba(255,255,255,.45)}
+.calcScope:after{content:"";position:absolute;left:0;top:50%;width:100%;height:2px;background:rgba(255,255,255,.45)}
+.deerSilhouette{width:72%;height:42%;border-radius:55% 48% 45% 55%;background:linear-gradient(135deg,rgba(126,92,48,.95),rgba(65,48,31,.95));position:relative}
+.deerSilhouette:before{content:"";position:absolute;right:-12%;top:14%;width:24%;height:32%;border-radius:50%;background:rgba(93,65,39,.95)}
+.deerSilhouette:after{content:"Vital Zone";position:absolute;left:45%;top:48%;transform:translate(-50%,-50%);font-size:12px;color:#ffe1d8}
+.distanceReadout{font-size:30px;color:var(--orange);font-weight:950}
+.formulaNote{font-size:12px;color:var(--muted);border-top:1px solid rgba(255,255,255,.08);padding-top:8px;margin-top:8px}
+@media(max-width:1000px){.autoCalcGrid{grid-template-columns:1fr}.calcResultGrid,.linkedInputGrid{grid-template-columns:1fr 1fr}}
+@media(max-width:650px){.calcResultGrid,.linkedInputGrid{grid-template-columns:1fr}}
+
+
+.shotPopupOverlay{
+position:fixed;
+inset:0;
+z-index:80;
+background:rgba(0,0,0,.72);
+display:grid;
+place-items:center;
+padding:18px;
+}
+.shotPopupWindow{
+width:min(980px,96vw);
+max-height:92vh;
+overflow:auto;
+border:1px solid var(--border);
+border-radius:22px;
+background:#151b16;
+box-shadow:0 28px 70px rgba(0,0,0,.55);
+padding:16px;
+}
+.popupHeader{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:12px;
+border-bottom:1px solid var(--border);
+padding-bottom:10px;
+margin-bottom:12px;
+}
+.popupClose{
+border:1px solid rgba(255,77,46,.65);
+background:rgba(255,77,46,.15);
+color:#ffd5d0;
+border-radius:999px;
+padding:9px 13px;
+font-weight:900;
+cursor:pointer;
+}
+.quickShotButton{
+border:1px solid rgba(255,122,26,.65)!important;
+background:rgba(255,122,26,.16)!important;
+color:#ffd8bd!important;
+}
+.scaledReadout{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:10px;
+margin:10px 0;
+}
+.scaledReadout div{
+border:1px solid var(--border);
+border-radius:12px;
+background:rgba(255,255,255,.04);
+padding:10px;
+}
+.scaledReadout strong{display:block;color:var(--orange);font-size:18px}
+.commandTickerBlock{margin-bottom:18px}
+@media(max-width:850px){.scaledReadout{grid-template-columns:1fr}.shotPopupWindow{width:98vw}}
+
+
+.feedHistoryControls{border:1px solid rgba(255,122,26,.45);border-radius:18px;background:rgba(255,122,26,.06);padding:14px;margin-bottom:18px}
+.feedFilterGrid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:12px}
+.feedFilterGrid select,.feedFilterGrid input{margin-bottom:0}
+.feedHistoryList{border:1px solid var(--border);border-radius:18px;background:rgba(255,255,255,.04);padding:14px;margin-bottom:18px}
+.feedHistoryItem{display:grid;grid-template-columns:90px 1fr 120px;gap:10px;align-items:start;border:1px solid rgba(255,255,255,.07);border-radius:14px;background:rgba(255,255,255,.035);padding:10px;margin-bottom:10px}
+.feedTypeBadge{border-radius:999px;padding:5px 8px;font-size:12px;font-weight:900;text-align:center;border:1px solid var(--border)}
+.feedTypeWeather{background:rgba(107,168,255,.14);color:#d8e8ff;border-color:rgba(107,168,255,.45)}
+.feedTypeCamera{background:rgba(255,122,26,.14);color:#ffd8bd;border-color:rgba(255,122,26,.45)}
+.feedTypeHunter{background:rgba(180,140,255,.14);color:#eadfff;border-color:rgba(180,140,255,.45)}
+.feedTypeSafety{background:rgba(255,77,46,.16);color:#ffd5d0;border-color:rgba(255,77,46,.55)}
+.feedTypeStand{background:rgba(194,166,109,.16);color:#f4f1e8;border-color:rgba(194,166,109,.45)}
+.savedFeedViewGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px}
+.savedFeedView{border:1px solid var(--border);border-radius:16px;background:rgba(255,255,255,.04);padding:14px}
+.savedFeedView strong{display:block;color:var(--orange)}
+@media(max-width:1050px){.feedFilterGrid{grid-template-columns:1fr 1fr}.savedFeedViewGrid{grid-template-columns:1fr 1fr}.feedHistoryItem{grid-template-columns:1fr}}
+@media(max-width:650px){.feedFilterGrid,.savedFeedViewGrid{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
 <aside class="sidebar">
-<div class="brand"><div class="logo">VT</div><div><strong>VenariTrace</strong><br><small>Prototype v4.4.3.1 Menu Route Fix</small></div></div>
+<div class="brand"><div class="logo">VT</div><div><strong>VenariTrace</strong><br><small>Prototype v4.4.7.1 Menu Route Fix</small></div></div>
 <nav class="nav" id="nav"></nav>
 </aside>
 <main class="main" id="main"></main>
@@ -1024,10 +1160,10 @@ box-shadow:0 12px 28px rgba(0,0,0,.2);
 <nav class="bottom" id="bottom"></nav>
 <script>
 (function(){
-var page="command";var quickOpen=false;var harvestRecordCreated=false;var ballisticMode="quick";var trackStatus="not_started";var standSub="overview";var hunterSub="overview";var hcmSub="overview";var sosConfirm=false;var sosActive=false;var trackingActive=false;var activeSub="command";var settingsSub="profile";
+var simDistance=250;var simWind=6;var shotPopupOpen=false;var page="command";var previousPage="command";var pageHistory=["command"];var quickOpen=false;var harvestRecordCreated=false;var ballisticMode="quick";var trackStatus="not_started";var standSub="overview";var hunterSub="overview";var hcmSub="overview";var sosConfirm=false;var sosActive=false;var trackingActive=false;var activeSub="command";var settingsSub="profile";
 var activePrefs={map:true,weather:true,feed:true,comms:true,ballistics:true,dope:true,media:true,alerts:true,graphs:true};
 var nav=[
-["command","Command Suite","COMMAND"],["stabilize","Stabilization","COMMAND"],["refine","Operational Refinement","COMMAND"],
+["command","Command Suite","COMMAND"],["feedHistory","Event Feed History","COMMAND"],["stabilize","Stabilization","COMMAND"],["refine","Operational Refinement","COMMAND"],
 ["hunt","Hunt Command Manager","HUNT OPERATIONS"],
 ["active","Active Hunt View","HUNT OPERATIONS"],["safety","SOS / Tracking","HUNT OPERATIONS"],
 ["scouting","Scouting Mode","HUNT OPERATIONS"],
@@ -1175,7 +1311,7 @@ var activeStatus = "Morning Rut Hunt · North Box · 4 hunters live";
 return '<div class="topOpsBar"><div><button class="opsBtn command" data-page="command">⌂ COMMAND</button> <button class="opsBtn activeHunt" data-page="active">● ACTIVE HUNT <span class="badgeCount">3</span></button></div><div class="opsStatus"><span>'+activeStatus+'</span><span>Wind E 6 mph</span><span>3 Alerts</span></div></div><div class="breadcrumb">Command &gt; '+esc(pageTitle())+'</div>';
 }
 function quickActions(){
-return '<div id="quickPanel" class="quickActionPanel '+(quickOpen?'open':'')+'"><button data-page="active">Open Active Hunt</button><button data-page="scouting">Log Sighting / Scouting Note</button><button data-page="ballistics">Open Ballistics</button><button data-page="weather">Open Map / Weather</button><button data-page="comms">Message / Timers</button><button data-page="intel">AI Intel Query</button><button data-page="safety">SOS / Track Animal</button><button data-page="harvest">Log Harvest</button><button data-page="property">Create Property Task</button><button data-page="storage">Open Storage Vault</button><button data-page="command">Return to Command</button></div><div class="quickActionDock"><button data-page="command">⌂ Command</button><button data-page="active">● Active Hunt</button><button class="primary" id="quickToggle">＋</button></div>';
+return '<div id="quickPanel" class="quickActionPanel '+(quickOpen?'open':'')+'"><button data-page="active">Open Active Hunt</button><button data-page="scouting">Log Sighting / Scouting Note</button><button data-page="ballistics">Open Ballistics</button><button data-page="weather">Open Map / Weather</button><button data-page="comms">Message / Timers</button><button data-page="feedHistory">Feed History</button><button data-page="intel">AI Intel Query</button><button data-page="safety">SOS / Track Animal</button><button data-page="harvest">Log Harvest</button><button data-page="property">Create Property Task</button><button data-page="storage">Open Storage Vault</button><button data-page="command">Return to Command</button></div><div class="quickActionDock"><button data-page="command">⌂ Command</button><button data-page="active">● Active Hunt</button><button class="primary" id="quickToggle">＋</button></div>';
 }
 
 
@@ -1295,7 +1431,7 @@ return '<section class="sourceCardGrid"><div class="sourceCard"><strong>Camera I
 }
 function cleanCommandDashboard(){
 return stableBanner()+header("Command Suite","Command Dashboard","Operational overview with source-labeled data, compact branding, current alerts, map views, recent harvests, and decision support.")+
-cleanCommandTop()+cleanCommandMetrics()+commandModeRefinement()+cleanSourceCards()+
+cleanCommandTop()+commandLiveTicker()+eventFeedHistoryControls()+cleanCommandMetrics()+commandModeRefinement()+cleanSourceCards()+
 '<div class="commandSectionTitle"><h2>Live Operations</h2><span>map + weather + alerts</span></div>'+
 '<section class="cleanCommandGrid"><div class="card"><h2>Live Activity Map</h2>'+map()+'<div class="dataSourceLine">Sources: Hunter location, stand locations, camera pins, scouting records, weather/wind overlay.</div></div><div>'+weatherAlertsPanel()+ '</div></section>'+
 radarPanel()+
@@ -1448,10 +1584,10 @@ return '<div class="activeFeedList"><div class="activeFeedItem critical"><strong
 }
 function activeHuntFixed(){
 return stableBanner()+header("Active Hunt View","Active Hunt Cockpit","Live operational field screen for current hunt: map, alerts, weather, comms, ballistics, SOS, animal tracking, sightings, and hunter coordination.")+
-activeHuntTickerFixed()+standSummaryBox()+quickEventDropdown()+
+activeHuntTickerFixed()+eventFeedHistoryControls()+standSummaryBox()+quickEventDropdown()+
 '<section class="activeFixedCards"><div class="activeFixedCard"><strong>4</strong>Hunters Online<br><small class="muted">location sharing active</small></div><div class="activeFixedCard"><strong>North Box</strong>Best Stand<br><small class="muted">E/NE wind ideal</small></div><div class="activeFixedCard"><strong>5:48–6:12</strong>Legal Hours<br><small class="muted">30 min rule</small></div><div class="activeFixedCard"><strong>3</strong>Active Alerts<br><small class="muted">weather/camera/safety</small></div></section>'+
 '<section class="activeFixedGrid"><div class="card"><h2>Live Active Hunt Map</h2>'+activeHuntMapFixed()+'<div class="dataSourceLine">Sources: hunter locations, stands, camera alerts, scouting pins, wind overlay.</div></div><div class="card"><h2>Recent Event Feed</h2>'+activeHuntFeedFixed()+'</div></section>'+
-'<section class="activeFixedGrid"><div class="card sosPanel"><h2>SOS / Emergency</h2><button class="sosButton" id="sosStart">SOS</button><div class="row">Requires yes/no confirmation. If activated: alerts hunters and emergency contact, shares location, starts emergency tracking.</div></div><div class="card"><h2>Fast Actions</h2><div class="activeActionGrid"><button class="primary" data-page="scouting">Log Sighting</button><button data-page="ballistics">Ballistics</button><button data-page="comms">Message</button><button data-page="safety">Track Animal</button><button data-page="harvest">Log Harvest</button><button class="danger" data-page="safety">SOS / Recovery</button></div></div></section>'+
+'<section class="activeFixedGrid"><div class="card sosPanel"><h2>SOS / Emergency</h2><button class="sosButton" id="sosStart">SOS</button><div class="row">Requires yes/no confirmation. If activated: alerts hunters and emergency contact, shares location, starts emergency tracking.</div></div><div class="card"><h2>Fast Actions</h2><div class="activeActionGrid"><button class="primary" data-page="scouting">Log Sighting</button><button class="quickShotButton" id="openShotPopup">Shot Placement</button><button data-page="ballistics">Ballistics</button><button data-page="comms">Message</button><button data-page="safety">Track Animal</button><button data-page="harvest">Log Harvest</button><button class="danger" data-page="safety">SOS / Recovery</button></div></div></section>'+
 '<section class="activeFixedGrid"><div class="card"><h2>Ballistic Quick Card</h2>'+safeDopeTable()+'</div><div class="card"><h2>Current Conditions</h2><div class="row">44°F · E/NE wind 6 mph · gust 11</div><div class="row">Sunrise 6:18 AM · Sunset 5:42 PM</div><div class="row">Moon: Waning crescent · 34%</div><div class="row">Precipitation chance: 18%</div></div></section>';
 }
 
@@ -1514,12 +1650,7 @@ ballisticModeTabs()+
 '<section class="ballisticAdvancedGrid"><div class="card"><h2>Rifle / Ammo Data Entry</h2><div class="inputMatrix"><input placeholder="Rifle profile name"><input placeholder="Caliber"><input placeholder="Bullet weight gr"><input placeholder="Ballistic coefficient"><input placeholder="Muzzle velocity fps"><input placeholder="Zero range yd"><input placeholder="Sight height inches"><input placeholder="Scope click value"><input placeholder="Reticle type"><input placeholder="Temperature °F"><input placeholder="Pressure / altitude"><input placeholder="Humidity %"><input placeholder="Wind speed mph"><input placeholder="Wind direction"><input placeholder="Shot angle °"></div><button class="badge">Calculate Table</button></div><div class="card"><h2>Saved Library</h2><div class="row">.308 Deer Rifle · 165gr · 100 yd zero</div><div class="row">6.5 Creedmoor · 143gr · 200 yd zero</div><div class="row">MOA Hash Reticle · ¼ MOA clicks</div><div class="row">Cold Weather DOPE Card</div></div></section>'+
 '<section class="grid2"><div class="card"><h2>Advanced Shooting Table</h2>'+advancedDopeTable()+'</div><div class="card"><h2>MOA / MIL Reference</h2><table><tr><th>Value</th><th>100 yd</th><th>200 yd</th><th>300 yd</th></tr><tr><td>1 MOA</td><td>1.047 in</td><td>2.094 in</td><td>3.141 in</td></tr><tr><td>1 MIL</td><td>3.6 in</td><td>7.2 in</td><td>10.8 in</td></tr><tr><td>¼ MOA click</td><td>.26 in</td><td>.52 in</td><td>.79 in</td></tr></table></div></section>';
 }
-function shotPlacementSimulatorView(){
-return header("Shot Placement Simulator","Deer Angle, Hold Reticle, Impact Reticle & Recovery Planning","Simulator view for deer angle, distance, hold point, impact point, windage/elevation, and recovery notes.")+
-ballisticModeTabs()+
-'<section class="simulatorGrid"><div class="card"><h2>Simulator Visual</h2>'+scope()+'<p class="muted">White reticle = hold point · Red reticle = desired impact. Future build can switch deer angle and scale by distance.</p></div><div class="card"><h2>Simulator Controls</h2><select><option>Broadside Left</option><option>Quarter Toward Left</option><option>Quarter Away Left</option><option>Broadside Right</option><option>Quarter Toward Right</option><option>Quarter Away Right</option><option>Straight On</option><option>Straight Away</option></select><input type="range" min="20" max="400" value="250"><div class="row">Distance: 250 yd</div><div class="row">Elevation hold: 2.8 MOA / 0.81 MIL / 11 clicks</div><div class="row">Windage hold: 1.2 MOA / 0.35 MIL / 5 clicks</div><button class="badge">Apply to Active Hunt</button></div></section>'+
-'<section class="grid2"><div class="card"><h2>Shot Record</h2><textarea placeholder="Shot notes, angle, reaction, point of impact, blood, direction of travel"></textarea><button class="badge" data-page="safety">Start Animal Tracking</button></div><div class="card"><h2>Recovery Link</h2><div class="row">Shot record can link to Track Animal, Harvest Suite, Completed Hunt, and Season Archive.</div></div></section>';
-}
+function shotPlacementSimulatorView(){return autoShotPlacementSimulator()}
 function ballisticsFixed(){
 if(ballisticMode==="lab") return ballisticLabView();
 if(ballisticMode==="simulator") return shotPlacementSimulatorView();
@@ -1552,10 +1683,79 @@ function hitListStatusPanel(){
 return '<section class="grid2"><div class="card"><h2>Active Hit List After Harvest</h2><table><tr><th>Deer</th><th>System ID</th><th>Status</th><th>Action</th></tr><tr><td>Tall 8</td><td>SYS-BUCK-0011</td><td>Active Target</td><td>Track</td></tr><tr><td>Wide 10</td><td>SYS-BUCK-0004</td><td>Archived Harvest</td><td>View Trophy</td></tr><tr><td>Split G2</td><td>SYS-BUCK-0007</td><td>Harvested / Removed</td><td>Open Harvest</td></tr></table></div><div class="card"><h2>Automatic Harvest Rules</h2><div class="row">If deer has hit-list label: remove from active hit list.</div><div class="row">Set Deer Intelligence status to Harvested.</div><div class="row">Move deer to Trophy Gallery and Harvest Suite.</div><div class="row">Keep full history in Season Archive.</div><div class="row">If no prior label: generate SYS-HARVEST-YYYY-####.</div></div></section>';
 }
 
+
+function navControls(){
+var prev = previousPage || "command";
+return '<section class="navControlBar"><button class="backBtn" id="globalBackBtn">← Back</button><div class="breadcrumbTrail"><span>Current: '+page+'</span><span>Previous: '+prev+'</span><span>History: '+pageHistory.slice(-4).join(" → ")+'</span></div></section>';
+}
+
+
+function ballisticSolution(distance, wind){
+  var d=Number(distance)||250;
+  var w=Number(wind)||6;
+  // Prototype interpolation model based on saved .308 165gr profile. Production build should use the saved ballistic engine/profile.
+  var drop = Math.max(0, 0.00032*d*d - 0.025*d + 0.3);
+  var moa = d>0 ? (drop/(1.047*(d/100))) : 0;
+  var mil = d>0 ? (drop/(3.6*(d/100))) : 0;
+  var clicks = Math.round(moa/0.25);
+  var drift = Math.max(0, (w/10) * (0.00008*d*d + 0.002*d));
+  var windMoa = d>0 ? (drift/(1.047*(d/100))) : 0;
+  var windMil = d>0 ? (drift/(3.6*(d/100))) : 0;
+  var windClicks = Math.round(windMoa/0.25);
+  return {distance:d, wind:w, drop:drop, moa:moa, mil:mil, clicks:clicks, drift:drift, windMoa:windMoa, windMil:windMil, windClicks:windClicks};
+}
+function autoShotPlacementSimulator(){
+  var s=ballisticSolution(simDistance, simWind);
+  var holdTop=Math.max(24, Math.min(47, 50 - s.moa*2.7));
+  var holdLeft=Math.max(38, Math.min(62, 50 - s.windMoa*3.2));
+  return header("Shot Placement Simulator","Auto Hold / Impact Calculator","Yardage slider and manual distance entries update the hold reticle automatically using the saved ballistic profile and linked weather/wind inputs.")+
+  ballisticModeTabs()+
+  '<section class="linkedInputGrid"><div class="linkedInput"><strong>Saved Ballistic Profile</strong>.308 Deer Rifle · 165gr · 100 yd zero</div><div class="linkedInput"><strong>Weather Link</strong>44°F · E/NE wind · '+s.wind+' mph</div><div class="linkedInput"><strong>Shot Record Link</strong>Active Hunt · North Box · legal hours open</div></section>'+
+  '<section class="autoCalcGrid"><div class="card"><h2>Visual Hold / Impact View</h2>'+scaledShotVisual()+'<p class="muted">White reticle = calculated hold. Red reticle = desired impact. Deer image and reticle scale with the yardage selected.</p></div>'+
+  '<div class="autoCalcPanel"><h2>Simulator Controls</h2><label>Shot Distance Slider</label><input id="simDistanceSlider" type="range" min="20" max="500" value="'+s.distance+'"><div class="distanceReadout">'+s.distance+' yd</div><input id="simDistanceManual" type="number" value="'+s.distance+'" placeholder="Manual shot distance yards"><input id="simWindManual" type="number" value="'+s.wind+'" placeholder="Manual wind speed mph"><select><option>Profile: .308 Deer Rifle · 165gr</option><option>6.5 Creedmoor · 143gr</option><option>Custom Saved Profile</option></select><select><option>Angle: Broadside Left</option><option>Quarter Toward Left</option><option>Quarter Away Left</option><option>Broadside Right</option><option>Quarter Toward Right</option><option>Quarter Away Right</option><option>Straight On</option><option>Straight Away</option></select><button class="badge" id="applySimCalc">Apply Manual Calculation</button><div class="formulaNote">Prototype uses an interpolated saved-profile model. Production build should calculate from real saved ballistic profile, weather, atmosphere, incline, reticle and firearm/ammo data.</div></div></section>'+
+  '<section class="card"><h2>Calculated Ballistic Solution</h2><div class="calcResultGrid"><div class="calcResult"><strong>'+s.drop.toFixed(1)+' in</strong>Drop</div><div class="calcResult"><strong>'+s.moa.toFixed(2)+'</strong>MOA Elevation</div><div class="calcResult"><strong>'+s.mil.toFixed(2)+'</strong>MIL Elevation</div><div class="calcResult"><strong>'+s.clicks+'</strong>¼ MOA Clicks</div><div class="calcResult"><strong>'+s.drift.toFixed(1)+' in</strong>Wind Drift</div><div class="calcResult"><strong>'+s.windMoa.toFixed(2)+'</strong>MOA Wind</div><div class="calcResult"><strong>'+s.windMil.toFixed(2)+'</strong>MIL Wind</div><div class="calcResult"><strong>'+s.windClicks+'</strong>Wind Clicks</div></div></section>'+
+  '<section class="grid2"><div class="card"><h2>Linked Calculation Inputs</h2><div class="row">Shot distance: slider/manual entry</div><div class="row">Weather: wind speed/direction, temperature, pressure</div><div class="row">Saved ballistic profile: rifle, ammo, zero, velocity, BC, sight height</div><div class="row">Reticle profile: MOA/MIL/click value</div><div class="row">Active Hunt: stand, location, legal hours, shot record</div></div><div class="card"><h2>Save / Apply</h2><button class="badge">Save Shot Solution</button><br><br><button class="badge2" data-page="active">Apply to Active Hunt</button><br><br><button class="badge2" data-page="harvest">Attach to Harvest Record</button><br><br><button class="badge2" data-page="safety">Start Tracking</button></div></section>';
+}
+
+
+function scaledShotVisual(){
+  var s=ballisticSolution(simDistance, simWind);
+  var deerScale=Math.max(0.42, Math.min(1.45, 140 / Math.max(60, s.distance)));
+  var reticleScale=Math.max(0.55, Math.min(1.35, 160 / Math.max(80, s.distance)));
+  var holdTop=Math.max(24, Math.min(47, 50 - s.moa*2.7));
+  var holdLeft=Math.max(38, Math.min(62, 50 - s.windMoa*3.2));
+  return '<div class="calcScope"><div class="deerSilhouette" style="transform:scale('+deerScale.toFixed(2)+')"></div><div class="impactMarker" style="transform:translate(-50%,-50%) scale('+reticleScale.toFixed(2)+')" title="Desired impact reticle"></div><div class="holdMarker" title="Calculated hold reticle" style="top:'+holdTop+'%;left:'+holdLeft+'%;transform:translate(-50%,-50%) scale('+reticleScale.toFixed(2)+')"></div></div><div class="scaledReadout"><div><strong>'+deerScale.toFixed(2)+'x</strong>Deer image scale</div><div><strong>'+reticleScale.toFixed(2)+'x</strong>Reticle scale</div><div><strong>'+s.distance+' yd</strong>Shot distance</div></div>';
+}
+function shotPlacementPopup(){
+ if(!shotPopupOpen) return '';
+ var s=ballisticSolution(simDistance, simWind);
+ return '<div class="shotPopupOverlay"><div class="shotPopupWindow"><div class="popupHeader"><div><h2>Quick Shot Placement Solution</h2><small class="muted">Active Hunt popup · linked to ballistic profile, weather, wind, and shot distance</small></div><button class="popupClose" id="closeShotPopup">X / Cancel</button></div><section class="autoCalcGrid"><div class="card"><h2>Scaled Hold / Impact View</h2>'+scaledShotVisual()+'</div><div class="autoCalcPanel"><h2>Quick Controls</h2><label>Shot Distance</label><input id="popupSimDistanceSlider" type="range" min="20" max="500" value="'+s.distance+'"><div class="distanceReadout">'+s.distance+' yd</div><input id="popupSimDistanceManual" type="number" value="'+s.distance+'" placeholder="Manual distance"><input id="popupSimWindManual" type="number" value="'+s.wind+'" placeholder="Wind mph"><button class="badge" id="popupApplySimCalc">Recalculate</button><br><br><button class="badge2" id="closeShotPopup2">Cancel / Close</button></div></section><section class="card"><h2>Solution</h2><div class="calcResultGrid"><div class="calcResult"><strong>'+s.drop.toFixed(1)+' in</strong>Drop</div><div class="calcResult"><strong>'+s.moa.toFixed(2)+'</strong>MOA Elev</div><div class="calcResult"><strong>'+s.mil.toFixed(2)+'</strong>MIL Elev</div><div class="calcResult"><strong>'+s.clicks+'</strong>Clicks</div><div class="calcResult"><strong>'+s.drift.toFixed(1)+' in</strong>Wind Drift</div><div class="calcResult"><strong>'+s.windMoa.toFixed(2)+'</strong>MOA Wind</div><div class="calcResult"><strong>'+s.windMil.toFixed(2)+'</strong>MIL Wind</div><div class="calcResult"><strong>'+s.windClicks+'</strong>Wind Clicks</div></div></section></div></div>';
+}
+function commandLiveTicker(){
+ return '<div class="commandTickerBlock">'+activeHuntTickerFixed()+'</div>';
+}
+
+
+function eventFeedHistoryControls(){
+return '<section class="feedHistoryControls"><h2>Event Feed History / Filters</h2><p class="muted">Show current or former feeds, filter by type, set how far back to search, choose how many records to display, and sort the results.</p><div class="feedFilterGrid"><select><option>Feed Scope: Active Hunt</option><option>Command Feed</option><option>All Property Feeds</option><option>Hunter Profile Feeds</option><option>Season Archive Feed</option></select><select><option>Type: All</option><option>Weather</option><option>Camera</option><option>Hunter Event</option><option>Safety / SOS</option><option>Stand / Property</option><option>Harvest</option><option>Tracking</option><option>Comms</option></select><select><option>Lookback: Last 24 Hours</option><option>Last 7 Days</option><option>Last 30 Days</option><option>Current Season</option><option>Custom Date Range</option></select><select><option>Show: 25 Events</option><option>Show: 50 Events</option><option>Show: 100 Events</option><option>Show: All Filtered</option></select><select><option>Sort: Newest First</option><option>Oldest First</option><option>Priority First</option><option>By Type</option><option>By Hunter</option><option>By Stand</option></select></div><div class="feedFilterGrid"><input placeholder="Search feed text, deer name, stand, hunter"><input placeholder="Start date"><input placeholder="End date"><select><option>Priority: Any</option><option>Critical</option><option>High</option><option>Normal</option><option>Low</option></select><button class="badge">Apply Filters</button></div></section>';
+}
+function eventFeedHistoryList(){
+return '<section class="feedHistoryList"><h2>Filtered Feed Results</h2><div class="feedHistoryItem"><span class="feedTypeBadge feedTypeWeather">Weather</span><div><strong>Wind Shift Advisory</strong><br><small class="muted">E wind shifting NE; East Plot caution, North Box ideal.</small></div><small class="muted">Today · 7:22 AM</small></div><div class="feedHistoryItem"><span class="feedTypeBadge feedTypeCamera">Camera</span><div><strong>SPYPOINT Buck Alert</strong><br><small class="muted">Split G2 detected at East Plot · AI confidence 88%.</small></div><small class="muted">Today · 6:42 AM</small></div><div class="feedHistoryItem"><span class="feedTypeBadge feedTypeHunter">Hunter</span><div><strong>Doe Sighted (#2)</strong><br><small class="muted">Hunter 2 reported two does crossing Creek Trail.</small></div><small class="muted">Today · 7:11 AM</small></div><div class="feedHistoryItem"><span class="feedTypeBadge feedTypeSafety">Safety</span><div><strong>Starting a Track</strong><br><small class="muted">Hunter 1 started recovery tracking from North Box.</small></div><small class="muted">Today · 7:43 AM</small></div><div class="feedHistoryItem"><span class="feedTypeBadge feedTypeStand">Stand</span><div><strong>North Box Needs Attention</strong><br><small class="muted">Stand marked for supplies / maintenance follow-up.</small></div><small class="muted">Today · 8:24 AM</small></div></section>';
+}
+function savedFeedViews(){
+return '<section class="card"><h2>Saved Feed Views</h2><div class="savedFeedViewGrid"><div class="savedFeedView"><strong>Critical Active Hunt Events</strong><small class="muted">SOS, shot fired, track, severe weather</small><br><button class="badge2">Load View</button></div><div class="savedFeedView"><strong>Camera + Hit List Feed</strong><small class="muted">SPYPOINT, deer labels, target buck alerts</small><br><button class="badge2">Load View</button></div><div class="savedFeedView"><strong>Stand / Property Issues</strong><small class="muted">Needs attention, hazards, inventory, maintenance</small><br><button class="badge2">Load View</button></div></div></section>';
+}
+function eventFeedArchiveSuite(){
+return header("Event Feed History","Former Feeds, Filters, Sorting & Saved Feed Views","Review past/current feed events across Command, Active Hunt, Hunter Profiles, Property, Season Archive and linked records.")+
+eventFeedHistoryControls()+eventFeedHistoryList()+savedFeedViews()+
+'<section class="grid2"><div class="card"><h2>Feed Routing</h2><div class="row">Quick events appear in Active Hunt feed and Command feed.</div><div class="row">Weather/camera/SOS/stand events also save to linked records.</div><div class="row">Former feeds are preserved by season and hunt.</div></div><div class="card"><h2>Filter Examples</h2><div class="row">Last 7 days · Camera only · Newest first</div><div class="row">Current season · Harvest + Tracking · By hunter</div><div class="row">Last 30 days · Stand Issues · Priority first</div></div></section>';
+}
+
 function content(){
   try{
     var routes={
       command:function(){return command()},
+      feedHistory:function(){return eventFeedArchiveSuite()},
       stabilize:function(){return stabilizationDashboard()},
       refine:function(){return operationalRefinementSuite()},
       hunt:function(){return hunt()},
@@ -1617,6 +1817,17 @@ var sn=document.getElementById("sosNo");if(sn){sn.addEventListener("click",funct
 var ts=document.getElementById("trackStart");if(ts){ts.addEventListener("click",function(){trackStatus="active";trackingActive=true;render();});}
 
 document.querySelectorAll("[data-ballisticmode]").forEach(function(b){b.addEventListener("click",function(){ballisticMode=b.getAttribute("data-ballisticmode");page="ballistics";render();window.scrollTo(0,0);})});
+
+var sd=document.getElementById("simDistanceSlider");if(sd){sd.addEventListener("input",function(){simDistance=Number(sd.value)||250;render();});}
+
+var osp=document.getElementById("openShotPopup");if(osp){osp.addEventListener("click",function(){shotPopupOpen=true;render();});}
+var csp=document.getElementById("closeShotPopup");if(csp){csp.addEventListener("click",function(){shotPopupOpen=false;render();});}
+var csp2=document.getElementById("closeShotPopup2");if(csp2){csp2.addEventListener("click",function(){shotPopupOpen=false;render();});}
+var psd=document.getElementById("popupSimDistanceSlider");if(psd){psd.addEventListener("input",function(){simDistance=Number(psd.value)||250;render();});}
+var psm=document.getElementById("popupSimDistanceManual");var psw=document.getElementById("popupSimWindManual");var pap=document.getElementById("popupApplySimCalc");if(pap){pap.addEventListener("click",function(){simDistance=Number(psm&&psm.value)||simDistance;simWind=Number(psw&&psw.value)||simWind;render();});}
+
+var sm=document.getElementById("simDistanceManual");var sw=document.getElementById("simWindManual");var ap=document.getElementById("applySimCalc");if(ap){ap.addEventListener("click",function(){simDistance=Number(sm&&sm.value)||simDistance;simWind=Number(sw&&sw.value)||simWind;render();});}
+
 var th=document.getElementById("trackHarvested");if(th){th.addEventListener("click",function(){trackStatus="harvested";harvestRecordCreated=true;render();});}
 var tl=document.getElementById("trackLost");if(tl){tl.addEventListener("click",function(){trackStatus="lost";render();});}
 var tc=document.getElementById("trackContinue");if(tc){tc.addEventListener("click",function(){trackStatus="active";render();});}
