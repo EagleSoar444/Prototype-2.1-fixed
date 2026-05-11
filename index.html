@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>VT Tracer Prototype v4.1 Hunt Command Manager Expansion</title>
+<title>VT Tracer Prototype v4.2 Operational Refinement</title>
 <style>
 :root{--bg:#0f1510;--deep:#0b0f0b;--panel:#1a211b;--panel2:#202920;--border:#394339;--orange:#ff7a1a;--olive:#556b2f;--tan:#f4f1e8;--muted:#b4b0a2;--red:#ff4d2e;--blue:#6ba8ff;--purple:#b48cff}
 *{box-sizing:border-box}body{margin:0;font-family:Arial,system-ui,sans-serif;background:linear-gradient(135deg,#0f1510,#171d16);color:var(--tan);display:grid;grid-template-columns:280px 1fr;min-height:100vh}button,input,select,textarea{font:inherit}
@@ -864,11 +864,36 @@ max-width:210px!important;
 @media(max-width:1100px){.hcmDashboardGrid,.hcmWorkflow,.planCardGrid,.assignmentGrid{grid-template-columns:1fr 1fr}.hcmGrid{grid-template-columns:1fr}}
 @media(max-width:650px){.hcmDashboardGrid,.hcmWorkflow,.planCardGrid,.assignmentGrid,.checklistGrid{grid-template-columns:1fr}.hcmStep:after{display:none}}
 
+
+.modeStrip{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
+.modeCard{border:1px solid var(--border);border-radius:16px;background:rgba(255,255,255,.04);padding:14px}
+.modeCard strong{display:block;color:var(--orange);font-size:20px}
+.priorityLayout{display:grid;grid-template-columns:1.2fr .8fr;gap:18px;margin-bottom:18px}
+.focusPanel{border:2px solid rgba(255,122,26,.45);border-radius:20px;background:rgba(255,122,26,.06);padding:16px}
+.focusPanel h2{margin:0 0 10px;color:#d9c896}
+.activeWidgetGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px}
+.activeWidget{border:1px solid var(--border);border-radius:16px;background:rgba(255,255,255,.04);padding:14px}
+.activeWidget strong{display:block;color:var(--orange);font-size:22px}
+.deerIntelTabs{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
+.deerIntelTab{border:1px solid var(--border);border-radius:14px;background:rgba(255,255,255,.04);padding:12px;text-align:center}
+.deerIntelTab strong{display:block;color:var(--orange)}
+.ballisticLayerGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:18px}
+.ballisticLayer{border:1px solid var(--border);border-radius:18px;background:rgba(255,255,255,.04);padding:16px}
+.ballisticLayer strong{display:block;color:var(--orange);font-size:20px}
+.mapEngineGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px}
+.mapEngineCard{border:1px solid var(--border);border-radius:16px;background:rgba(255,255,255,.04);padding:14px}
+.mediaEngineGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+.mediaEngineCard{border:1px solid var(--border);border-radius:16px;background:rgba(255,255,255,.04);padding:14px}
+.mediaEngineCard strong,.mapEngineCard strong{color:var(--orange);display:block}
+.disclosureBox{border:1px dashed rgba(255,122,26,.55);border-radius:16px;background:rgba(255,122,26,.05);padding:14px;margin-bottom:18px}
+@media(max-width:1050px){.modeStrip,.activeWidgetGrid,.deerIntelTabs,.ballisticLayerGrid,.mapEngineGrid,.mediaEngineGrid{grid-template-columns:1fr 1fr}.priorityLayout{grid-template-columns:1fr}}
+@media(max-width:650px){.modeStrip,.activeWidgetGrid,.deerIntelTabs,.ballisticLayerGrid,.mapEngineGrid,.mediaEngineGrid{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
 <aside class="sidebar">
-<div class="brand"><div class="logo">VT</div><div><strong>VenariTrace</strong><br><small>Prototype v4.1 Hunt Command Manager Expansion</small></div></div>
+<div class="brand"><div class="logo">VT</div><div><strong>VenariTrace</strong><br><small>Prototype v4.2 Operational Refinement</small></div></div>
 <nav class="nav" id="nav"></nav>
 </aside>
 <main class="main" id="main"></main>
@@ -885,7 +910,7 @@ max-width:210px!important;
 var page="command";var quickOpen=false;var hunterSub="overview";var hcmSub="overview";var sosConfirm=false;var sosActive=false;var trackingActive=false;var activeSub="command";var settingsSub="profile";
 var activePrefs={map:true,weather:true,feed:true,comms:true,ballistics:true,dope:true,media:true,alerts:true,graphs:true};
 var nav=[
-["command","Command Suite","COMMAND"],
+["command","Command Suite","COMMAND"],["refine","Operational Refinement","COMMAND"],
 ["hunt","Hunt Command Manager","HUNT OPERATIONS"],
 ["active","Active Hunt View","HUNT OPERATIONS"],["safety","SOS / Tracking","HUNT OPERATIONS"],
 ["scouting","Scouting Mode","HUNT OPERATIONS"],
@@ -1064,7 +1089,7 @@ weatherAlertsPanel()+commandWeatherPanel()+radarPanel()+
 
 
 function advancedBallisticSuite(){
-return header("Ballistic Suite","Advanced Ballistic Library, Shooting Tables, Reticles, MOA/MIL & DOPE Cards","Comprehensive ballistic workspace for rifle profiles, ammunition/load library, environmental data, scope/reticle profiles, range tables, MOA/MIL conversions, elevation and windage holds, saved DOPE cards, and Active Hunt shot-placement access.")+
+return ballisticRefinement()+header("Ballistic Suite","Advanced Ballistic Library, Shooting Tables, Reticles, MOA/MIL & DOPE Cards","Comprehensive ballistic workspace for rifle profiles, ammunition/load library, environmental data, scope/reticle profiles, range tables, MOA/MIL conversions, elevation and windage holds, saved DOPE cards, and Active Hunt shot-placement access.")+
 '<section class="solutionRibbon"><div class="solutionBox"><strong>250</strong>yards</div><div class="solutionBox"><strong>7.4</strong>in drop</div><div class="solutionBox"><strong>2.8</strong>MOA up</div><div class="solutionBox"><strong>0.81</strong>MIL up</div><div class="solutionBox"><strong>11</strong>¼ MOA clicks</div><div class="solutionBox"><strong>5</strong>wind clicks</div></section>'+
 '<section class="ballisticAdvancedGrid"><div class="card"><h2>Advanced Data Entry</h2><div class="inputMatrix"><input placeholder="Rifle profile name"><input placeholder="Caliber"><input placeholder="Bullet weight gr"><input placeholder="Ballistic coefficient"><input placeholder="Muzzle velocity fps"><input placeholder="Zero range yd"><input placeholder="Sight height inches"><input placeholder="Scope click value"><input placeholder="Reticle type"><input placeholder="Temperature °F"><input placeholder="Pressure / altitude"><input placeholder="Humidity %"><input placeholder="Wind speed mph"><input placeholder="Wind direction"><input placeholder="Shot angle °"></div><button class="badge">Calculate Ballistic Table Placeholder</button></div><div class="card"><h2>Ballistic Profile Summary</h2><div class="row">Active rifle: .308 Deer Rifle</div><div class="row">Ammo: 165gr hunting load</div><div class="row">Zero: 100 yards</div><div class="row">Reticle: MOA hash reticle</div><div class="row">Verified max range: 250 yards</div><div class="calcNote">Production engine should calculate drop, drift, time of flight, velocity, energy, MOA, MIL, clicks, density altitude, incline correction, and wind holds from verified rifle/ammo data.</div></div></section>'+
 '<section class="grid2"><div class="card"><h2>Shot Placement / Reticle View</h2>'+scope()+'<p class="muted">White reticle = hold point · Red reticle = desired impact. Reticle overlay should be selectable by scope profile.</p></div><div class="card"><h2>Reticle + Scope Profiles</h2><div class="reticleGrid"><div class="reticleCard"><div class="reticleVisual"><div class="milDots"></div></div><strong>MOA Hash</strong><small class="muted">¼ MOA clicks</small></div><div class="reticleCard"><div class="reticleVisual"><div class="milDots"></div></div><strong>MIL Dot</strong><small class="muted">0.1 MIL clicks</small></div><div class="reticleCard"><div class="reticleVisual"><div class="milDots"></div></div><strong>BDC</strong><small class="muted">Caliber matched</small></div><div class="reticleCard"><div class="reticleVisual"><div class="milDots"></div></div><strong>Custom</strong><small class="muted">User defined</small></div></div><select><option>Active reticle: MOA Hash</option><option>MIL Dot</option><option>BDC</option><option>Custom Reticle</option></select><button class="badge">Save Reticle Profile</button></div></section>'+
@@ -1099,12 +1124,12 @@ function commandOpsExpansion(){
 return '<section class="commandOpsGrid"><div class="card"><h2>Operational Snapshot</h2><div class="opsStatusBoard"><div class="statusTile"><strong>GREEN</strong>Hunt status</div><div class="statusTile"><strong>4</strong>Hunters online</div><div class="statusTile"><strong>3</strong>Weather / field alerts</div><div class="statusTile"><strong>2</strong>High-priority property tasks</div><div class="statusTile"><strong>88%</strong>Top target probability</div><div class="statusTile"><strong>North Box</strong>Best current stand</div></div></div><div class="card"><h2>Command Priorities</h2><div class="row">1. Monitor Split G2 movement window</div><div class="row">2. Watch wind shift near East Plot</div><div class="row">3. Confirm Hunter 2 check-in</div><div class="row">4. Replace North Ridge camera batteries</div></div><div class="card"><h2>Decision Support</h2><div class="row">Best current action: hold North Box</div><div class="row">Avoid East Plot access for 45 minutes</div><div class="row">Camera confidence: high</div><div class="row">Legal shooting: open until 6:12 PM</div></div></section>'
 }
 function activeCockpitExpansion(){
-return header("Active Hunt Cockpit","One-Screen Field Operations View","A tactical active-hunt cockpit for live map, weather, wind, comms, sightings, camera alerts, ballistics, SOS, animal tracking, emergency controls, and hunter-selected display panels.")+activeAlertTicker()+sosPanel()+trackAnimalPanel()+activeRecentEvents()+
+return header("Active Hunt Cockpit","One-Screen Field Operations View","A tactical active-hunt cockpit for live map, weather, wind, comms, sightings, camera alerts, ballistics, SOS, animal tracking, emergency controls, and hunter-selected display panels.")+activeAlertTicker()+activeCockpitRefinement()+sosPanel()+trackAnimalPanel()+activeRecentEvents()+
 '<section class="cockpitGrid"><div class="card"><h2>Primary Tactical Map</h2>'+map()+'<p class="muted">Live hunters, stands, camera events, sightings, wind cone, and scouting pins.</p></div><div class="cockpitPanel"><h2>Hunter Status</h2><div class="row">Hunter 1 · North Box · On Stand</div><div class="row">Hunter 2 · South Ladder · Checked In</div><div class="row">Hunter 3 · West Ridge · Scouting</div><div class="row">Emergency status: Normal</div><button class="badge">Request Check-In</button></div><div class="cockpitPanel"><h2>Fast Actions</h2><button class="badge2" data-page="scouting">Log Sighting</button><br><br><button class="badge2" data-page="ballistics">Shot Placement</button><br><br><button class="badge2" data-page="comms">Message Crew</button><br><br><button class="badge" data-page="harvest">Log Harvest</button></div></section>'+
 '<section class="grid2"><div class="card"><h2>Active Intelligence</h2><div class="row">Split G2 detected 6:42 AM · East Plot</div><div class="row">Fresh scrape near North Ridge · movement weight increased</div><div class="row">Wind E/NE favors North Box</div><div class="row">Legal shooting window open</div></div><div class="card"><h2>Ballistic Quick Card</h2>'+advancedDopeTable()+'</div></section>'
 }
 function deerIntelligenceHub(){
-return header("Deer Intelligence Hub","Target Deer Profiles, Hit List, Movement Probability & Pattern Analysis","A dedicated intelligence workspace for unique deer identities, custom labels, hit list status, sightings, camera history, scouting sign, movement windows, stand recommendations, and harvest outcomes.")+
+return deerIntelRefinement()+header("Deer Intelligence Hub","Target Deer Profiles, Hit List, Movement Probability & Pattern Analysis","A dedicated intelligence workspace for unique deer identities, custom labels, hit list status, sightings, camera history, scouting sign, movement windows, stand recommendations, and harvest outcomes.")+
 '<section class="deerProfileGrid"><article class="deerCard"><div class="deerPortrait">Split G2</div><strong>SYS-BUCK-0007 · Split G2</strong><div class="probBar"><div style="width:88%"></div></div><small class="muted">88% hunt probability · North Box · sunrise window</small><div class="row">Last seen: East Plot · 6:42 AM</div><div class="row">Best wind: E / NE</div><button class="badge">Create Hunt Plan</button></article><article class="deerCard"><div class="deerPortrait">Tall 8</div><strong>SYS-BUCK-0011 · Tall 8</strong><div class="probBar"><div style="width:72%"></div></div><small class="muted">72% probability · North Ridge · last light</small><div class="row">Last seen: North Ridge · 5:55 PM</div><div class="row">Best wind: N / NW</div><button class="badge2">Watch</button></article><article class="deerCard"><div class="deerPortrait">Wide 10</div><strong>SYS-BUCK-0004 · Wide 10</strong><div class="probBar"><div style="width:69%"></div></div><small class="muted">69% probability · Creek Crossing · cold front</small><div class="row">Status: Harvested / archived</div><div class="row">Hunter 1 · Creek Crossing</div><button class="badge2">Open Record</button></article></section>'+
 '<section class="grid2"><div class="card"><h2>Movement Pattern Graph</h2>'+line()+'</div><div class="card"><h2>Intel Factors</h2><div class="row">Camera detections weighted by recency</div><div class="row">Manual sightings and scouting sign increase confidence</div><div class="row">Wind/stand fit adjusts hunt recommendation</div><div class="row">Harvest records close or archive hit list profiles</div><div class="row">Season archive stores all deer intelligence by year</div></div></section>'
 }
@@ -1153,7 +1178,7 @@ return '<section class="sourceCardGrid"><div class="sourceCard"><strong>Camera I
 }
 function cleanCommandDashboard(){
 return header("Command Suite","Command Dashboard","Operational overview with source-labeled data, compact branding, current alerts, map views, recent harvests, and decision support.")+
-cleanCommandTop()+cleanCommandMetrics()+cleanSourceCards()+
+cleanCommandTop()+cleanCommandMetrics()+commandModeRefinement()+cleanSourceCards()+
 '<div class="commandSectionTitle"><h2>Live Operations</h2><span>map + weather + alerts</span></div>'+
 '<section class="cleanCommandGrid"><div class="card"><h2>Live Activity Map</h2>'+map()+'<div class="dataSourceLine">Sources: Hunter location, stand locations, camera pins, scouting records, weather/wind overlay.</div></div><div>'+weatherAlertsPanel()+ '</div></section>'+
 radarPanel()+
@@ -1261,7 +1286,36 @@ function hcmAnalytics(){
 return '<section class="grid2"><div class="card"><h2>Plan Score Factors</h2>'+line()+'<div class="dataSourceLine">Sources: AI Intel, Weather & Maps, deer profile, scouting, harvest history.</div></div><div class="card"><h2>Stand Ranking</h2><table><tr><th>Stand</th><th>Score</th><th>Reason</th></tr><tr><td>North Box</td><td>82</td><td>E/NE wind + target pattern</td></tr><tr><td>Creek Crossing</td><td>75</td><td>Cold front activity</td></tr><tr><td>East Plot</td><td>62</td><td>Bad current wind</td></tr></table></div></section>';
 }
 
-function content(){if(page==="hunt")return hunt();if(page==="scouting")return scoutingMode();if(page==="active")return activeHunt();if(page==="safety")return safetyRecoverySuite();if(page==="harvest")return harvestSuite();if(page==="seasons")return seasonArchive();if(page==="hunter")return hunter();if(page==="account")return accountSettings();if(page==="intel")return intel();if(page==="aiCamera")return aiCameraLab();if(page==="deerIntel")return deerIntelligenceHub();if(page==="weather")return weather();if(page==="comms")return comms();if(page==="ballistics")return ballistics();if(page==="property")return property();if(page==="gallery")return gallery();if(page==="storage")return storageVault();if(page==="calendar")return calendar();if(page==="reports")return reports();return command()}
+
+function commandModeRefinement(){
+return '<section class="modeStrip"><div class="modeCard"><strong>Strategic</strong>Command overview</div><div class="modeCard"><strong>Operational</strong>Hunt planning</div><div class="modeCard"><strong>Tactical</strong>Active hunt cockpit</div><div class="modeCard"><strong>Archive</strong>Season intelligence</div></section>'+
+'<section class="priorityLayout"><div class="focusPanel"><h2>Current Command Focus</h2><div class="row">Priority 1: Active Hunt monitoring at North Farm</div><div class="row">Priority 2: Split G2 movement window remains active</div><div class="row">Priority 3: Wind shift advisory affecting East Plot approach</div><div class="row">Priority 4: North Ridge camera battery task after hunt closes</div><div class="dataSourceLine">Sources: Active Hunt, AI Intel, Weather & Maps, Property HQ</div></div><div class="card"><h2>Progressive Display</h2><div class="row">Show critical items first.</div><div class="row">Collapse secondary data by default.</div><div class="row">Let users expand details only when needed.</div><div class="row">Keep Command as the strategic home screen.</div></div></section>';
+}
+function activeCockpitRefinement(){
+return '<section class="activeWidgetGrid"><div class="activeWidget"><strong>One-Hand Mode</strong>Large field buttons</div><div class="activeWidget"><strong>Low-Light</strong>High contrast</div><div class="activeWidget"><strong>Offline Ready</strong>Cached plan/map</div><div class="activeWidget"><strong>Quick Overlay</strong>Ballistics/map/comms</div><div class="activeWidget"><strong>Safety</strong>SOS + tracking</div><div class="activeWidget"><strong>Custom</strong>User-selected widgets</div></section>'+
+'<section class="disclosureBox"><strong>Active Hunt UX Rule:</strong> keep the screen simple in the field. Show only critical tactical panels first: map, weather/wind, feed, SOS, sighting, ballistics, comms. Everything else should slide in as optional overlays.</section>';
+}
+function deerIntelRefinement(){
+return '<section class="deerIntelTabs"><div class="deerIntelTab"><strong>Identity</strong>AI deer labels</div><div class="deerIntelTab"><strong>Movement</strong>pattern scoring</div><div class="deerIntelTab"><strong>Prediction</strong>best chance model</div><div class="deerIntelTab"><strong>Outcome</strong>harvest/archive</div></section>'+
+'<section class="grid2"><div class="card"><h2>Elite Deer Intelligence Structure</h2><div class="row">Persistent deer identity with system ID and custom name.</div><div class="row">Profile photo timeline from SPYPOINT, Command, manual uploads, and harvest gallery.</div><div class="row">Movement corridor and daylight probability score.</div><div class="row">Weather, wind, moon, stand and camera correlation.</div><div class="row">Hit list state: watchlist, target, harvested, archived.</div></div><div class="card"><h2>Next AI Layer</h2><div class="row">Confidence score must show why the AI made the recommendation.</div><div class="row">Every prediction should list source records.</div><div class="row">Users should be able to approve, reject, or save AI recommendations.</div></div></section>';
+}
+function ballisticRefinement(){
+return '<section class="ballisticLayerGrid"><div class="ballisticLayer"><strong>Quick Hunt Ballistics</strong><p class="muted">Field-use view: distance, wind, hold, clicks, reticle, ethical max-range warning.</p><button class="badge2" data-page="active">Open Active Hunt</button></div><div class="ballisticLayer"><strong>Ballistic Lab</strong><p class="muted">Advanced rifle/ammo/reticle library, chronograph data, atmosphere, DOPE generation.</p><button class="badge2" data-page="ballistics">Open Lab</button></div><div class="ballisticLayer"><strong>Shot Placement Simulator</strong><p class="muted">Deer angle, anatomy, impact reticle, hold reticle, tracking/recovery record.</p><button class="badge2" data-page="ballistics">Open Simulator</button></div></section>';
+}
+function mapEngineRefinement(){
+return '<section class="mapEngineGrid"><div class="mapEngineCard"><strong>Operational Map</strong>Active hunters, stands, weather, SOS, tracking</div><div class="mapEngineCard"><strong>Intel Map</strong>Deer movement, sightings, cameras, rubs, scrapes</div><div class="mapEngineCard"><strong>Property Map</strong>Tasks, equipment, food plots, timber, hazards</div></section>'+
+'<section class="disclosureBox"><strong>Map Engine Rule:</strong> maps are a core operating layer. Every pin should know its source, season, owner, visibility, and linked record.</section>';
+}
+function mediaCollectionsRefinement(){
+return '<section class="mediaEngineGrid"><div class="mediaEngineCard"><strong>AI Camera</strong>trail cam imports</div><div class="mediaEngineCard"><strong>Harvest</strong>trophy/recovery media</div><div class="mediaEngineCard"><strong>Property</strong>tasks/docs/photos</div><div class="mediaEngineCard"><strong>Hunter</strong>personal gallery</div></section>'+
+'<section class="grid2"><div class="card"><h2>Collections Engine</h2><div class="row">Media should not be just a gallery; it should become evidence for AI Intel.</div><div class="row">Every image should link to deer ID, camera, location, stand, season, weather, wind, hunter and notes.</div></div><div class="card"><h2>Recommended Organization</h2><div class="row">Season → Property → Source → Linked Record → Visibility.</div><div class="row">Allow automatic tagging, manual correction, merge/split deer IDs, and archive by season.</div></div></section>';
+}
+function operationalRefinementSuite(){
+return header("Operational Refinement","Command Mode, Active Cockpit, Deer Intel, Ballistics, Map Engine & Media Collections","Implementation of the refinement recommendations: reduce feature sprawl, improve hierarchy, emphasize Command and Active Hunt, and organize complex tools into clearer operational layers.")+
+commandModeRefinement()+activeCockpitRefinement()+deerIntelRefinement()+ballisticRefinement()+mapEngineRefinement()+mediaCollectionsRefinement();
+}
+
+function content(){if(page==="refine")return operationalRefinementSuite();if(page==="hunt")return hunt();if(page==="scouting")return scoutingMode();if(page==="active")return activeHunt();if(page==="safety")return safetyRecoverySuite();if(page==="harvest")return harvestSuite();if(page==="seasons")return seasonArchive();if(page==="hunter")return hunter();if(page==="account")return accountSettings();if(page==="intel")return intel();if(page==="aiCamera")return aiCameraLab();if(page==="deerIntel")return deerIntelligenceHub();if(page==="weather")return weather();if(page==="comms")return comms();if(page==="ballistics")return ballistics();if(page==="property")return property();if(page==="gallery")return gallery();if(page==="storage")return storageVault();if(page==="calendar")return calendar();if(page==="reports")return reports();return command()}
 function renderNav(){
 var currentGroup="";
 var navHtml="";
