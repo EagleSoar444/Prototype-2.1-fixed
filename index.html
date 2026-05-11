@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>VT Tracer Prototype v4.4.1 Menu Route Fix</title>
+<title>VT Tracer Prototype v4.4.3.1 Menu Route Fix</title>
 <style>
 :root{--bg:#0f1510;--deep:#0b0f0b;--panel:#1a211b;--panel2:#202920;--border:#394339;--orange:#ff7a1a;--olive:#556b2f;--tan:#f4f1e8;--muted:#b4b0a2;--red:#ff4d2e;--blue:#6ba8ff;--purple:#b48cff}
 *{box-sizing:border-box}body{margin:0;font-family:Arial,system-ui,sans-serif;background:linear-gradient(135deg,#0f1510,#171d16);color:var(--tan);display:grid;grid-template-columns:280px 1fr;min-height:100vh}button,input,select,textarea{font:inherit}
@@ -965,11 +965,52 @@ box-shadow:0 12px 28px rgba(0,0,0,.2);
 @media(max-width:1050px){.calendarGridView{grid-template-columns:repeat(2,1fr)}.standCardGrid,.standFeatureGrid,.quickEventMenu,.standFilesGrid{grid-template-columns:1fr 1fr}}
 @media(max-width:650px){.calendarGridView,.standCardGrid,.standFeatureGrid,.quickEventMenu,.standFilesGrid{grid-template-columns:1fr}}
 
+
+.ballisticModeTabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.ballisticModeTabs button{border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--muted);border-radius:999px;padding:10px 14px;cursor:pointer}
+.ballisticModeTabs button.active{background:var(--orange);color:#15120d;border-color:var(--orange);font-weight:900}
+.simulatorGrid{display:grid;grid-template-columns:1.2fr .8fr;gap:18px;margin-bottom:18px}
+.trackOutcomeGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+.trackOutcomeGrid button{border:1px solid var(--border);border-radius:14px;background:rgba(255,255,255,.05);color:var(--tan);padding:12px;cursor:pointer;font-weight:900}
+.trackOutcomeGrid .harvested{background:rgba(255,122,26,.18);border-color:rgba(255,122,26,.65)}
+.trackOutcomeGrid .lost{background:rgba(255,77,46,.16);border-color:rgba(255,77,46,.65);color:#ffd5d0}
+.trackOutcomeGrid .continue{background:rgba(107,168,255,.14);border-color:rgba(107,168,255,.45);color:#d8e8ff}
+.trackStatusBanner{border:1px solid rgba(255,122,26,.55);border-radius:16px;background:rgba(255,122,26,.08);padding:12px;margin-bottom:12px}
+.trackStatusBanner strong{color:var(--orange);font-size:20px}
+@media(max-width:900px){.simulatorGrid,.trackOutcomeGrid{grid-template-columns:1fr}}
+
+
+.harvestRecordPanel{border:1px solid rgba(255,122,26,.55);border-radius:18px;background:rgba(255,122,26,.07);padding:14px;margin-bottom:18px}
+.harvestRecordPanel h2{margin-top:0}
+.harvestRecordGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px}
+.harvestRecordItem{border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.04);padding:10px}
+.harvestRecordItem strong{display:block;color:var(--orange)}
+.catalogIdBox{font-family:monospace;border:1px solid rgba(107,168,255,.45);background:rgba(107,168,255,.12);border-radius:12px;padding:10px;color:#d8e8ff;margin-bottom:12px}
+.harvestRouteGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+.harvestRouteGrid button{border:1px solid var(--border);border-radius:14px;background:rgba(255,255,255,.05);color:var(--tan);padding:10px;cursor:pointer;font-weight:900}
+.harvestRouteGrid .primary{background:var(--orange);border-color:var(--orange);color:#15120d}
+@media(max-width:900px){.harvestRecordGrid,.harvestRouteGrid{grid-template-columns:1fr 1fr}}
+@media(max-width:650px){.harvestRecordGrid,.harvestRouteGrid{grid-template-columns:1fr}}
+
+
+.trophyGalleryGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+.trophyCard{border:1px solid var(--border);border-radius:18px;background:rgba(255,255,255,.04);padding:14px}
+.trophyPhoto{height:150px;border-radius:14px;background:linear-gradient(135deg,rgba(255,122,26,.28),rgba(85,107,47,.32));display:grid;place-items:center;color:#d9c896;font-weight:900;margin-bottom:10px;position:relative;overflow:hidden}
+.trophyPhoto:after{content:"TROPHY";position:absolute;right:8px;bottom:8px;background:rgba(0,0,0,.55);border:1px solid var(--border);border-radius:999px;padding:4px 8px;font-size:11px;color:#fff}
+.hitListStatusGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px}
+.hitStatusCard{border:1px solid var(--border);border-radius:16px;background:rgba(255,255,255,.04);padding:14px}
+.hitStatusCard strong{display:block;color:var(--orange);font-size:20px}
+.archivedHarvest{border-left:5px solid var(--orange)}
+.removedHitList{border-left:5px solid var(--red)}
+.activeHitList{border-left:5px solid var(--blue)}
+@media(max-width:900px){.trophyGalleryGrid,.hitListStatusGrid{grid-template-columns:1fr 1fr}}
+@media(max-width:650px){.trophyGalleryGrid,.hitListStatusGrid{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
 <aside class="sidebar">
-<div class="brand"><div class="logo">VT</div><div><strong>VenariTrace</strong><br><small>Prototype v4.4.1 Menu Route Fix</small></div></div>
+<div class="brand"><div class="logo">VT</div><div><strong>VenariTrace</strong><br><small>Prototype v4.4.3.1 Menu Route Fix</small></div></div>
 <nav class="nav" id="nav"></nav>
 </aside>
 <main class="main" id="main"></main>
@@ -983,7 +1024,7 @@ box-shadow:0 12px 28px rgba(0,0,0,.2);
 <nav class="bottom" id="bottom"></nav>
 <script>
 (function(){
-var page="command";var quickOpen=false;var standSub="overview";var hunterSub="overview";var hcmSub="overview";var sosConfirm=false;var sosActive=false;var trackingActive=false;var activeSub="command";var settingsSub="profile";
+var page="command";var quickOpen=false;var harvestRecordCreated=false;var ballisticMode="quick";var trackStatus="not_started";var standSub="overview";var hunterSub="overview";var hcmSub="overview";var sosConfirm=false;var sosActive=false;var trackingActive=false;var activeSub="command";var settingsSub="profile";
 var activePrefs={map:true,weather:true,feed:true,comms:true,ballistics:true,dope:true,media:true,alerts:true,graphs:true};
 var nav=[
 ["command","Command Suite","COMMAND"],["stabilize","Stabilization","COMMAND"],["refine","Operational Refinement","COMMAND"],
@@ -1003,7 +1044,7 @@ var nav=[
 ["seasons","Season Archive","ARCHIVES & REPORTS"],
 ["reports","Reports","ARCHIVES & REPORTS"]
 ];
-var events=[["SPYPOINT Buck Alert","Split G2 detected near East Plot camera. Confidence 88%.","critical","6:42 AM","SPYPOINT · Target Buck"],["Command Cam Motion","Motion flagged at Creek Trail.","high","6:58 AM","Command Cam"],["Wind Shift Warning","Wind drifting toward lower access road.","high","7:02 AM","Weather"],["Live Sighting","Hunter 2 marked two does crossing Creek Trail.","info","7:11 AM","Sighting"],["Property Alert","Feeder refill is overdue.","high","8:04 AM","Property"],["Weather Warning","Wind shift advisory affecting stand selection.","high","8:12 AM","Weather Alert · Wind"],["SOS/Recovery Ready","SOS and Track Animal tools available in Active Hunt.","critical","8:18 AM","Safety · Recovery"],["Stand Needs Attention","North Box marked for maintenance/supplies issue.","high","8:24 AM","Stand Management"]];
+var events=[["SPYPOINT Buck Alert","Split G2 detected near East Plot camera. Confidence 88%.","critical","6:42 AM","SPYPOINT · Target Buck"],["Command Cam Motion","Motion flagged at Creek Trail.","high","6:58 AM","Command Cam"],["Wind Shift Warning","Wind drifting toward lower access road.","high","7:02 AM","Weather"],["Live Sighting","Hunter 2 marked two does crossing Creek Trail.","info","7:11 AM","Sighting"],["Property Alert","Feeder refill is overdue.","high","8:04 AM","Property"],["Weather Warning","Wind shift advisory affecting stand selection.","high","8:12 AM","Weather Alert · Wind"],["SOS/Recovery Ready","SOS and Track Animal tools available in Active Hunt.","critical","8:18 AM","Safety · Recovery"],["Stand Needs Attention","North Box marked for maintenance/supplies issue.","high","8:24 AM","Stand Management"],["Harvest Record Created","Tracking outcome marked harvested and routed to Harvest Suite.","high","8:31 AM","Harvest · Tracking"],["Hit List Updated","Split G2 removed from active hit list and moved to Trophy Gallery.","high","8:34 AM","Hit List · Harvest"]];
 function esc(x){return String(x==null?"":x).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#039;",'"':"&quot;"}[c]||c})}
 function header(k,t,d){return '<section class="hero"><div><p class="muted">'+esc(k)+'</p><h1>'+esc(t)+'</h1><p>'+esc(d)+'</p></div><div class="pill"><span class="dot"></span>Live Prototype</div></section>'}
 function metrics(items){return '<section class="grid4">'+items.map(function(x){return '<div class="metric"><strong>'+x[0]+'</strong>'+x[1]+'<br><small>'+x[2]+'</small></div>'}).join('')+'</section>'}
@@ -1037,7 +1078,7 @@ function hunter(){return hunterCenter();}
 function intel(){return aiIntelAnalyticsSuite()}
 function weather(){return masterMapSuite()}
 function comms(){return advancedCommsSuite()}
-function ballistics(){return advancedBallisticSuite()}
+function ballistics(){return ballisticsFixed()}
 function property(){return propertyHQExpansion()}
 function gallery(){return header("Media Vault","Master Gallery and Hunter Galleries","Shared master gallery, individual hunter galleries, trail camera photos, property images, completed hunt media, season-based archives, and linked device/cloud storage.")+'<section class="grid2"><div class="card"><h2>Master Gallery</h2><div class="gallery"><div class="thumb">Target Buck</div><div class="thumb">Trail Cam</div><div class="thumb">Food Plot</div><div class="thumb">Harvest</div></div></div><div class="card"><h2>Upload / Share</h2><input placeholder="Photo title"><select><option>Master Gallery</option><option>Hunter 1 Gallery</option><option>Active Hunt</option></select><textarea placeholder="Notes"></textarea><button class="badge">Save Photo</button></div></section>'}
 function calendar(){return header("Calendar","Master and Hunter Calendars","Schedule hunts, maintenance, camera checks, equipment service, food plot work, and property-specific legal hunting season start/stop dates.")+'<section class="grid2"><div class="card"><h2>Upcoming</h2><div class="row">2026 VenariTrace Season · Jan 2, 2026 → Jan 1, 2027</div><div class="row">Deer Archery Season · property location dates</div><div class="row">Deer Firearm Season · property location dates</div><div class="row">Morning Rut Hunt · Monday</div><div class="row">Camera Check · Wednesday</div><div class="row">Food Plot Work · Saturday</div></div><div class="card"><h2>Add Event</h2><input placeholder="Event title"><input placeholder="Date/time"><button class="badge">Add Event</button></div></section>'}
@@ -1106,10 +1147,10 @@ return '<section class="card"><h2>Recent Harvests</h2><div class="harvestGrid"><
 }
 function harvestSuite(){
 return header("Harvest Suite","Harvest Records, Gallery, Hit List Tracking & Season Data","Track harvested deer against the hunt, hunter, stand, location, weather, wind, date/time, media, scouting history, camera history, ballistic record, and hit list status.")+
-recentHarvestCards()+
-'<section class="grid2"><div class="card"><h2>Log Harvest</h2><select><option>Harvest Type: Hit List Deer</option><option>Harvest Type: Doe / Management</option><option>Harvest Type: Buck Not on Hit List</option><option>Harvest Type: Other Species</option></select><select><option>Hunter: Hunter 1</option><option>Hunter 2</option><option>Hunter 3</option></select><select><option>Linked Hunt: Morning Rut Hunt</option><option>Active Hunt</option><option>Manual / Historical Entry</option></select><select><option>Linked Deer: Split G2</option><option>Tall 8</option><option>Wide 10</option><option>Create New Deer Profile</option></select><input placeholder="Stand / location / map pin"><input placeholder="Date and time of harvest"><input placeholder="Weather / wind snapshot"><textarea placeholder="Harvest notes: shot distance, direction, behavior, recovery notes, field photos, processor/taxidermist info"></textarea><button class="badge">Save Harvest Placeholder</button></div><div class="card"><h2>Harvest Data Links</h2><div class="row">Link to Hunt Plan / Active Hunt / Completed Hunt</div><div class="row">Link to Hunter Profile and stats</div><div class="row">Link to Stand and Map Location</div><div class="row">Link to Weather Snapshot and Wind</div><div class="row">Link to Hit List / Deer Profile</div><div class="row">Link to Ballistic Shot Placement Record</div><div class="row">Link to Harvest Gallery and Media Vault</div><div class="row">Assign to Season Archive automatically based on date/time</div></div></section>'+
+hitListHarvestOutcomePanel()+trophyGalleryPanel()+harvestedTrackingRecordPanel()+recentHarvestCards()+
+'<section class="grid2"><div class="card"><h2>Log Harvest</h2><select><option>Harvest Type: Hit List Deer</option><option>Harvest Type: Doe / Management</option><option>Harvest Type: Buck Not on Hit List</option><option>Harvest Type: Other Species</option></select><select><option>Hunter: Hunter 1</option><option>Hunter 2</option><option>Hunter 3</option></select><select><option>Linked Hunt: Morning Rut Hunt</option><option>Active Hunt</option><option>Manual / Historical Entry</option></select><select><option>Linked Deer: Split G2</option><option>Tall 8</option><option>Wide 10</option><option>Create New Deer Profile</option></select><input placeholder="Stand / location / map pin"><input placeholder="Date and time of harvest"><input placeholder="Weather / wind snapshot"><input placeholder="Moon phase / percentage"><input placeholder="Shot placement"><input placeholder="Shot distance"><input placeholder="Tracking route / recovery status"><textarea placeholder="Harvest notes: shot distance, direction, behavior, recovery notes, field photos, processor/taxidermist info"></textarea><button class="badge">Save Harvest Placeholder</button></div><div class="card"><h2>Harvest Data Links</h2><div class="row">Link to Hunt Plan / Active Hunt / Completed Hunt</div><div class="row">Link to Hunter Profile and stats</div><div class="row">Link to Stand and Map Location</div><div class="row">Link to Weather Snapshot and Wind</div><div class="row">Link to Hit List / Deer Profile</div><div class="row">Link to Ballistic Shot Placement Record</div><div class="row">Link to Harvest Gallery and Media Vault</div><div class="row">Assign to Season Archive automatically based on date/time</div></div></section>'+
 '<section class="grid2"><div class="card"><h2>Harvest Gallery</h2><div class="gallery"><div class="thumb">Field Photo</div><div class="thumb">Trail Cam Before</div><div class="thumb">Recovery</div><div class="thumb">Stand View</div></div><br><input placeholder="Photo title"><select><option>Attach to Split G2 harvest</option><option>Attach to current active hunt</option><option>Attach to Hunter 1 gallery</option><option>Attach to master harvest gallery</option></select><button class="badge">Add Harvest Photo</button></div><div class="card"><h2>Harvest Timeline</h2><div class="harvestTimeline"><div class="row"><strong>6:42 AM · SPYPOINT Detection</strong><br><small class="muted">Split G2 · East Plot</small></div><div class="row"><strong>7:11 AM · Hunter Sighting</strong><br><small class="muted">Direction of travel toward North Box</small></div><div class="row"><strong>7:42 AM · Harvest Logged</strong><br><small class="muted">Hunter 1 · North Box · E wind</small></div><div class="row"><strong>8:18 AM · Recovery Complete</strong><br><small class="muted">Media and notes added</small></div></div></div></section>'+
-'<section class="grid2"><div class="card"><h2>Season Harvest Analytics</h2>'+chart()+'</div><div class="card"><h2>Hit List Outcome</h2><table><tr><th>Deer</th><th>Status</th><th>Hunter</th><th>Stand</th></tr><tr><td>Split G2</td><td>Harvested</td><td>Hunter 1</td><td>North Box</td></tr><tr><td>Tall 8</td><td>Watchlist</td><td>-</td><td>North Ridge</td></tr><tr><td>Wide 10</td><td>Harvested</td><td>Hunter 1</td><td>Creek Crossing</td></tr></table></div></section>'
+hitListStatusPanel()+'<section class="grid2"><div class="card"><h2>Season Harvest Analytics</h2>'+chart()+'</div><div class="card"><h2>Hit List Outcome</h2><table><tr><th>Deer</th><th>Status</th><th>Hunter</th><th>Stand</th></tr><tr><td>Split G2</td><td>Harvested</td><td>Hunter 1</td><td>North Box</td></tr><tr><td>Tall 8</td><td>Watchlist</td><td>-</td><td>North Ridge</td></tr><tr><td>Wide 10</td><td>Harvested</td><td>Hunter 1</td><td>Creek Crossing</td></tr></table></div></section>'
 }
 
 
@@ -1200,13 +1241,13 @@ function commandOpsExpansion(){
 return '<section class="commandOpsGrid"><div class="card"><h2>Operational Snapshot</h2><div class="opsStatusBoard"><div class="statusTile"><strong>GREEN</strong>Hunt status</div><div class="statusTile"><strong>4</strong>Hunters online</div><div class="statusTile"><strong>3</strong>Weather / field alerts</div><div class="statusTile"><strong>2</strong>High-priority property tasks</div><div class="statusTile"><strong>88%</strong>Top target probability</div><div class="statusTile"><strong>North Box</strong>Best current stand</div></div></div><div class="card"><h2>Command Priorities</h2><div class="row">1. Monitor Split G2 movement window</div><div class="row">2. Watch wind shift near East Plot</div><div class="row">3. Confirm Hunter 2 check-in</div><div class="row">4. Replace North Ridge camera batteries</div></div><div class="card"><h2>Decision Support</h2><div class="row">Best current action: hold North Box</div><div class="row">Avoid East Plot access for 45 minutes</div><div class="row">Camera confidence: high</div><div class="row">Legal shooting: open until 6:12 PM</div></div></section>'
 }
 function activeCockpitExpansion(){
-return header("Active Hunt Cockpit","One-Screen Field Operations View","A tactical active-hunt cockpit for live map, weather, wind, comms, sightings, camera alerts, ballistics, SOS, animal tracking, emergency controls, and hunter-selected display panels.")+activeAlertTicker()+activeCockpitRefinement()+sosPanel()+trackAnimalPanel()+activeRecentEvents()+
+return header("Active Hunt Cockpit","One-Screen Field Operations View","A tactical active-hunt cockpit for live map, weather, wind, comms, sightings, camera alerts, ballistics, SOS, animal tracking, emergency controls, and hunter-selected display panels.")+activeAlertTicker()+activeCockpitRefinement()+sosPanel()+trackAnimalPanelFixed()+activeRecentEvents()+
 '<section class="cockpitGrid"><div class="card"><h2>Primary Tactical Map</h2>'+map()+'<p class="muted">Live hunters, stands, camera events, sightings, wind cone, and scouting pins.</p></div><div class="cockpitPanel"><h2>Hunter Status</h2><div class="row">Hunter 1 · North Box · On Stand</div><div class="row">Hunter 2 · South Ladder · Checked In</div><div class="row">Hunter 3 · West Ridge · Scouting</div><div class="row">Emergency status: Normal</div><button class="badge">Request Check-In</button></div><div class="cockpitPanel"><h2>Fast Actions</h2><button class="badge2" data-page="scouting">Log Sighting</button><br><br><button class="badge2" data-page="ballistics">Shot Placement</button><br><br><button class="badge2" data-page="comms">Message Crew</button><br><br><button class="badge" data-page="harvest">Log Harvest</button></div></section>'+
 '<section class="grid2"><div class="card"><h2>Active Intelligence</h2><div class="row">Split G2 detected 6:42 AM · East Plot</div><div class="row">Fresh scrape near North Ridge · movement weight increased</div><div class="row">Wind E/NE favors North Box</div><div class="row">Legal shooting window open</div></div><div class="card"><h2>Ballistic Quick Card</h2>'+advancedDopeTable()+'</div></section>'
 }
 function deerIntelligenceHub(){
 return deerIntelRefinement()+header("Deer Intelligence Hub","Target Deer Profiles, Hit List, Movement Probability & Pattern Analysis","A dedicated intelligence workspace for unique deer identities, custom labels, hit list status, sightings, camera history, scouting sign, movement windows, stand recommendations, and harvest outcomes.")+
-'<section class="deerProfileGrid"><article class="deerCard"><div class="deerPortrait">Split G2</div><strong>SYS-BUCK-0007 · Split G2</strong><div class="probBar"><div style="width:88%"></div></div><small class="muted">88% hunt probability · North Box · sunrise window</small><div class="row">Last seen: East Plot · 6:42 AM</div><div class="row">Best wind: E / NE</div><button class="badge">Create Hunt Plan</button></article><article class="deerCard"><div class="deerPortrait">Tall 8</div><strong>SYS-BUCK-0011 · Tall 8</strong><div class="probBar"><div style="width:72%"></div></div><small class="muted">72% probability · North Ridge · last light</small><div class="row">Last seen: North Ridge · 5:55 PM</div><div class="row">Best wind: N / NW</div><button class="badge2">Watch</button></article><article class="deerCard"><div class="deerPortrait">Wide 10</div><strong>SYS-BUCK-0004 · Wide 10</strong><div class="probBar"><div style="width:69%"></div></div><small class="muted">69% probability · Creek Crossing · cold front</small><div class="row">Status: Harvested / archived</div><div class="row">Hunter 1 · Creek Crossing</div><button class="badge2">Open Record</button></article></section>'+
+'<section class="deerProfileGrid"><article class="deerCard"><div class="deerPortrait">Split G2</div><strong>SYS-BUCK-0007 · Split G2</strong><div class="probBar"><div style="width:88%"></div></div><small class="muted">88% hunt probability · North Box · sunrise window</small><div class="row">Last seen: East Plot · 6:42 AM</div><div class="row">Best wind: E / NE</div><button class="badge">Create Hunt Plan</button></article><article class="deerCard"><div class="deerPortrait">Tall 8</div><strong>SYS-BUCK-0011 · Tall 8</strong><div class="probBar"><div style="width:72%"></div></div><small class="muted">72% probability · North Ridge · last light</small><div class="row">Last seen: North Ridge · 5:55 PM</div><div class="row">Best wind: N / NW</div><button class="badge2">Watch</button></article><article class="deerCard"><div class="deerPortrait">Wide 10</div><strong>SYS-BUCK-0004 · Wide 10</strong><div class="probBar"><div style="width:69%"></div></div><small class="muted">69% probability · Creek Crossing · cold front</small><div class="row">Status: Harvested / removed from active hit list / trophy gallery</div><div class="row">Hunter 1 · Creek Crossing</div><button class="badge2">Open Record</button></article></section>'+
 '<section class="grid2"><div class="card"><h2>Movement Pattern Graph</h2>'+line()+'</div><div class="card"><h2>Intel Factors</h2><div class="row">Camera detections weighted by recency</div><div class="row">Manual sightings and scouting sign increase confidence</div><div class="row">Wind/stand fit adjusts hunt recommendation</div><div class="row">Harvest records close or archive hit list profiles</div><div class="row">Season archive stores all deer intelligence by year</div></div></section>'
 }
 function propertyHQExpansion(){
@@ -1223,14 +1264,14 @@ var activeHtml=sosActive?'<div class="sosActiveBanner"><strong>⚠ SOS ACTIVE</s
 return activeHtml+'<section class="card sosPanel"><h2>SOS Emergency Function</h2><button class="sosButton" id="sosStart">SOS</button>'+confirmHtml+'<div class="row">When activated: notify all hunters saved in profiles and emergency contact listed in Hunter Center.</div><div class="row">Share hunter location, begin tracking, post alert to Active Hunt and Command feed.</div><div class="row">Emergency override ignores quiet mode and pushes critical notification routing.</div></section>';
 }
 function trackAnimalPanel(){
-return '<section class="trackGrid"><div class="card"><h2>Track Animal / Recovery Map</h2><div class="trackMap"><div class="trackLine"></div><span class="pin hunterPin" style="left:20%;top:40%">Shot Location</span><span class="pin lastSeenPin" style="left:36%;top:48%">Last Seen</span><span class="pin bloodPin" style="left:52%;top:55%">Blood Mark</span><span class="pin trackPin" style="left:64%;top:62%">Track Point</span><span class="pin recoveryPin" style="left:78%;top:68%">Recovery Area</span></div><p class="muted">Track line, last-seen location, blood markers, direction of travel, recovery notes, and shared hunter view.</p></div><div class="card"><h2>Tracking Controls</h2><button class="badge" id="trackStart">'+(trackingActive?'Tracking Active':'Start Tracking')+'</button><br><br><button class="badge2">Mark Shot Location</button><br><br><button class="badge2">Mark Last Seen</button><br><br><button class="badge2">Add Blood Marker</button><br><br><button class="badge2">Add Track Point</button><br><br><button class="badge2">Add Photo / Note</button><br><br><button class="badge">Share Track With Active Hunters</button><div class="row">Tracking can attach to harvest record, completed hunt summary, map layer, gallery, and season archive.</div></div></section>';
+var harvestPanel=(trackStatus==='harvested')?harvestedTrackingRecordPanel()+harvestSavePanel():''; return harvestPanel+'<section class="trackGrid"><div class="card"><h2>Track Animal / Recovery Map</h2><div class="trackMap"><div class="trackLine"></div><span class="pin hunterPin" style="left:20%;top:40%">Shot Location</span><span class="pin lastSeenPin" style="left:36%;top:48%">Last Seen</span><span class="pin bloodPin" style="left:52%;top:55%">Blood Mark</span><span class="pin trackPin" style="left:64%;top:62%">Track Point</span><span class="pin recoveryPin" style="left:78%;top:68%">Recovery Area</span></div><p class="muted">Track line, last-seen location, blood markers, direction of travel, recovery notes, and shared hunter view.</p></div><div class="card"><h2>Tracking Controls</h2><button class="badge" id="trackStart">'+(trackingActive?'Tracking Active':'Start Tracking')+'</button><br><br><button class="badge2">Mark Shot Location</button><br><br><button class="badge2">Mark Last Seen</button><br><br><button class="badge2">Add Blood Marker</button><br><br><button class="badge2">Add Track Point</button><br><br><button class="badge2">Add Photo / Note</button><br><br><button class="badge">Share Track With Active Hunters</button><div class="row">Tracking can attach to harvest record, completed hunt summary, map layer, gallery, and season archive.</div></div></section>';
 }
 function recoveryTimeline(){
 return '<section class="grid2"><div class="card"><h2>Recovery Timeline</h2><div class="trackTimeline"><div class="row"><strong>7:42 AM · Shot Recorded</strong><br><small class="muted">North Box · 250 yd · Split G2</small></div><div class="row"><strong>7:43 AM · Tracking Started</strong><br><small class="muted">Hunter 1 sharing route with active hunt crew</small></div><div class="row"><strong>7:48 AM · Last Seen Marker</strong><br><small class="muted">Moved toward creek crossing</small></div><div class="row"><strong>7:55 AM · Blood Marker</strong><br><small class="muted">Photo/note added</small></div></div></div><div class="card"><h2>Shared Recovery View</h2><div class="shareStatus"><div><strong>Hunter 1</strong>Owner</div><div><strong>Hunter 2</strong>Viewing</div><div><strong>Hunter 3</strong>Available</div></div><br><div class="row">Other online hunters can view the track if shared from Active Hunt.</div><div class="row">Command dashboard should display recovery status and location updates.</div><div class="row">When completed, recovery data can create Harvest Suite record.</div></div></section>';
 }
 function safetyRecoverySuite(){
 return header("SOS & Animal Tracking","Emergency Alerts, Location Sharing, Animal Recovery Tracking & Shared Map","Safety and recovery tools for Active Hunt. SOS requires confirmation before sending alerts. Track Animal creates a recovery map with shot location, last seen point, blood markers, track points, photos, notes, and sharing controls.")+
-sosPanel()+trackAnimalPanel()+recoveryTimeline();
+sosPanel()+trackAnimalPanelFixed()+recoveryTimeline();
 }
 
 
@@ -1262,7 +1303,7 @@ radarPanel()+
 '<div class="commandSectionTitle"><h2>Movement & Activity</h2><span>AI + camera + manual records</span></div>'+
 '<section class="grid2"><div class="card"><h2>Movement Graph</h2>'+line()+'<div class="dataSourceLine">Sources: AI Camera Lab, manual sightings, scouting records, deer profiles.</div></div><div class="card"><h2>Activity Breakdown</h2>'+chart()+'<div class="dataSourceLine">Sources: species labels, camera events, manual sightings, harvest and scouting records.</div></div></section>'+
 '<div class="commandSectionTitle"><h2>Decision Support</h2><span>current recommendations</span></div>'+
-'<section class="grid2"><div class="card"><h2>Recommended Actions</h2><div class="row">Hold North Box while E/NE wind remains stable.</div><div class="row">Avoid East Plot approach during current wind shift window.</div><div class="row">Monitor Split G2 camera pattern for next 90 minutes.</div><div class="row">Replace North Ridge camera battery after active hunt closes.</div><div class="dataSourceLine">Sources: Weather, stand wind rules, AI Deer Intel, Property HQ.</div></div>'+feed(5)+'</section>'+linkedRecordsPanel();
+'<section class="grid2"><div class="card"><h2>Recommended Actions</h2><div class="row">Hold North Box while E/NE wind remains stable.</div><div class="row">Avoid East Plot approach during current wind shift window.</div><div class="row">Monitor Split G2 camera pattern for next 90 minutes.</div><div class="row">Replace North Ridge camera battery after active hunt closes.</div><div class="dataSourceLine">Sources: Weather, stand wind rules, AI Deer Intel, Property HQ.</div></div>'+feed(5)+'</section>'+harvestSavePanel()+linkedRecordsPanel();
 }
 
 
@@ -1376,7 +1417,7 @@ return '<section class="deerIntelTabs"><div class="deerIntelTab"><strong>Identit
 '<section class="grid2"><div class="card"><h2>Elite Deer Intelligence Structure</h2><div class="row">Persistent deer identity with system ID and custom name.</div><div class="row">Profile photo timeline from SPYPOINT, Command, manual uploads, and harvest gallery.</div><div class="row">Movement corridor and daylight probability score.</div><div class="row">Weather, wind, moon, stand and camera correlation.</div><div class="row">Hit list state: watchlist, target, harvested, archived.</div></div><div class="card"><h2>Next AI Layer</h2><div class="row">Confidence score must show why the AI made the recommendation.</div><div class="row">Every prediction should list source records.</div><div class="row">Users should be able to approve, reject, or save AI recommendations.</div></div></section>';
 }
 function ballisticRefinement(){
-return '<section class="ballisticLayerGrid"><div class="ballisticLayer"><strong>Quick Hunt Ballistics</strong><p class="muted">Field-use view: distance, wind, hold, clicks, reticle, ethical max-range warning.</p><button class="badge2" data-page="active">Open Active Hunt</button></div><div class="ballisticLayer"><strong>Ballistic Lab</strong><p class="muted">Advanced rifle/ammo/reticle library, chronograph data, atmosphere, DOPE generation.</p><button class="badge2" data-page="ballistics">Open Lab</button></div><div class="ballisticLayer"><strong>Shot Placement Simulator</strong><p class="muted">Deer angle, anatomy, impact reticle, hold reticle, tracking/recovery record.</p><button class="badge2" data-page="ballistics">Open Simulator</button></div></section>';
+return '<section class="ballisticLayerGrid"><div class="ballisticLayer"><strong>Quick Hunt Ballistics</strong><p class="muted">Field-use view: distance, wind, hold, clicks, reticle, ethical max-range warning.</p><button class="badge2" data-page="active">Open Active Hunt</button></div><div class="ballisticLayer"><strong>Ballistic Lab</strong><p class="muted">Advanced rifle/ammo/reticle library, chronograph data, atmosphere, DOPE generation.</p><button class="badge2" data-ballisticmode="lab">Open Lab</button></div><div class="ballisticLayer"><strong>Shot Placement Simulator</strong><p class="muted">Deer angle, anatomy, impact reticle, hold reticle, tracking/recovery record.</p><button class="badge2" data-ballisticmode="simulator">Open Simulator</button></div></section>';
 }
 function mapEngineRefinement(){
 return '<section class="mapEngineGrid"><div class="mapEngineCard"><strong>Operational Map</strong>Active hunters, stands, weather, SOS, tracking</div><div class="mapEngineCard"><strong>Intel Map</strong>Deer movement, sightings, cameras, rubs, scrapes</div><div class="mapEngineCard"><strong>Property Map</strong>Tasks, equipment, food plots, timber, hazards</div></section>'+
@@ -1463,6 +1504,54 @@ var items=["Arrived Safely","Bobcat Down","Bobcat Fled","Bobcat Sighted","Buck D
 return '<section class="card"><h2>Quick Active Hunt Events</h2><p class="muted">Alphabetized quick event menu. Clicking an event would send it to the Active Hunt feed, Command feed, hunter profiles, and linked records.</p><div class="quickEventMenu">'+items.map(function(x){return '<button>'+x+'</button>'}).join('')+'</div></section>';
 }
 
+
+function ballisticModeTabs(){
+return '<section class="ballisticModeTabs"><button class="'+(ballisticMode==="quick"?"active":"")+'" data-ballisticmode="quick">Quick Hunt Ballistics</button><button class="'+(ballisticMode==="lab"?"active":"")+'" data-ballisticmode="lab">Ballistic Lab</button><button class="'+(ballisticMode==="simulator"?"active":"")+'" data-ballisticmode="simulator">Shot Placement Simulator</button></section>';
+}
+function ballisticLabView(){
+return header("Ballistic Lab","Advanced Rifle, Ammo, Reticle & DOPE Library","Detailed ballistic data entry and library workspace.")+
+ballisticModeTabs()+
+'<section class="ballisticAdvancedGrid"><div class="card"><h2>Rifle / Ammo Data Entry</h2><div class="inputMatrix"><input placeholder="Rifle profile name"><input placeholder="Caliber"><input placeholder="Bullet weight gr"><input placeholder="Ballistic coefficient"><input placeholder="Muzzle velocity fps"><input placeholder="Zero range yd"><input placeholder="Sight height inches"><input placeholder="Scope click value"><input placeholder="Reticle type"><input placeholder="Temperature °F"><input placeholder="Pressure / altitude"><input placeholder="Humidity %"><input placeholder="Wind speed mph"><input placeholder="Wind direction"><input placeholder="Shot angle °"></div><button class="badge">Calculate Table</button></div><div class="card"><h2>Saved Library</h2><div class="row">.308 Deer Rifle · 165gr · 100 yd zero</div><div class="row">6.5 Creedmoor · 143gr · 200 yd zero</div><div class="row">MOA Hash Reticle · ¼ MOA clicks</div><div class="row">Cold Weather DOPE Card</div></div></section>'+
+'<section class="grid2"><div class="card"><h2>Advanced Shooting Table</h2>'+advancedDopeTable()+'</div><div class="card"><h2>MOA / MIL Reference</h2><table><tr><th>Value</th><th>100 yd</th><th>200 yd</th><th>300 yd</th></tr><tr><td>1 MOA</td><td>1.047 in</td><td>2.094 in</td><td>3.141 in</td></tr><tr><td>1 MIL</td><td>3.6 in</td><td>7.2 in</td><td>10.8 in</td></tr><tr><td>¼ MOA click</td><td>.26 in</td><td>.52 in</td><td>.79 in</td></tr></table></div></section>';
+}
+function shotPlacementSimulatorView(){
+return header("Shot Placement Simulator","Deer Angle, Hold Reticle, Impact Reticle & Recovery Planning","Simulator view for deer angle, distance, hold point, impact point, windage/elevation, and recovery notes.")+
+ballisticModeTabs()+
+'<section class="simulatorGrid"><div class="card"><h2>Simulator Visual</h2>'+scope()+'<p class="muted">White reticle = hold point · Red reticle = desired impact. Future build can switch deer angle and scale by distance.</p></div><div class="card"><h2>Simulator Controls</h2><select><option>Broadside Left</option><option>Quarter Toward Left</option><option>Quarter Away Left</option><option>Broadside Right</option><option>Quarter Toward Right</option><option>Quarter Away Right</option><option>Straight On</option><option>Straight Away</option></select><input type="range" min="20" max="400" value="250"><div class="row">Distance: 250 yd</div><div class="row">Elevation hold: 2.8 MOA / 0.81 MIL / 11 clicks</div><div class="row">Windage hold: 1.2 MOA / 0.35 MIL / 5 clicks</div><button class="badge">Apply to Active Hunt</button></div></section>'+
+'<section class="grid2"><div class="card"><h2>Shot Record</h2><textarea placeholder="Shot notes, angle, reaction, point of impact, blood, direction of travel"></textarea><button class="badge" data-page="safety">Start Animal Tracking</button></div><div class="card"><h2>Recovery Link</h2><div class="row">Shot record can link to Track Animal, Harvest Suite, Completed Hunt, and Season Archive.</div></div></section>';
+}
+function ballisticsFixed(){
+if(ballisticMode==="lab") return ballisticLabView();
+if(ballisticMode==="simulator") return shotPlacementSimulatorView();
+return advancedBallisticSuite();
+}
+function trackAnimalPanelFixed(){
+var statusText = trackStatus==="active" ? "Tracking Active" : (trackStatus==="harvested" ? "Animal Harvested / Recovery Complete" : (trackStatus==="lost" ? "Animal Lost / Track Closed" : "Not Started"));
+return '<section class="trackGrid"><div class="card"><h2>Track Animal / Recovery Map</h2><div class="trackStatusBanner"><strong>'+statusText+'</strong><br><small class="muted">Track status is saved to Active Hunt, Completed Hunt, Harvest Suite, Harvest/Recovery record, Deer Profile, Media Vault, and Season Archive.</small></div><div class="trackMap"><div class="trackLine"></div><span class="pin hunterPin" style="left:20%;top:40%">Shot Location</span><span class="pin lastSeenPin" style="left:36%;top:48%">Last Seen</span><span class="pin bloodPin" style="left:52%;top:55%">Blood Mark</span><span class="pin trackPin" style="left:64%;top:62%">Track Point</span><span class="pin recoveryPin" style="left:78%;top:68%">Recovery Area</span></div></div><div class="card"><h2>Tracking Controls</h2><button class="badge" id="trackStart">'+(trackStatus==="active"?"Tracking Active":"Start Tracking")+'</button><br><br><button class="badge2">Mark Shot Location</button><br><br><button class="badge2">Mark Last Seen</button><br><br><button class="badge2">Add Blood Marker</button><br><br><button class="badge2">Add Track Point</button><br><br><button class="badge">Share Track With Active Hunters</button><div class="trackOutcomeGrid"><button class="harvested" id="trackHarvested">Animal Harvested</button><button class="lost" id="trackLost">Animal Lost</button><button class="continue" id="trackContinue">Continue Tracking</button></div></div></section>';
+}
+
+
+function harvestedTrackingRecordPanel(){
+var matched = true;
+var systemId = matched ? "SYS-BUCK-0007" : "SYS-HARVEST-2026-0001";
+var customName = matched ? "Split G2" : "Generated Harvest Deer";
+return '<section class="harvestRecordPanel"><h2>Harvest Record From Tracking</h2><div class="catalogIdBox">Catalog ID: '+systemId+' · Custom Name: '+customName+' · Season: 2026</div><div class="harvestRecordGrid"><div class="harvestRecordItem"><strong>Hunter</strong>Hunter 1</div><div class="harvestRecordItem"><strong>Stand</strong>North Box</div><div class="harvestRecordItem"><strong>Date / Time</strong>Nov 7 · 7:42 AM</div><div class="harvestRecordItem"><strong>Weather</strong>44°F · E/NE wind</div><div class="harvestRecordItem"><strong>Moon</strong>Waning crescent · 34%</div><div class="harvestRecordItem"><strong>Shot Distance</strong>250 yd</div><div class="harvestRecordItem"><strong>Shot Placement</strong>Vital zone · broadside</div><div class="harvestRecordItem"><strong>Location</strong>North Box → Creek recovery</div></div><div class="row">Tracking route: shot location, last-seen point, blood marker, track point, recovery area.</div><div class="row">Linked records: Active Hunt, Harvest Suite, Deer Intelligence profile, Hit List outcome, Media Vault, Season Archive.</div><div class="harvestRouteGrid"><button class="primary" data-page="harvest">Open Harvest Suite</button><button data-page="deerIntel">Open Deer Profile</button><button data-page="gallery">Open Harvest Gallery</button></div></section>';
+}
+function harvestSavePanel(){
+return '<section class="grid2"><div class="card"><h2>Save Harvest + Tracking Data</h2><div class="row">If deer matched hit list: keep assigned system ID and custom name.</div><div class="row">If no prior label: generate new system name for cataloging.</div><div class="row">Save tracking route, markers, weather, moon, hunter, stand, shot data, photos, notes, and recovery result.</div><button class="badge">Save Harvest Record Placeholder</button></div><div class="card"><h2>System Naming Logic</h2><div class="row">Matched deer: SYS-BUCK-0007 · Split G2</div><div class="row">Unmatched harvest: SYS-HARVEST-2026-0001</div><div class="row">File path example: /VenariTrace/2026/Harvests/SYS-BUCK-0007_SplitG2/</div></div></section>';
+}
+
+
+function hitListHarvestOutcomePanel(){
+return '<section class="card"><h2>Hit List Harvest Outcome</h2><div class="hitListStatusGrid"><div class="hitStatusCard removedHitList"><strong>Removed From Active Hit List</strong>SYS-BUCK-0007 · Split G2<br><small class="muted">Status changed from Target to Harvested</small></div><div class="hitStatusCard archivedHarvest"><strong>Recorded In Harvest Suite</strong>Hunter 1 · North Box · 250 yd<br><small class="muted">Tracking and shot data attached</small></div><div class="hitStatusCard activeHitList"><strong>Remaining Hit List</strong>Tall 8 · Wide 10 Watchlist<br><small class="muted">Active targets remain visible</small></div></div><div class="row">When a hit-list deer is marked harvested, it should automatically leave the active hit list, update Deer Intelligence status, create a Harvest record, and appear in Trophy Gallery.</div></section>';
+}
+function trophyGalleryPanel(){
+return '<section class="card"><h2>Trophy Gallery</h2><div class="trophyGalleryGrid"><article class="trophyCard"><div class="trophyPhoto">Split G2</div><strong>SYS-BUCK-0007 · Split G2</strong><br><span class="hitBadge">Former Hit List</span><span class="harvestBadge">Harvested</span><div class="row">Hunter 1 · North Box · 7:42 AM</div><div class="row">Weather: 44°F · E/NE wind · Moon 34%</div><div class="row">Shot: 250 yd · Vital zone</div></article><article class="trophyCard"><div class="trophyPhoto">Wide 10</div><strong>SYS-BUCK-0004 · Wide 10</strong><br><span class="hitBadge">Former Hit List</span><span class="harvestBadge">Archived</span><div class="row">Hunter 1 · Creek Crossing</div><div class="row">Cold front · rising pressure</div></article><article class="trophyCard"><div class="trophyPhoto">Doe</div><strong>SYS-HARVEST-2026-0002</strong><br><span class="harvestBadge">Management</span><div class="row">Hunter 3 · East Plot</div><div class="row">No prior hit-list label</div></article><article class="trophyCard"><div class="trophyPhoto">Open Slot</div><strong>Next Harvest</strong><br><span class="harvestBadge">Season 2026</span><div class="row">New harvested animals will appear here.</div></article></div></section>';
+}
+function hitListStatusPanel(){
+return '<section class="grid2"><div class="card"><h2>Active Hit List After Harvest</h2><table><tr><th>Deer</th><th>System ID</th><th>Status</th><th>Action</th></tr><tr><td>Tall 8</td><td>SYS-BUCK-0011</td><td>Active Target</td><td>Track</td></tr><tr><td>Wide 10</td><td>SYS-BUCK-0004</td><td>Archived Harvest</td><td>View Trophy</td></tr><tr><td>Split G2</td><td>SYS-BUCK-0007</td><td>Harvested / Removed</td><td>Open Harvest</td></tr></table></div><div class="card"><h2>Automatic Harvest Rules</h2><div class="row">If deer has hit-list label: remove from active hit list.</div><div class="row">Set Deer Intelligence status to Harvested.</div><div class="row">Move deer to Trophy Gallery and Harvest Suite.</div><div class="row">Keep full history in Season Archive.</div><div class="row">If no prior label: generate SYS-HARVEST-YYYY-####.</div></div></section>';
+}
+
 function content(){
   try{
     var routes={
@@ -1479,7 +1568,7 @@ function content(){
       aiCamera:function(){return aiCameraLab()},
       deerIntel:function(){return deerIntelligenceHub()},
       weather:function(){return weather()},
-      ballistics:function(){return ballistics()},
+      ballistics:function(){return ballisticsFixed()},
       gallery:function(){return gallery()},
       storage:function(){return storageVault()},
       hunter:function(){return hunter()},
@@ -1525,7 +1614,13 @@ document.querySelectorAll("[data-standtab]").forEach(function(b){b.addEventListe
 var ss=document.getElementById("sosStart");if(ss){ss.addEventListener("click",function(){sosConfirm=true;render();});}
 var sy=document.getElementById("sosYes");if(sy){sy.addEventListener("click",function(){sosActive=true;sosConfirm=false;render();});}
 var sn=document.getElementById("sosNo");if(sn){sn.addEventListener("click",function(){sosConfirm=false;render();});}
-var ts=document.getElementById("trackStart");if(ts){ts.addEventListener("click",function(){trackingActive=true;render();});}
+var ts=document.getElementById("trackStart");if(ts){ts.addEventListener("click",function(){trackStatus="active";trackingActive=true;render();});}
+
+document.querySelectorAll("[data-ballisticmode]").forEach(function(b){b.addEventListener("click",function(){ballisticMode=b.getAttribute("data-ballisticmode");page="ballistics";render();window.scrollTo(0,0);})});
+var th=document.getElementById("trackHarvested");if(th){th.addEventListener("click",function(){trackStatus="harvested";harvestRecordCreated=true;render();});}
+var tl=document.getElementById("trackLost");if(tl){tl.addEventListener("click",function(){trackStatus="lost";render();});}
+var tc=document.getElementById("trackContinue");if(tc){tc.addEventListener("click",function(){trackStatus="active";render();});}
+
 }
 function render(){
   var fb=document.getElementById("fallbackLoad");
