@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>VT Tracer Prototype v4.0 Comms Channels Timers</title>
+<title>VT Tracer Prototype v4.1 Hunt Command Manager Expansion</title>
 <style>
 :root{--bg:#0f1510;--deep:#0b0f0b;--panel:#1a211b;--panel2:#202920;--border:#394339;--orange:#ff7a1a;--olive:#556b2f;--tan:#f4f1e8;--muted:#b4b0a2;--red:#ff4d2e;--blue:#6ba8ff;--purple:#b48cff}
 *{box-sizing:border-box}body{margin:0;font-family:Arial,system-ui,sans-serif;background:linear-gradient(135deg,#0f1510,#171d16);color:var(--tan);display:grid;grid-template-columns:280px 1fr;min-height:100vh}button,input,select,textarea{font:inherit}
@@ -836,11 +836,39 @@ max-width:210px!important;
 @media(max-width:1200px){.commsWorkspace{grid-template-columns:1fr}.timerGrid,.streamArchiveGrid{grid-template-columns:1fr 1fr}}
 @media(max-width:650px){.timerGrid,.streamArchiveGrid,.deliveryOptions,.retentionRules{grid-template-columns:1fr}.messageComposer{grid-template-columns:1fr}.messageBubble{max-width:100%}}
 
+
+.hcmDashboardGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+.hcmMetric{border:1px solid var(--border);border-radius:16px;background:rgba(255,255,255,.04);padding:14px}
+.hcmMetric strong{display:block;color:var(--orange);font-size:28px}
+.hcmWorkflow{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:18px}
+.hcmStep{border:1px solid var(--border);border-radius:16px;background:rgba(255,255,255,.04);padding:12px;text-align:center;position:relative}
+.hcmStep strong{display:block;color:var(--orange);font-size:22px}
+.hcmStep:after{content:"→";position:absolute;right:-12px;top:50%;transform:translateY(-50%);color:var(--orange);font-weight:900}
+.hcmStep:last-child:after{display:none}
+.hcmGrid{display:grid;grid-template-columns:1.1fr .9fr;gap:18px;margin-bottom:18px}
+.hcmTabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.hcmTabs button{border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--muted);border-radius:999px;padding:10px 14px;cursor:pointer}
+.hcmTabs button.active{background:var(--orange);color:#15120d;border-color:var(--orange);font-weight:900}
+.planCardGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.planCard{border:1px solid var(--border);border-radius:16px;background:rgba(255,255,255,.04);padding:14px}
+.planCard strong{display:block;color:var(--orange);font-size:18px}
+.checklistGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.checklistGrid label{border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.035);padding:9px;display:flex;gap:7px;align-items:center}
+.checklistGrid input{width:auto;margin:0}
+.assignmentGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.assignmentCard{border:1px solid var(--border);border-radius:16px;background:rgba(255,255,255,.04);padding:12px}
+.assignmentCard strong{color:var(--orange)}
+.hcmTimeline{border-left:3px solid var(--orange);padding-left:12px}
+.hcmTimeline .row{position:relative}
+.hcmTimeline .row:before{content:"";position:absolute;left:-21px;top:17px;width:10px;height:10px;border-radius:50%;background:var(--orange)}
+@media(max-width:1100px){.hcmDashboardGrid,.hcmWorkflow,.planCardGrid,.assignmentGrid{grid-template-columns:1fr 1fr}.hcmGrid{grid-template-columns:1fr}}
+@media(max-width:650px){.hcmDashboardGrid,.hcmWorkflow,.planCardGrid,.assignmentGrid,.checklistGrid{grid-template-columns:1fr}.hcmStep:after{display:none}}
+
 </style>
 </head>
 <body>
 <aside class="sidebar">
-<div class="brand"><div class="logo">VT</div><div><strong>VenariTrace</strong><br><small>Prototype v4.0 Comms Channels Timers</small></div></div>
+<div class="brand"><div class="logo">VT</div><div><strong>VenariTrace</strong><br><small>Prototype v4.1 Hunt Command Manager Expansion</small></div></div>
 <nav class="nav" id="nav"></nav>
 </aside>
 <main class="main" id="main"></main>
@@ -854,7 +882,7 @@ max-width:210px!important;
 <nav class="bottom" id="bottom"></nav>
 <script>
 (function(){
-var page="command";var quickOpen=false;var hunterSub="overview";var sosConfirm=false;var sosActive=false;var trackingActive=false;var activeSub="command";var settingsSub="profile";
+var page="command";var quickOpen=false;var hunterSub="overview";var hcmSub="overview";var sosConfirm=false;var sosActive=false;var trackingActive=false;var activeSub="command";var settingsSub="profile";
 var activePrefs={map:true,weather:true,feed:true,comms:true,ballistics:true,dope:true,media:true,alerts:true,graphs:true};
 var nav=[
 ["command","Command Suite","COMMAND"],
@@ -885,8 +913,7 @@ function map(){return '<div class="map"><div class="windCone"></div><span class=
 function scope(){return '<div class="scope"><div class="scopeCircle"></div><div class="crossH"></div><div class="crossV"></div><div class="deer"></div><div class="impact"></div><div class="hold"></div></div>'}
 function dope(){return '<table><tr><th>Range</th><th>Drop</th><th>MOA</th><th>MIL</th><th>Clicks</th></tr><tr><td>100</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>200</td><td>3.1 in</td><td>1.5</td><td>.44</td><td>6</td></tr><tr><td>250</td><td>7.4 in</td><td>2.8</td><td>.81</td><td>11</td></tr><tr><td>300</td><td>12.9 in</td><td>4.1</td><td>1.19</td><td>16</td></tr></table>'}
 function command(){return cleanCommandDashboard()}
-function hunt(){return header("Hunt Command Manager","Plan → Active → Completed","Save plans, activate them into current hunts, complete them into season and hunter records.")+'<section class="grid2"><div class="card"><h2>Plan Hunt</h2><select><option>Target: Split G2</option></select><select><option>Recommended Stand: North Box</option></select><textarea placeholder="Ask AI to build the hunt plan"></textarea><button class="badge">Save Hunt Plan</button></div><div class="card"><h2>Workflow</h2><div class="row">1. Plan</div><div class="row">2. Save / Recall</div><div class="row">3. Activate Current Hunt</div><div class="row">4. Complete & Journal</div></div></section><section class="grid2"><div class="card"><h2>Hunt Intel</h2>'+line()+'</div><div class="card"><h2>Stand Scores</h2><div class="row">North Box · 82 · Best wind</div><div class="row">East Plot · 71 · Evening watch</div><div class="row">South Ladder · 64 · Backup</div></div></section>'}
-
+function hunt(){return expandedHuntCommandManager()}
 function hunterCenter(){
 return header("Hunter Center","Profile, Account, Gear Profiles, Preferences, Stats & Personal Operations","Unified hunter identity center combining profile, account settings, privacy, notifications, gear profiles, equipment, ballistics, hunt preferences, gallery, season history, and Active Hunt defaults.")+
 '<section class="hunterTabs"><button class="'+(hunterSub==="overview"?"active":"")+'" data-huntertab="overview">Overview</button><button class="'+(hunterSub==="profile"?"active":"")+'" data-huntertab="profile">Profile & Account</button><button class="'+(hunterSub==="gear"?"active":"")+'" data-huntertab="gear">Gear Profiles</button><button class="'+(hunterSub==="preferences"?"active":"")+'" data-huntertab="preferences">Preferences</button><button class="'+(hunterSub==="stats"?"active":"")+'" data-huntertab="stats">Stats</button><button class="'+(hunterSub==="privacy"?"active":"")+'" data-huntertab="privacy">Privacy / Notifications</button><button class="'+(hunterSub==="gallery"?"active":"")+'" data-huntertab="gallery">Gallery</button><button class="'+(hunterSub==="seasons"?"active":"")+'" data-huntertab="seasons">Seasons</button></section>'+hunterCenterContent()
@@ -1125,7 +1152,7 @@ function cleanSourceCards(){
 return '<section class="sourceCardGrid"><div class="sourceCard"><strong>Camera Intelligence</strong><div class="row">Split G2 · East Plot · 6:42 AM</div><small class="muted">From SPYPOINT / AI Camera Lab</small></div><div class="sourceCard"><strong>Hunter Activity</strong><div class="row">Hunter 1 checked in · North Box</div><small class="muted">From Active Hunt / Hunter Center</small></div><div class="sourceCard"><strong>Weather / Wind</strong><div class="row">E/NE wind · North Box ideal</div><small class="muted">From Weather & Maps</small></div></section>';
 }
 function cleanCommandDashboard(){
-return header("Command Suite","Clean Command Dashboard","Readable operational overview with source-labeled data, compact branding, current alerts, map views, recent harvests, and decision support.")+
+return header("Command Suite","Command Dashboard","Operational overview with source-labeled data, compact branding, current alerts, map views, recent harvests, and decision support.")+
 cleanCommandTop()+cleanCommandMetrics()+cleanSourceCards()+
 '<div class="commandSectionTitle"><h2>Live Operations</h2><span>map + weather + alerts</span></div>'+
 '<section class="cleanCommandGrid"><div class="card"><h2>Live Activity Map</h2>'+map()+'<div class="dataSourceLine">Sources: Hunter location, stand locations, camera pins, scouting records, weather/wind overlay.</div></div><div>'+weatherAlertsPanel()+ '</div></section>'+
@@ -1188,6 +1215,52 @@ function messageRetentionPanel(){
 return '<section class="grid2"><div class="card"><h2>Message Retention Rules</h2><div class="retentionRules"><div class="row">Active Hunt channels: save until hunt completed</div><div class="row">Emergency channels: preserve permanently</div><div class="row">Property Ops: archive by season</div><div class="row">Direct messages: user-controlled retention</div><div class="row">Camera Intel: save important alerts to AI Intel</div><div class="row">Streams: save to Storage Vault / Media Vault</div></div></div><div class="card"><h2>Editing / Deleting</h2><div class="row">Users can edit their own messages.</div><div class="row">Deleted messages should retain audit metadata in production if tied to SOS, harvest, or legal/safety records.</div><div class="row">Pinned messages can become hunt notes, map pins, property tasks, or completed hunt summary items.</div><div class="row">Saved strings can be exported into Season Archive.</div></div></section>'
 }
 
+
+function expandedHuntCommandManager(){
+return header("Hunt Command Manager","Plan, Coordinate, Activate, Monitor, Complete & Analyze Hunts","Comprehensive hunt workflow suite for AI-assisted planning, gear/checklist readiness, hunter assignments, stand selection, map/weather/ballistics integration, active-hunt activation, completion, summaries, and season archive updates.")+
+hcmTabs()+hcmContent()
+}
+function hcmTabs(){
+return '<section class="hcmTabs"><button class="'+(hcmSub==="overview"?"active":"")+'" data-hcm="overview">Overview</button><button class="'+(hcmSub==="planner"?"active":"")+'" data-hcm="planner">AI Planner</button><button class="'+(hcmSub==="saved"?"active":"")+'" data-hcm="saved">Saved Plans</button><button class="'+(hcmSub==="assignments"?"active":"")+'" data-hcm="assignments">Assignments</button><button class="'+(hcmSub==="readiness"?"active":"")+'" data-hcm="readiness">Readiness</button><button class="'+(hcmSub==="activate"?"active":"")+'" data-hcm="activate">Activate Hunt</button><button class="'+(hcmSub==="complete"?"active":"")+'" data-hcm="complete">Complete Hunt</button><button class="'+(hcmSub==="analytics"?"active":"")+'" data-hcm="analytics">Plan Analytics</button></section>';
+}
+function hcmMetrics(){
+return '<section class="hcmDashboardGrid"><div class="hcmMetric"><strong>3</strong>Plans Ready<br><small class="muted">saved hunt plans</small></div><div class="hcmMetric"><strong>82</strong>Top Plan Score<br><small class="muted">North Box AM</small></div><div class="hcmMetric"><strong>4</strong>Hunters Assigned<br><small class="muted">current hunt</small></div><div class="hcmMetric"><strong>92%</strong>Readiness<br><small class="muted">gear + weather + checks</small></div></section>';
+}
+function hcmWorkflow(){
+return '<section class="hcmWorkflow"><div class="hcmStep"><strong>1</strong>Build Plan</div><div class="hcmStep"><strong>2</strong>Assign Hunters</div><div class="hcmStep"><strong>3</strong>Check Readiness</div><div class="hcmStep"><strong>4</strong>Activate Hunt</div><div class="hcmStep"><strong>5</strong>Complete / Archive</div></section>';
+}
+function hcmContent(){
+if(hcmSub==="planner")return hcmPlanner();
+if(hcmSub==="saved")return hcmSavedPlans();
+if(hcmSub==="assignments")return hcmAssignments();
+if(hcmSub==="readiness")return hcmReadiness();
+if(hcmSub==="activate")return hcmActivate();
+if(hcmSub==="complete")return hcmComplete();
+if(hcmSub==="analytics")return hcmAnalytics();
+return hcmMetrics()+hcmWorkflow()+'<section class="hcmGrid"><div class="card"><h2>Current Hunt Plan Summary</h2><div class="row"><strong>Plan:</strong> Morning Rut Hunt · Split G2</div><div class="row"><strong>Recommended Stand:</strong> North Box · E/NE wind ideal</div><div class="row"><strong>Window:</strong> 5:48 AM legal open → 8:00 AM high movement</div><div class="row"><strong>Gear Profile:</strong> Rifle Morning Sit</div><div class="row"><strong>Ballistic Profile:</strong> .308 Deer Rifle · active DOPE card</div><div class="row"><strong>AI Confidence:</strong> 82 plan score</div></div><div class="card"><h2>Command Manager Actions</h2><button class="badge" data-hcm="planner">Build / Edit Plan</button><br><br><button class="badge2" data-hcm="assignments">Assign Hunters</button><br><br><button class="badge2" data-hcm="readiness">Run Readiness Check</button><br><br><button class="badge" data-hcm="activate">Activate Hunt</button><br><br><button class="badge2" data-page="active">Open Active Hunt Cockpit</button></div></section><section class="grid2"><div class="card"><h2>Plan Timeline</h2><div class="hcmTimeline"><div class="row"><strong>AI Plan Generated</strong><br><small class="muted">Split G2 pattern + weather + stand wind fit</small></div><div class="row"><strong>Hunters Assigned</strong><br><small class="muted">Hunter 1 North Box, Hunter 2 South Ladder</small></div><div class="row"><strong>Gear Profile Attached</strong><br><small class="muted">Rifle Morning Sit + .308 DOPE card</small></div><div class="row"><strong>Ready For Activation</strong><br><small class="muted">92% readiness score</small></div></div></div><div class="card"><h2>Integrated Data Sources</h2><div class="row">AI Intel Query: Split G2 sunrise pattern</div><div class="row">Weather & Maps: E/NE wind, legal hours, moon</div><div class="row">Hunter Center: gear profile, preferences, availability</div><div class="row">Ballistics: active rifle/DOPE profile</div><div class="row">Storage/Media: camera photos and scouting attachments</div></div></section>';
+}
+function hcmPlanner(){
+return '<section class="hcmGrid"><div class="card"><h2>AI Pre-Hunt Planner</h2><select><option>Target: Split G2</option><option>Tall 8</option><option>General deer movement</option><option>Turkey</option></select><select><option>Hunt Type: Morning rifle sit</option><option>Evening bow sit</option><option>Scouting mission</option><option>Recovery/tracking</option></select><select><option>Property: North Farm</option></select><select><option>Hunter Gear Profile: Rifle Morning Sit</option><option>Bow Rut Setup</option><option>Scouting / Property Ops</option></select><textarea placeholder="Ask AI to create or refine the hunt plan using weather, deer intel, stands, gear, ballistics, moon, scouting, and camera history."></textarea><button class="badge">Generate AI Hunt Plan Placeholder</button></div><div class="card"><h2>AI Recommendations</h2><div class="row">Best stand: North Box</div><div class="row">Entry route: lower ridge road, avoid East Plot edge</div><div class="row">Wind fit: ideal E/NE</div><div class="row">Target window: legal open to 8:00 AM</div><div class="row">Attach: .308 DOPE card and Rifle Morning Sit gear profile</div><div class="row">Scouting note: fresh scrape near North Ridge increases target confidence</div></div></section>'+hcmAnalytics();
+}
+function hcmSavedPlans(){
+return '<section class="card"><h2>Saved Hunt Plans</h2><div class="planCardGrid"><article class="planCard"><strong>Morning Rut Hunt</strong><small class="muted">Split G2 · North Box · 82 score</small><div class="row">Status: Ready</div><button class="badge">Activate</button> <button class="badge2">Edit</button></article><article class="planCard"><strong>Evening Food Plot Watch</strong><small class="muted">Tall 8 · East Plot · 71 score</small><div class="row">Status: Weather dependent</div><button class="badge2">Review</button> <button class="badge2">Edit</button></article><article class="planCard"><strong>Scouting Ridge Loop</strong><small class="muted">Scrapes / rubs / camera battery · 66 score</small><div class="row">Status: Property ops</div><button class="badge2">Open</button> <button class="badge2">Assign</button></article></div></section><section class="grid2"><div class="card"><h2>Plan Filters</h2><select><option>Season: 2026</option></select><select><option>Target: All</option><option>Hit List</option><option>Scouting</option><option>Harvest follow-up</option></select><select><option>Status: All</option><option>Ready</option><option>Draft</option><option>Completed</option></select></div><div class="card"><h2>Plan Storage</h2><div class="row">Saved plans are assigned to season archive.</div><div class="row">Plans can be cloned, edited, activated, completed, or archived.</div></div></section>';
+}
+function hcmAssignments(){
+return '<section class="card"><h2>Hunter Assignments</h2><div class="assignmentGrid"><div class="assignmentCard"><strong>Hunter 1</strong><div class="row">Stand: North Box</div><div class="row">Role: Primary target watch</div><div class="row">Gear: Rifle Morning Sit</div><button class="badge2">Edit</button></div><div class="assignmentCard"><strong>Hunter 2</strong><div class="row">Stand: South Ladder</div><div class="row">Role: Creek movement watch</div><div class="row">Gear: Bow Rut Setup</div><button class="badge2">Edit</button></div><div class="assignmentCard"><strong>Hunter 3</strong><div class="row">Mode: Scouting</div><div class="row">Role: North Ridge sign check</div><div class="row">Gear: Scouting Ops</div><button class="badge2">Edit</button></div></div></section><section class="grid2"><div class="card"><h2>Assignment Map</h2>'+map()+'</div><div class="card"><h2>Coordination Rules</h2><div class="row">Avoid overlapping access routes.</div><div class="row">Assign stands based on wind fit and safety zones.</div><div class="row">Allow hunter privacy preferences.</div><div class="row">Share only necessary locations unless Active Hunt or SOS mode is active.</div></div></section>';
+}
+function hcmReadiness(){
+return '<section class="grid2"><div class="card"><h2>Readiness Checklist</h2><div class="checklistGrid"><label><input type="checkbox" checked> Legal hours confirmed</label><label><input type="checkbox" checked> Weather checked</label><label><input type="checkbox" checked> Wind fit checked</label><label><input type="checkbox" checked> Gear profile loaded</label><label><input type="checkbox" checked> Ballistic DOPE loaded</label><label><input type="checkbox"> Radio charged</label><label><input type="checkbox" checked> Emergency contact set</label><label><input type="checkbox" checked> Location sharing ready</label><label><input type="checkbox"> Camera battery task open</label><label><input type="checkbox" checked> Stand safety ready</label></div></div><div class="card"><h2>Readiness Score</h2><div class="hcmMetric"><strong>92%</strong>Ready for activation<br><small class="muted">Missing: radio charge confirmation + camera task</small></div><br><div class="row">AI should warn if critical checklist items are missing before activation.</div><button class="badge">Resolve Missing Items</button></div></section>';
+}
+function hcmActivate(){
+return '<section class="grid2"><div class="card"><h2>Activate Hunt</h2><div class="row">Plan: Morning Rut Hunt</div><div class="row">Hunters: 4 assigned</div><div class="row">Gear: Rifle Morning Sit attached</div><div class="row">Ballistics: .308 DOPE active</div><div class="row">Weather: E/NE wind, North Box ideal</div><div class="row">Legal shooting: 5:48 AM → 6:12 PM</div><button class="badge">Activate Current Hunt Placeholder</button> <button class="badge2">Schedule for Later</button></div><div class="card"><h2>Activation Effects</h2><div class="row">Creates Active Hunt room.</div><div class="row">Loads hunter assignments on map.</div><div class="row">Starts event feed/ticker.</div><div class="row">Enables SOS and Track Animal tools.</div><div class="row">Loads gear checklist and ballistic quick card.</div><div class="row">Routes camera/weather alerts to active hunt.</div></div></section>';
+}
+function hcmComplete(){
+return '<section class="grid2"><div class="card"><h2>Complete Hunt</h2><select><option>Outcome: No harvest</option><option>Harvest</option><option>Sighting only</option><option>Scouting completed</option><option>Tracking/recovery</option></select><textarea placeholder="Completed hunt summary, notes, sightings, harvest, gear, weather, lessons learned"></textarea><button class="badge">Save Completed Hunt Placeholder</button></div><div class="card"><h2>Completion Routing</h2><div class="row">Save to Completed Hunts</div><div class="row">Update Hunter Center stats</div><div class="row">Update Deer Intelligence profile</div><div class="row">Update Harvest Suite if harvest occurred</div><div class="row">Archive media and message thread</div><div class="row">Assign to 2026 Season Archive</div></div></section>';
+}
+function hcmAnalytics(){
+return '<section class="grid2"><div class="card"><h2>Plan Score Factors</h2>'+line()+'<div class="dataSourceLine">Sources: AI Intel, Weather & Maps, deer profile, scouting, harvest history.</div></div><div class="card"><h2>Stand Ranking</h2><table><tr><th>Stand</th><th>Score</th><th>Reason</th></tr><tr><td>North Box</td><td>82</td><td>E/NE wind + target pattern</td></tr><tr><td>Creek Crossing</td><td>75</td><td>Cold front activity</td></tr><tr><td>East Plot</td><td>62</td><td>Bad current wind</td></tr></table></div></section>';
+}
+
 function content(){if(page==="hunt")return hunt();if(page==="scouting")return scoutingMode();if(page==="active")return activeHunt();if(page==="safety")return safetyRecoverySuite();if(page==="harvest")return harvestSuite();if(page==="seasons")return seasonArchive();if(page==="hunter")return hunter();if(page==="account")return accountSettings();if(page==="intel")return intel();if(page==="aiCamera")return aiCameraLab();if(page==="deerIntel")return deerIntelligenceHub();if(page==="weather")return weather();if(page==="comms")return comms();if(page==="ballistics")return ballistics();if(page==="property")return property();if(page==="gallery")return gallery();if(page==="storage")return storageVault();if(page==="calendar")return calendar();if(page==="reports")return reports();return command()}
 function renderNav(){
 var currentGroup="";
@@ -1207,7 +1280,8 @@ document.getElementById("bottom").innerHTML=bottomItems.map(function(n){return '
 function bind(){document.querySelectorAll("[data-page]").forEach(function(b){b.addEventListener("click",function(){page=b.getAttribute("data-page");quickOpen=false;render();window.scrollTo(0,0)})});
 var qt=document.getElementById("quickToggle");if(qt){qt.addEventListener("click",function(){quickOpen=!quickOpen;render();});}document.querySelectorAll("[data-active]").forEach(function(b){b.addEventListener("click",function(){activeSub=b.getAttribute("data-active");render();window.scrollTo(0,0)})});
 document.querySelectorAll("[data-settings]").forEach(function(b){b.addEventListener("click",function(){settingsSub=b.getAttribute("data-settings");render();window.scrollTo(0,0)})});
-document.querySelectorAll("[data-huntertab]").forEach(function(b){b.addEventListener("click",function(){hunterSub=b.getAttribute("data-huntertab");render();window.scrollTo(0,0)})});document.querySelectorAll("[data-pref]").forEach(function(i){i.addEventListener("change",function(){activePrefs[i.getAttribute("data-pref")]=i.checked;render()})});
+document.querySelectorAll("[data-huntertab]").forEach(function(b){b.addEventListener("click",function(){hunterSub=b.getAttribute("data-huntertab");render();window.scrollTo(0,0)})});
+document.querySelectorAll("[data-hcm]").forEach(function(b){b.addEventListener("click",function(){hcmSub=b.getAttribute("data-hcm");render();window.scrollTo(0,0)})});document.querySelectorAll("[data-pref]").forEach(function(i){i.addEventListener("change",function(){activePrefs[i.getAttribute("data-pref")]=i.checked;render()})});
 var ss=document.getElementById("sosStart");if(ss){ss.addEventListener("click",function(){sosConfirm=true;render();});}
 var sy=document.getElementById("sosYes");if(sy){sy.addEventListener("click",function(){sosActive=true;sosConfirm=false;render();});}
 var sn=document.getElementById("sosNo");if(sn){sn.addEventListener("click",function(){sosConfirm=false;render();});}
