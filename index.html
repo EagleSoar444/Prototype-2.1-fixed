@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>VT Tracer Prototype v4.5 Command Architecture Reorg</title>
+<title>VT Tracer Final Architecture v4.5.1</title>
 <style>
 :root{--bg:#0f1510;--deep:#0b0f0b;--panel:#1a211b;--panel2:#202920;--border:#394339;--orange:#ff7a1a;--olive:#556b2f;--tan:#f4f1e8;--muted:#b4b0a2;--red:#ff4d2e;--blue:#6ba8ff;--purple:#b48cff}
 *{box-sizing:border-box}body{margin:0;font-family:Arial,system-ui,sans-serif;background:linear-gradient(135deg,#0f1510,#171d16);color:var(--tan);display:grid;grid-template-columns:280px 1fr;min-height:100vh}button,input,select,textarea{font:inherit}
@@ -1204,7 +1204,7 @@ padding:10px;
 </head>
 <body>
 <aside class="sidebar">
-<div class="brand"><div class="logo">VT</div><div><strong>VenariTrace</strong><br><small>Prototype v4.5 Command Architecture Reorg</small></div></div>
+<div class="brand"><div class="logo">VT</div><div><strong>VenariTrace</strong><br><small>VT Tracer Final Architecture v4.5.1</small></div></div>
 <nav class="nav" id="nav"></nav>
 </aside>
 <main class="main" id="main"></main>
@@ -1223,22 +1223,30 @@ var activePrefs={map:true,weather:true,feed:true,comms:true,ballistics:true,dope
 var nav=[
 ["command","Command Suite","COMMAND"],
 ["architecture","Architecture","COMMAND"],
+
+["hunter","Hunter Center","HUNTER CENTER"],
+
 ["hunt","Hunt Operations","HUNT OPERATIONS"],
 ["active","Active Hunt","HUNT OPERATIONS"],
 ["scouting","Scouting","HUNT OPERATIONS"],
 ["safety","Tracking / SOS","HUNT OPERATIONS"],
 ["harvest","Harvests","HUNT OPERATIONS"],
+
 ["intel","AI Intel","INTEL & COLLECTIONS"],
 ["aiCamera","Camera Intelligence","INTEL & COLLECTIONS"],
 ["deerIntel","Deer Intelligence","INTEL & COLLECTIONS"],
 ["feedHistory","Feed History","INTEL & COLLECTIONS"],
+
 ["weather","Weather & Maps","WEATHER & MAPS"],
+
 ["ballistics","Ballistics","BALLISTICS"],
+
 ["property","Property Suite","PROPERTY"],
 ["stands","Stand Management","PROPERTY"],
+
 ["gallery","Media Vault","MEDIA VAULT"],
 ["storage","Storage Vault","MEDIA VAULT"],
-["hunter","Hunter Center","HUNTER CENTER"],
+
 ["seasons","Season Archive","ARCHIVES"],
 ["reports","Reports","ARCHIVES"]
 ];
