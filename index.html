@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>VT Tracer Final Architecture v4.5.1</title>
+<title>VT Tracer Final Architecture v4.5.2 Corrected</title>
 <style>
 :root{--bg:#0f1510;--deep:#0b0f0b;--panel:#1a211b;--panel2:#202920;--border:#394339;--orange:#ff7a1a;--olive:#556b2f;--tan:#f4f1e8;--muted:#b4b0a2;--red:#ff4d2e;--blue:#6ba8ff;--purple:#b48cff}
 *{box-sizing:border-box}body{margin:0;font-family:Arial,system-ui,sans-serif;background:linear-gradient(135deg,#0f1510,#171d16);color:var(--tan);display:grid;grid-template-columns:280px 1fr;min-height:100vh}button,input,select,textarea{font:inherit}
@@ -1204,7 +1204,7 @@ padding:10px;
 </head>
 <body>
 <aside class="sidebar">
-<div class="brand"><div class="logo">VT</div><div><strong>VenariTrace</strong><br><small>VT Tracer Final Architecture v4.5.1</small></div></div>
+<div class="brand"><div class="logo">VT</div><div><strong>VenariTrace</strong><br><small>VT Tracer Final Architecture v4.5.2 Corrected</small></div></div>
 <nav class="nav" id="nav"></nav>
 </aside>
 <main class="main" id="main"></main>
@@ -1900,11 +1900,36 @@ architectureNotice()+
 '<section class="hunterCenterFocus"><h2>Hunter Center Decision</h2><p>Hunter Center remains separate because it is personal identity, settings, preferences, gear, stats, privacy and notifications. Command stays shared and operational.</p></section>';
 }
 
+
+function vtFinalArchitectureNotice(){
+return '<section class="architectureNotice"><strong>Final Architecture v4.5.2</strong><p class="muted">Final sidebar flow: Command → Hunter Center → Hunt Operations → Intel & Collections → Weather & Maps → Ballistics → Property → Media Vault → Archives.</p></section>';
+}
+function vtFinalCommandTabs(){
+return '<section class="commandHubTabs"><button class="'+(commandSub==="dashboard"?"active":"")+'" data-commandtab="dashboard">Dashboard</button><button class="'+(commandSub==="operations"?"active":"")+'" data-commandtab="operations">Operations</button><button class="'+(commandSub==="communications"?"active":"")+'" data-commandtab="communications">Communications</button><button class="'+(commandSub==="calendar"?"active":"")+'" data-commandtab="calendar">Calendar</button><button class="'+(commandSub==="alerts"?"active":"")+'" data-commandtab="alerts">Alerts / Feeds</button><button class="'+(commandSub==="reports"?"active":"")+'" data-commandtab="reports">Reports</button><button class="'+(commandSub==="maps"?"active":"")+'" data-commandtab="maps">Live Maps</button><button class="'+(commandSub==="hunters"?"active":"")+'" data-commandtab="hunters">Hunter Status</button></section>';
+}
+function vtFinalCommandHub(){
+if(commandSub==="communications" && typeof advancedCommsSuite==="function") return header("Command Suite","Communications Hub","Operational messaging and coordination inside Command.")+vtFinalArchitectureNotice()+vtFinalCommandTabs()+advancedCommsSuite();
+if(commandSub==="calendar" && typeof trueCalendarView==="function") return header("Command Suite","Master Calendar","Hunts, reservations and property activity inside Command.")+vtFinalArchitectureNotice()+vtFinalCommandTabs()+trueCalendarView();
+if(commandSub==="alerts" && typeof eventFeedArchiveSuite==="function") return header("Command Suite","Alerts & Event Feeds","Feed history, filters and routing.")+vtFinalArchitectureNotice()+vtFinalCommandTabs()+eventFeedArchiveSuite();
+if(commandSub==="reports" && typeof reports==="function") return header("Command Suite","Reports","Command reports and archive summaries.")+vtFinalArchitectureNotice()+vtFinalCommandTabs()+reports();
+if(commandSub==="maps" && typeof weather==="function") return header("Command Suite","Live Maps","Operational map and weather view.")+vtFinalArchitectureNotice()+vtFinalCommandTabs()+weather();
+if(commandSub==="hunters") return header("Command Suite","Hunter Status","Operational hunter status overview.")+vtFinalArchitectureNotice()+vtFinalCommandTabs()+'<section class="architectureGrid"><div class="architectureCard"><strong>Hunter 1</strong>North Box · Online</div><div class="architectureCard"><strong>Hunter 2</strong>South Ladder · Checked In</div><div class="architectureCard"><strong>Hunter 3</strong>Scouting · Available</div></section>';
+if(commandSub==="operations" && typeof expandedHuntCommandManager==="function") return header("Command Suite","Operations Overview","Hunt Operations overview inside Command.")+vtFinalArchitectureNotice()+vtFinalCommandTabs()+expandedHuntCommandManager();
+if(typeof cleanCommandDashboard==="function") return vtFinalArchitectureNotice()+vtFinalCommandTabs()+cleanCommandDashboard();
+if(typeof command==="function") return vtFinalArchitectureNotice()+vtFinalCommandTabs()+command();
+return vtFinalArchitectureNotice()+vtFinalCommandTabs()+header("Command Suite","Dashboard","Command dashboard placeholder.");
+}
+function vtFinalArchitecturePage(){
+return header("Architecture","Final Sidebar Flow","Finalized VT Tracer platform organization.")+
+vtFinalArchitectureNotice()+
+'<section class="architectureGrid"><div class="architectureCard"><strong>Command</strong>Operational center: dashboard, communications, calendar, alerts, reports, maps, hunter status.</div><div class="architectureCard"><strong>Hunter Center</strong>Personal identity, profile, preferences, gear, settings, stats, emergency contacts.</div><div class="architectureCard"><strong>Hunt Operations</strong>Planning, Active Hunt, completed hunts, scouting, tracking/SOS, harvests.</div><div class="architectureCard"><strong>Intel & Collections</strong>AI Intel, camera/deer intelligence, feed history, predictions.</div><div class="architectureCard"><strong>Property</strong>Assets, stands, food plots, feeders, documents, contacts, maintenance.</div><div class="architectureCard"><strong>Archives</strong>Season records, reports, history.</div></section>';
+}
+
 function content(){
   try{
     var routes={
-      command:function(){return commandHub()},
-      architecture:function(){return architectureOverviewPage()},
+      command:function(){return vtFinalCommandHub()},
+      architecture:function(){return vtFinalArchitecturePage()},
       feedHistory:function(){return eventFeedArchiveSuite()},
       stabilize:function(){return stabilizationDashboard()},
       refine:function(){return operationalRefinementSuite()},
