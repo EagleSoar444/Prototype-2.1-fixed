@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>VT Tracer Prototype v2.7 Season Archive Calendar</title>
+<title>VT Tracer Prototype v2.8 Persistent Command + Active Return</title>
 <style>
 :root{--bg:#0f1510;--deep:#0b0f0b;--panel:#1a211b;--panel2:#202920;--border:#394339;--orange:#ff7a1a;--olive:#556b2f;--tan:#f4f1e8;--muted:#b4b0a2;--red:#ff4d2e;--blue:#6ba8ff;--purple:#b48cff}
 *{box-sizing:border-box}body{margin:0;font-family:Arial,system-ui,sans-serif;background:linear-gradient(135deg,#0f1510,#171d16);color:var(--tan);display:grid;grid-template-columns:280px 1fr;min-height:100vh}button,input,select,textarea{font:inherit}
@@ -105,11 +105,138 @@ input,select,textarea{width:100%;border:1px solid var(--border);background:rgba(
 @media(max-width:900px){.seasonBanner,.archiveGrid{grid-template-columns:1fr 1fr}.seasonCalendar{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:650px){.seasonBanner,.archiveGrid,.seasonCalendar{grid-template-columns:1fr}}
 
+
+.topOpsBar{
+position:sticky;
+top:0;
+z-index:30;
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:12px;
+margin:-20px -20px 18px -20px;
+padding:12px 20px;
+background:rgba(11,15,11,.94);
+border-bottom:1px solid var(--border);
+backdrop-filter:blur(12px);
+}
+.opsBtn{
+border:1px solid var(--border);
+border-radius:999px;
+background:rgba(255,255,255,.05);
+color:var(--tan);
+padding:10px 14px;
+font-weight:900;
+cursor:pointer;
+}
+.opsBtn.command{
+background:rgba(255,122,26,.16);
+border-color:rgba(255,122,26,.65);
+color:#ffd8bd;
+}
+.opsBtn.activeHunt{
+background:rgba(255,77,46,.16);
+border-color:rgba(255,77,46,.65);
+color:#ffd5d0;
+box-shadow:0 0 18px rgba(255,77,46,.18);
+}
+.opsStatus{
+display:flex;
+gap:8px;
+flex-wrap:wrap;
+align-items:center;
+color:var(--muted);
+font-size:13px;
+}
+.opsStatus span{
+border:1px solid var(--border);
+border-radius:999px;
+background:rgba(255,255,255,.04);
+padding:5px 9px;
+}
+.breadcrumb{
+color:var(--muted);
+font-size:13px;
+margin-bottom:12px;
+}
+.quickActionDock{
+position:fixed;
+right:18px;
+bottom:18px;
+z-index:35;
+display:grid;
+gap:8px;
+}
+.quickActionDock button{
+border:1px solid var(--border);
+border-radius:999px;
+background:rgba(11,15,11,.94);
+color:var(--tan);
+padding:10px 13px;
+box-shadow:0 10px 25px rgba(0,0,0,.3);
+cursor:pointer;
+font-weight:800;
+}
+.quickActionDock button.primary{
+background:var(--orange);
+color:#15120d;
+border-color:var(--orange);
+}
+.quickActionPanel{
+position:fixed;
+right:18px;
+bottom:74px;
+z-index:34;
+width:260px;
+border:1px solid var(--border);
+border-radius:18px;
+background:rgba(26,33,27,.97);
+box-shadow:0 18px 38px rgba(0,0,0,.35);
+padding:12px;
+display:none;
+}
+.quickActionPanel.open{display:block}
+.quickActionPanel button{
+width:100%;
+margin-bottom:8px;
+border:1px solid var(--border);
+border-radius:12px;
+background:rgba(255,255,255,.05);
+color:var(--tan);
+padding:10px;
+text-align:left;
+cursor:pointer;
+}
+@media(max-width:1100px){
+.topOpsBar{
+margin:-20px -20px 14px -20px;
+padding:10px 14px;
+}
+.opsStatus{display:none}
+.quickActionDock{
+left:10px;
+right:10px;
+bottom:72px;
+grid-template-columns:1fr 1fr 54px;
+}
+.quickActionDock button{text-align:center}
+.quickActionPanel{
+left:10px;
+right:10px;
+bottom:130px;
+width:auto;
+}
+}
+@media(max-width:650px){
+.topOpsBar{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.opsBtn{padding:10px 8px;font-size:13px}
+}
+
 </style>
 </head>
 <body>
 <aside class="sidebar">
-<div class="brand"><div class="logo">VT</div><div><strong>VenariTrace</strong><br><small>Prototype v2.7 Season Archive Calendar</small></div></div>
+<div class="brand"><div class="logo">VT</div><div><strong>VenariTrace</strong><br><small>Prototype v2.8 Persistent Command + Active Return</small></div></div>
 <nav class="nav" id="nav"></nav>
 </aside>
 <main class="main" id="main"></main>
@@ -123,7 +250,7 @@ input,select,textarea{width:100%;border:1px solid var(--border);background:rgba(
 <nav class="bottom" id="bottom"></nav>
 <script>
 (function(){
-var page="command";var activeSub="command";var settingsSub="profile";
+var page="command";var quickOpen=false;var activeSub="command";var settingsSub="profile";
 var activePrefs={map:true,weather:true,feed:true,comms:true,ballistics:true,dope:true,media:true,alerts:true,graphs:true};
 var nav=[["command","Command Suite"],["hunt","Hunt Command Manager"],["scouting","Scouting Mode"],["active","Active Hunt View"],["harvest","Harvest Suite"],["seasons","Season Archive"],["hunter","Hunter Suite"],["account","Account Settings"],["intel","Intel & Collections"],["aiCamera","AI Camera Lab"],["weather","Weather & Maps"],["comms","Communication"],["ballistics","Ballistic Suite"],["property","Property Suite"],["gallery","Media Vault"],["calendar","Calendar"],["reports","Reports"]];
 var events=[["SPYPOINT Buck Alert","Split G2 detected near East Plot camera. Confidence 88%.","critical","6:42 AM","SPYPOINT · Target Buck"],["Command Cam Motion","Motion flagged at Creek Trail.","high","6:58 AM","Command Cam"],["Wind Shift Warning","Wind drifting toward lower access road.","high","7:02 AM","Weather"],["Live Sighting","Hunter 2 marked two does crossing Creek Trail.","info","7:11 AM","Sighting"],["Property Alert","Feeder refill is overdue.","high","8:04 AM","Property"]];
@@ -231,15 +358,29 @@ seasonBanner()+
 '<section class="grid2"><div class="card"><h2>Hunting Season Calendar</h2><div class="seasonCalendar"><div class="seasonDay seasonOpen"><strong>Sep</strong><small>Archery opens</small></div><div class="seasonDay seasonOpen"><strong>Oct</strong><small>Archery / scouting</small></div><div class="seasonDay seasonOpen"><strong>Nov</strong><small>Rut / firearm window</small></div><div class="seasonDay seasonOpen"><strong>Dec</strong><small>Late season</small></div><div class="seasonDay seasonOpen"><strong>Jan 1</strong><small>VenariTrace season closes</small></div><div class="seasonDay seasonClosed"><strong>Jan 2</strong><small>New archive season starts</small></div><div class="seasonDay"><strong>Spring</strong><small>Turkey / property work</small></div></div></div><div class="card"><h2>Season Data Links</h2><div class="row">Command Suite: season summaries and last 4 harvests</div><div class="row">Hunter Suite: season stats by hunter</div><div class="row">AI Camera Lab: photos and deer IDs by season</div><div class="row">Scouting Mode: sign and sightings by season</div><div class="row">Harvest Suite: harvest gallery and hit list outcomes by season</div><div class="row">Property Suite: annual tasks, timber, food plots, equipment logs</div></div></section>'
 }
 
+
+function pageTitle(){
+var found=nav.find(function(n){return n[0]===page});
+return found?found[1]:"Command";
+}
+function opsBar(){
+var activeStatus = "Morning Rut Hunt · North Box · 4 hunters live";
+return '<div class="topOpsBar"><div><button class="opsBtn command" data-page="command">⌂ COMMAND</button> <button class="opsBtn activeHunt" data-page="active">● ACTIVE HUNT</button></div><div class="opsStatus"><span>'+activeStatus+'</span><span>Wind E 6 mph</span><span>3 Alerts</span></div></div><div class="breadcrumb">Command &gt; '+esc(pageTitle())+'</div>';
+}
+function quickActions(){
+return '<div id="quickPanel" class="quickActionPanel '+(quickOpen?'open':'')+'"><button data-page="active">Open Active Hunt</button><button data-page="scouting">Log Sighting / Scouting Note</button><button data-page="ballistics">Open Ballistics</button><button data-page="weather">Open Map / Weather</button><button data-page="comms">Message Hunters</button><button data-page="harvest">Log Harvest</button><button data-page="property">Create Property Task</button><button data-page="command">Return to Command</button></div><div class="quickActionDock"><button data-page="command">⌂ Command</button><button data-page="active">● Active Hunt</button><button class="primary" id="quickToggle">＋</button></div>';
+}
+
 function content(){if(page==="hunt")return hunt();if(page==="scouting")return scoutingMode();if(page==="active")return activeHunt();if(page==="harvest")return harvestSuite();if(page==="seasons")return seasonArchive();if(page==="hunter")return hunter();if(page==="account")return accountSettings();if(page==="intel")return intel();if(page==="aiCamera")return aiCameraLab();if(page==="weather")return weather();if(page==="comms")return comms();if(page==="ballistics")return ballistics();if(page==="property")return property();if(page==="gallery")return gallery();if(page==="calendar")return calendar();if(page==="reports")return reports();return command()}
 function renderNav(){document.getElementById("nav").innerHTML=nav.map(function(n){return '<button class="'+(page===n[0]?'active':'')+'" data-page="'+n[0]+'">'+n[1]+'</button>'}).join('');document.getElementById("bottom").innerHTML=nav.slice(0,5).map(function(n){return '<button class="'+(page===n[0]?'active':'')+'" data-page="'+n[0]+'">'+n[1].split(" ")[0]+'</button>'}).join('')}
-function bind(){document.querySelectorAll("[data-page]").forEach(function(b){b.addEventListener("click",function(){page=b.getAttribute("data-page");render();window.scrollTo(0,0)})});document.querySelectorAll("[data-active]").forEach(function(b){b.addEventListener("click",function(){activeSub=b.getAttribute("data-active");render();window.scrollTo(0,0)})});
+function bind(){document.querySelectorAll("[data-page]").forEach(function(b){b.addEventListener("click",function(){page=b.getAttribute("data-page");quickOpen=false;render();window.scrollTo(0,0)})});
+var qt=document.getElementById("quickToggle");if(qt){qt.addEventListener("click",function(){quickOpen=!quickOpen;render();});}document.querySelectorAll("[data-active]").forEach(function(b){b.addEventListener("click",function(){activeSub=b.getAttribute("data-active");render();window.scrollTo(0,0)})});
 document.querySelectorAll("[data-settings]").forEach(function(b){b.addEventListener("click",function(){settingsSub=b.getAttribute("data-settings");render();window.scrollTo(0,0)})});document.querySelectorAll("[data-pref]").forEach(function(i){i.addEventListener("change",function(){activePrefs[i.getAttribute("data-pref")]=i.checked;render()})})}
 function render(){
   var fb=document.getElementById("fallbackLoad");
   if(fb){fb.remove();}
   renderNav();
-  document.getElementById("main").innerHTML=content();
+  document.getElementById("main").innerHTML=opsBar()+content()+quickActions();
   bind();
 }
 render();
