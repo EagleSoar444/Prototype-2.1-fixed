@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>VT Tracer Prototype v4.4.7.1 Menu Route Fix</title>
+<title>VT Tracer Prototype v4.4.9.2 GitHub Load Fix</title>
 <style>
 :root{--bg:#0f1510;--deep:#0b0f0b;--panel:#1a211b;--panel2:#202920;--border:#394339;--orange:#ff7a1a;--olive:#556b2f;--tan:#f4f1e8;--muted:#b4b0a2;--red:#ff4d2e;--blue:#6ba8ff;--purple:#b48cff}
 *{box-sizing:border-box}body{margin:0;font-family:Arial,system-ui,sans-serif;background:linear-gradient(135deg,#0f1510,#171d16);color:var(--tan);display:grid;grid-template-columns:280px 1fr;min-height:100vh}button,input,select,textarea{font:inherit}
@@ -1142,11 +1142,57 @@ padding:10px;
 @media(max-width:1050px){.feedFilterGrid{grid-template-columns:1fr 1fr}.savedFeedViewGrid{grid-template-columns:1fr 1fr}.feedHistoryItem{grid-template-columns:1fr}}
 @media(max-width:650px){.feedFilterGrid,.savedFeedViewGrid{grid-template-columns:1fr}}
 
+
+.pmTabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.pmTabs button{border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--muted);border-radius:999px;padding:10px 14px;cursor:pointer}
+.pmTabs button.active{background:var(--orange);color:#15120d;border-color:var(--orange);font-weight:900}
+.assetCategoryGrid,.docCategoryGrid,.contactCategoryGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
+.categoryTile{border:1px solid var(--border);border-radius:16px;background:rgba(255,255,255,.04);padding:12px}
+.categoryTile strong{display:block;color:var(--orange);font-size:18px}
+.assetGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px}
+.assetCard{border:1px solid var(--border);border-radius:18px;background:rgba(255,255,255,.04);padding:14px}
+.assetPhoto{height:130px;border-radius:14px;background:linear-gradient(135deg,rgba(255,122,26,.22),rgba(85,107,47,.28));display:grid;place-items:center;color:#d9c896;font-weight:900;margin-bottom:10px}
+.assetDetailGrid,.propertyDetailGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.assetDetail{border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.035);padding:9px}
+.assetDetail strong{color:#d9c896}
+.importPanel{border:1px solid rgba(107,168,255,.45);border-radius:18px;background:rgba(107,168,255,.08);padding:14px;margin-bottom:18px}
+.fileAttachGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:10px}
+.fileAttach{border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.04);padding:10px;text-align:center}
+.docManagerGrid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px}
+.docListItem,.contactListItem{display:grid;grid-template-columns:52px 1fr auto;gap:10px;align-items:center;border:1px solid rgba(255,255,255,.07);border-radius:14px;background:rgba(255,255,255,.035);padding:10px;margin-bottom:10px}
+.docIcon,.contactAvatar{width:44px;height:44px;border-radius:14px;background:rgba(255,122,26,.16);display:grid;place-items:center;color:#ffd8bd;font-weight:900;border:1px solid rgba(255,122,26,.35)}
+.contactAvatar{border-radius:50%}
+.contactManagerGrid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px}
+.maintenanceTimeline{border-left:3px solid var(--orange);padding-left:12px}
+.maintenanceTimeline .row{position:relative}
+.maintenanceTimeline .row:before{content:"";position:absolute;left:-21px;top:17px;width:10px;height:10px;border-radius:50%;background:var(--orange)}
+@media(max-width:1050px){.assetCategoryGrid,.docCategoryGrid,.contactCategoryGrid,.assetGrid,.assetDetailGrid,.propertyDetailGrid,.fileAttachGrid{grid-template-columns:1fr 1fr}.docManagerGrid,.contactManagerGrid{grid-template-columns:1fr}}
+@media(max-width:650px){.assetCategoryGrid,.docCategoryGrid,.contactCategoryGrid,.assetGrid,.assetDetailGrid,.propertyDetailGrid,.fileAttachGrid{grid-template-columns:1fr}.docListItem,.contactListItem{grid-template-columns:44px 1fr}}
+
+
+.foodPlotGrid,.feederGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px}
+.foodPlotCard,.feederCard{border:1px solid var(--border);border-radius:18px;background:rgba(255,255,255,.04);padding:14px}
+.foodPlotPhoto,.feederPhoto{height:120px;border-radius:14px;background:linear-gradient(135deg,rgba(85,107,47,.36),rgba(255,122,26,.18));display:grid;place-items:center;color:#d9c896;font-weight:900;margin-bottom:10px}
+.plotMetricGrid,.feedMetricGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
+.plotMetric,.feedMetric{border:1px solid var(--border);border-radius:14px;background:rgba(255,255,255,.04);padding:12px}
+.plotMetric strong,.feedMetric strong{display:block;color:var(--orange);font-size:22px}
+.aiAssistPanel{border:1px solid rgba(107,168,255,.45);border-radius:18px;background:rgba(107,168,255,.08);padding:14px;margin-bottom:18px}
+.feedBarChart{height:180px;border:1px solid var(--border);border-radius:16px;background:rgba(255,255,255,.035);display:flex;align-items:flex-end;gap:12px;padding:14px;margin-bottom:12px}
+.feedBar{flex:1;border-radius:10px 10px 0 0;background:linear-gradient(180deg,rgba(255,122,26,.72),rgba(255,122,26,.25));position:relative;min-height:20px}
+.feedBar span{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);font-size:11px;color:#d9c896;white-space:nowrap}
+.cropTag{display:inline-block;border:1px solid var(--border);border-radius:999px;background:rgba(255,255,255,.04);padding:5px 8px;font-size:12px;color:#d9c896;margin:3px}
+@media(max-width:1050px){.foodPlotGrid,.feederGrid,.plotMetricGrid,.feedMetricGrid{grid-template-columns:1fr 1fr}}
+@media(max-width:650px){.foodPlotGrid,.feederGrid,.plotMetricGrid,.feedMetricGrid{grid-template-columns:1fr}}
+
+
+.bootFallback{border:1px solid rgba(255,122,26,.55);border-radius:18px;background:rgba(255,122,26,.08);padding:14px;margin-bottom:18px}
+.githubLoadNote{font-size:12px;color:var(--muted)}
+
 </style>
 </head>
 <body>
 <aside class="sidebar">
-<div class="brand"><div class="logo">VT</div><div><strong>VenariTrace</strong><br><small>Prototype v4.4.7.1 Menu Route Fix</small></div></div>
+<div class="brand"><div class="logo">VT</div><div><strong>VenariTrace</strong><br><small>Prototype v4.4.9.2 GitHub Load Fix</small></div></div>
 <nav class="nav" id="nav"></nav>
 </aside>
 <main class="main" id="main"></main>
@@ -1160,7 +1206,7 @@ padding:10px;
 <nav class="bottom" id="bottom"></nav>
 <script>
 (function(){
-var simDistance=250;var simWind=6;var shotPopupOpen=false;var page="command";var previousPage="command";var pageHistory=["command"];var quickOpen=false;var harvestRecordCreated=false;var ballisticMode="quick";var trackStatus="not_started";var standSub="overview";var hunterSub="overview";var hcmSub="overview";var sosConfirm=false;var sosActive=false;var trackingActive=false;var activeSub="command";var settingsSub="profile";
+var simDistance=250;var simWind=6;var shotPopupOpen=false;var page="command";var propertySub="overview";var previousPage="command";var pageHistory=["command"];var quickOpen=false;var harvestRecordCreated=false;var ballisticMode="quick";var trackStatus="not_started";var standSub="overview";var hunterSub="overview";var hcmSub="overview";var sosConfirm=false;var sosActive=false;var trackingActive=false;var activeSub="command";var settingsSub="profile";
 var activePrefs={map:true,weather:true,feed:true,comms:true,ballistics:true,dope:true,media:true,alerts:true,graphs:true};
 var nav=[
 ["command","Command Suite","COMMAND"],["feedHistory","Event Feed History","COMMAND"],["stabilize","Stabilization","COMMAND"],["refine","Operational Refinement","COMMAND"],
@@ -1215,7 +1261,7 @@ function intel(){return aiIntelAnalyticsSuite()}
 function weather(){return masterMapSuite()}
 function comms(){return advancedCommsSuite()}
 function ballistics(){return ballisticsFixed()}
-function property(){return propertyHQExpansion()}
+function property(){return propertyManagementSuite()}
 function gallery(){return header("Media Vault","Master Gallery and Hunter Galleries","Shared master gallery, individual hunter galleries, trail camera photos, property images, completed hunt media, season-based archives, and linked device/cloud storage.")+'<section class="grid2"><div class="card"><h2>Master Gallery</h2><div class="gallery"><div class="thumb">Target Buck</div><div class="thumb">Trail Cam</div><div class="thumb">Food Plot</div><div class="thumb">Harvest</div></div></div><div class="card"><h2>Upload / Share</h2><input placeholder="Photo title"><select><option>Master Gallery</option><option>Hunter 1 Gallery</option><option>Active Hunt</option></select><textarea placeholder="Notes"></textarea><button class="badge">Save Photo</button></div></section>'}
 function calendar(){return header("Calendar","Master and Hunter Calendars","Schedule hunts, maintenance, camera checks, equipment service, food plot work, and property-specific legal hunting season start/stop dates.")+'<section class="grid2"><div class="card"><h2>Upcoming</h2><div class="row">2026 VenariTrace Season · Jan 2, 2026 → Jan 1, 2027</div><div class="row">Deer Archery Season · property location dates</div><div class="row">Deer Firearm Season · property location dates</div><div class="row">Morning Rut Hunt · Monday</div><div class="row">Camera Check · Wednesday</div><div class="row">Food Plot Work · Saturday</div></div><div class="card"><h2>Add Event</h2><input placeholder="Event title"><input placeholder="Date/time"><button class="badge">Add Event</button></div></section>'}
 function reports(){return header("Reports","Analytics and Recommendations","Completed hunts, season activity, app sync model, and next build steps.")+'<section class="grid2"><div class="card"><h2>Season Activity</h2>'+line()+'</div><div class="card"><h2>Recommendations</h2><div class="row">Convert to React/Vite components</div><div class="row">Add persistent storage</div><div class="row">Add map/weather APIs</div><div class="row">Add real camera ingestion</div><div class="row">Harvest records should update hunter stats, hit list outcomes, season analytics, gallery, and map history.</div></div></section>'}
@@ -1751,6 +1797,61 @@ eventFeedHistoryControls()+eventFeedHistoryList()+savedFeedViews()+
 '<section class="grid2"><div class="card"><h2>Feed Routing</h2><div class="row">Quick events appear in Active Hunt feed and Command feed.</div><div class="row">Weather/camera/SOS/stand events also save to linked records.</div><div class="row">Former feeds are preserved by season and hunt.</div></div><div class="card"><h2>Filter Examples</h2><div class="row">Last 7 days · Camera only · Newest first</div><div class="row">Current season · Harvest + Tracking · By hunter</div><div class="row">Last 30 days · Stand Issues · Priority first</div></div></section>';
 }
 
+
+function propertyManagementSuite(){
+return header("Property Management","Farm Profile, Equipment, Documents, Contacts & Operations Tracking","Comprehensive property management system for farm details, assets, maintenance, inventory, documents, contacts, hunters, files, photos, costs, repairs, values and operating history.")+
+'<section class="pmTabs"><button class="'+(propertySub==="overview"?"active":"")+'" data-pmtab="overview">Overview</button><button class="'+(propertySub==="assets"?"active":"")+'" data-pmtab="assets">Equipment / Assets</button><button class="'+(propertySub==="documents"?"active":"")+'" data-pmtab="documents">Documents</button><button class="'+(propertySub==="contacts"?"active":"")+'" data-pmtab="contacts">Contacts</button><button class="'+(propertySub==="farm"?"active":"")+'" data-pmtab="farm">Farm Details</button><button class="'+(propertySub==="foodplots"?"active":"")+'" data-pmtab="foodplots">Food Plots / Feeders</button><button class="'+(propertySub==="maintenance"?"active":"")+'" data-pmtab="maintenance">Maintenance</button></section>'+propertyManagementContent();
+}
+function propertyManagementContent(){
+if(propertySub==="assets")return equipmentAssetManager();
+if(propertySub==="documents")return documentManager();
+if(propertySub==="contacts")return contactManager();
+if(propertySub==="farm")return farmDetailsManager();
+if(propertySub==="foodplots")return foodPlotFeederManager();
+if(propertySub==="maintenance")return maintenanceManager();
+return '<section class="propertyHQGrid"><div class="hqTile"><strong>22</strong>Tracked Assets</div><div class="hqTile"><strong>42</strong>Documents</div><div class="hqTile"><strong>18</strong>Contacts</div><div class="hqTile"><strong>6</strong>Open Maintenance</div><div class="hqTile"><strong>3</strong>Food Plots</div><div class="hqTile"><strong>5</strong>Feeders</div><div class="hqTile"><strong>$184K</strong>Asset Value</div><div class="hqTile"><strong>9</strong>Hunter Contacts</div><div class="hqTile"><strong>4</strong>Excel/CSV Imports</div><div class="hqTile"><strong>2026</strong>Season Records</div></section><section class="grid2"><div class="card"><h2>Property Management Focus</h2><div class="row">Track every asset, document, contact, file, photo, repair, cost and usage event.</div><div class="row">Auto-add hunters with accounts to Contacts.</div><div class="row">Link equipment to maintenance, inventory, tasks, documents, photos and operating costs.</div><div class="row">Link documents and contacts to property, assets, hunts, leases, vendors and emergency records.</div></div><div class="card"><h2>Quick Actions</h2><button class="badge" data-pmtab="assets">Open Assets</button> <button class="badge2" data-pmtab="documents">Documents</button><br><br><button class="badge2" data-pmtab="contacts">Contacts</button> <button class="badge2" data-pmtab="farm">Farm Details</button><br><br><button class="badge2" data-pmtab="foodplots">Food Plots / Feeders</button></div></section>';
+}
+function equipmentAssetManager(){
+return '<section class="importPanel"><h2>Import Equipment Data</h2><p class="muted">Import Excel or CSV files to populate equipment records. Production build should map columns to fields such as category, make, model, serial number, value, condition, maintenance interval, parts and notes.</p><input type="file" accept=".csv,.xlsx,.xls"><div class="assetDetailGrid"><input placeholder="Column: Asset Name"><input placeholder="Column: Serial Number"><input placeholder="Column: Model Number"><input placeholder="Column: Value"><input placeholder="Column: Condition"><button class="badge">Import / Map Data Placeholder</button></div></section>'+
+'<section class="assetCategoryGrid"><div class="categoryTile"><strong>Heavy Equipment</strong>dozer / skid steer</div><div class="categoryTile"><strong>Tractors</strong>utility / loader</div><div class="categoryTile"><strong>Implements</strong>disc / planter / spreader</div><div class="categoryTile"><strong>Attachments</strong>buckets / forks</div><div class="categoryTile"><strong>Tools</strong>saws / sprayers</div><div class="categoryTile"><strong>Feeders</strong>timed / gravity</div><div class="categoryTile"><strong>ATV / UTV</strong>Ranger / Sportsman</div><div class="categoryTile"><strong>Mowers</strong>zero turn / bush hog</div></section>'+
+'<section class="assetGrid"><article class="assetCard"><div class="assetPhoto">Tractor</div><strong>John Deere 4066M</strong><div class="assetDetailGrid"><div class="assetDetail"><strong>Category</strong><br>Tractor</div><div class="assetDetail"><strong>Condition</strong><br>Good</div><div class="assetDetail"><strong>Value</strong><br>$48,000</div></div><div class="row">SN: JD4066M-001 · Model: 4066M</div><div class="row">Maintenance: hydraulic service due</div><button class="badge2">Open</button> <button class="badge2">Attach Files</button></article><article class="assetCard"><div class="assetPhoto">UTV</div><strong>Polaris Ranger</strong><div class="assetDetailGrid"><div class="assetDetail"><strong>Category</strong><br>ATV/UTV</div><div class="assetDetail"><strong>Condition</strong><br>Fair</div><div class="assetDetail"><strong>Value</strong><br>$18,500</div></div><div class="row">SN: POL-RNG-2026 · Model: Northstar</div><div class="row">Repairs: tire / belt inspection</div><button class="badge2">Open</button> <button class="badge2">Attach Files</button></article><article class="assetCard"><div class="assetPhoto">Feeder</div><strong>East Plot Feeder</strong><div class="assetDetailGrid"><div class="assetDetail"><strong>Category</strong><br>Feeder</div><div class="assetDetail"><strong>Condition</strong><br>Needs Check</div><div class="assetDetail"><strong>Value</strong><br>$450</div></div><div class="row">Location: East Plot · Battery: low</div><div class="row">Parts: timer motor, battery</div><button class="badge needsAttention">Needs Attention</button></article></section>'+
+'<section class="grid2"><div class="card"><h2>Asset Detail Form</h2><select><option>Category: Heavy Equipment</option><option>Tractors</option><option>Implements</option><option>Attachments</option><option>Tools</option><option>Feeder</option><option>ATV/UTV</option><option>Mower</option></select><input placeholder="Asset name"><input placeholder="Make"><input placeholder="Model number"><input placeholder="Serial number"><input placeholder="Condition"><input placeholder="Estimated value"><input placeholder="Purchase cost"><input placeholder="Maintenance interval"><textarea placeholder="Usage, repairs, parts, notes"></textarea><button class="badge">Save Asset</button></div><div class="card"><h2>Photos / Documents</h2><input type="file" multiple><div class="fileAttachGrid"><div class="fileAttach">Photo</div><div class="fileAttach">Manual</div><div class="fileAttach">Receipt</div><div class="fileAttach">Repair Invoice</div></div></div></section>';
+}
+function documentManager(){
+return '<section class="docManagerGrid"><div class="card"><h2>Document Vault</h2><div class="docCategoryGrid"><div class="categoryTile"><strong>Leases</strong>property agreements</div><div class="categoryTile"><strong>Insurance</strong>policies / claims</div><div class="categoryTile"><strong>Equipment</strong>manuals / receipts</div><div class="categoryTile"><strong>Maps</strong>surveys / plats</div><div class="categoryTile"><strong>Permits</strong>hunting / burn / timber</div><div class="categoryTile"><strong>Maintenance</strong>invoices / parts</div><div class="categoryTile"><strong>Contacts</strong>cards / docs</div><div class="categoryTile"><strong>Other</strong>misc files</div></div><input type="file" multiple><select><option>Document Type: Lease</option><option>Insurance</option><option>Manual</option><option>Receipt</option><option>Map / Survey</option><option>Permit</option><option>Repair Invoice</option><option>Other</option></select><input placeholder="Tags: property, asset, hunter, season, vendor"><textarea placeholder="Document notes"></textarea><button class="badge">Upload / Save Document</button></div><div class="card"><h2>Recent Documents</h2><div class="docListItem"><div class="docIcon">PDF</div><div><strong>North Farm Survey</strong><br><small class="muted">Map / Survey · Property</small></div><button class="badge2">Open</button></div><div class="docListItem"><div class="docIcon">PDF</div><div><strong>Tractor Manual</strong><br><small class="muted">Equipment · John Deere</small></div><button class="badge2">Open</button></div><div class="docListItem"><div class="docIcon">CSV</div><div><strong>Equipment Import</strong><br><small class="muted">Asset data import</small></div><button class="badge2">Map</button></div></div></section><section class="grid2"><div class="card"><h2>Document Links</h2><div class="row">Link documents to property, equipment, contact, hunt, harvest, stand, or season.</div><div class="row">Use tags and categories for sorting and search.</div></div><div class="card"><h2>Document Controls</h2><div class="row">Save, edit, delete, archive, share, filter, sort and export.</div></div></section>';
+}
+function contactManager(){
+return '<section class="contactManagerGrid"><div class="card"><h2>Contacts</h2><p class="muted">Hunters with accounts are automatically captured into Contacts with profile information.</p><div class="contactCategoryGrid"><div class="categoryTile"><strong>Hunters</strong>account profiles</div><div class="categoryTile"><strong>Emergency</strong>emergency contacts</div><div class="categoryTile"><strong>Vendors</strong>repair / parts</div><div class="categoryTile"><strong>Landowner</strong>property contacts</div><div class="categoryTile"><strong>Processor</strong>deer processing</div><div class="categoryTile"><strong>Taxidermist</strong>trophy records</div><div class="categoryTile"><strong>Veterinary</strong>dogs / livestock</div><div class="categoryTile"><strong>Other</strong>custom</div></div><input placeholder="Name"><input placeholder="Phone"><input placeholder="Email"><select><option>Type: Hunter</option><option>Emergency Contact</option><option>Vendor</option><option>Landowner</option><option>Processor</option><option>Taxidermist</option><option>Other</option></select><input type="file"><textarea placeholder="Profile notes / relationship / services"></textarea><button class="badge">Save Contact</button></div><div class="card"><h2>Contact List</h2><div class="contactListItem"><div class="contactAvatar">H1</div><div><strong>Hunter 1</strong><br><small class="muted">Hunter Account · Active Hunt enabled</small></div><button class="badge2">Open</button></div><div class="contactListItem"><div class="contactAvatar">EC</div><div><strong>Emergency Contact</strong><br><small class="muted">SOS notification recipient</small></div><button class="badge2">Open</button></div><div class="contactListItem"><div class="contactAvatar">TX</div><div><strong>Taxidermist</strong><br><small class="muted">Harvest / trophy gallery link</small></div><button class="badge2">Open</button></div></div></section>';
+}
+function farmDetailsManager(){
+return '<section class="grid2"><div class="card"><h2>Farm / Property Profile</h2><input placeholder="Property / farm name"><input placeholder="Address / general location"><input placeholder="County / state / game zone"><input placeholder="Acres"><input placeholder="Parcel ID"><input placeholder="Owner / manager"><textarea placeholder="Property description, access notes, gates, roads, utilities, water, timber, fields, boundaries"></textarea><button class="badge">Save Property Details</button></div><div class="card"><h2>Property Details Display</h2><div class="propertyDetailGrid"><div class="assetDetail"><strong>Name</strong><br>North Farm</div><div class="assetDetail"><strong>Acres</strong><br>245</div><div class="assetDetail"><strong>County</strong><br>Example County</div><div class="assetDetail"><strong>Stands</strong><br>8</div><div class="assetDetail"><strong>Food Plots</strong><br>3</div><div class="assetDetail"><strong>Cameras</strong><br>12</div></div><br><div class="row">Property details feed Calendar, Weather & Maps, Stand Management, Documents, Contacts and Season Archive.</div></div></section>';
+}
+function maintenanceManager(){
+return '<section class="grid2"><div class="card"><h2>Maintenance / Usage / Cost Tracking</h2><div class="maintenanceTimeline"><div class="row"><strong>John Deere 4066M</strong><br><small class="muted">Hydraulic service due · parts estimate $240</small></div><div class="row"><strong>Polaris Ranger</strong><br><small class="muted">Belt inspection · tire repair · usage 12 hrs</small></div><div class="row"><strong>East Plot Feeder</strong><br><small class="muted">Battery low · timer motor check</small></div></div></div><div class="card"><h2>Log Maintenance / Usage</h2><select><option>Asset: John Deere 4066M</option><option>Polaris Ranger</option><option>East Plot Feeder</option></select><input placeholder="Usage hours / miles / run time"><input placeholder="Cost"><input placeholder="Parts used"><input placeholder="Repair vendor / contact"><textarea placeholder="Maintenance notes"></textarea><button class="badge">Save Maintenance Record</button></div></section>';
+}
+
+
+function foodPlotFeederManager(){
+return header("Food Plot & Feeder Management","Food Plots, Crops, Feeders, Feed Inventory, Costs & AI Planting Assist","Manage plot acreage, crop rotations, planting records, feeder inventory, feed usage by feeder and season, feed costs, and AI-assisted food plot recommendations.")+
+'<section class="plotMetricGrid"><div class="plotMetric"><strong>3</strong>Food Plots</div><div class="plotMetric"><strong>6.8</strong>Total Acres</div><div class="plotMetric"><strong>5</strong>Crop Types</div><div class="plotMetric"><strong>2026</strong>Season Plan</div></section>'+
+aiFoodPlotAssist()+foodPlotCards()+foodPlotRecordForm()+feederManagement();
+}
+function aiFoodPlotAssist(){
+return '<section class="aiAssistPanel"><h2>AI Food Plot Assistant</h2><p class="muted">AI should help recommend crop selection, planting windows, soil amendments, seed rates, maintenance, mowing, fertilizer, lime, and seasonal strategy based on acreage, soil, weather, deer usage, camera activity, and hunting objectives.</p><div class="grid2"><div><select><option>Goal: Attract deer during bow season</option><option>Goal: Late-season nutrition</option><option>Goal: Doe/fawn nutrition</option><option>Goal: Turkey and deer mix</option></select><select><option>Soil: Unknown / needs test</option><option>Sandy</option><option>Clay</option><option>Loam</option><option>Wet bottom</option></select><input placeholder="Plot acreage"><input placeholder="Sun exposure / shade"><textarea placeholder="Ask AI: What should I plant in East Plot this season?"></textarea><button class="badge">Generate Food Plot Plan</button></div><div><h3>Example AI Recommendation</h3><div class="row">East Plot: clover/chicory base with fall brassica strip.</div><div class="row">Soil test before lime/fertilizer decision.</div><div class="row">Planting window: late summer for fall attraction.</div><div class="row">Maintenance: mow clover after early growth, monitor browse pressure.</div></div></div></section>';
+}
+function foodPlotCards(){
+return '<section class="foodPlotGrid"><article class="foodPlotCard"><div class="foodPlotPhoto">East Plot</div><strong>East Plot · 2.4 acres</strong><div><span class="cropTag">Clover</span><span class="cropTag">Chicory</span><span class="cropTag">Brassica</span></div><div class="row">Status: active · high deer use</div><div class="row">Last planted: Fall 2026</div><button class="badge2">Open Plot</button></article><article class="foodPlotCard"><div class="foodPlotPhoto">West Clover</div><strong>West Clover · 1.8 acres</strong><div><span class="cropTag">Clover</span><span class="cropTag">Oats</span></div><div class="row">Status: mow next week</div><div class="row">Soil test: needed</div><button class="badge2">Open Plot</button></article><article class="foodPlotCard"><div class="foodPlotPhoto">South Field</div><strong>South Field · 2.6 acres</strong><div><span class="cropTag">Rye</span><span class="cropTag">Wheat</span><span class="cropTag">Turnips</span></div><div class="row">Status: planned</div><div class="row">Lime/fertilizer: pending</div><button class="badge2">Open Plot</button></article></section>';
+}
+function foodPlotRecordForm(){
+return '<section class="grid2"><div class="card"><h2>Food Plot Record</h2><input placeholder="Plot name"><input placeholder="Acreage"><input placeholder="Crop type / mix planted"><input placeholder="Seed rate"><input placeholder="Planting date"><input placeholder="Fertilizer / lime"><input placeholder="Cost"><textarea placeholder="Planting notes, soil test, maintenance, deer usage, camera activity"></textarea><button class="badge">Save Food Plot Record</button></div><div class="card"><h2>Plot History</h2><div class="maintenanceTimeline"><div class="row"><strong>East Plot</strong><br><small class="muted">Clover/chicory/brassica · Fall 2026 · $420</small></div><div class="row"><strong>West Clover</strong><br><small class="muted">Mowed · high browse pressure</small></div><div class="row"><strong>South Field</strong><br><small class="muted">Soil test requested · planned rye/wheat/turnip mix</small></div></div></div></section>';
+}
+function feederManagement(){
+return '<section class="feedMetricGrid"><div class="feedMetric"><strong>5</strong>Feeders</div><div class="feedMetric"><strong>1,250 lb</strong>Feed Ordered</div><div class="feedMetric"><strong>430 lb</strong>Feed On Hand</div><div class="feedMetric"><strong>$715</strong>Total Feed Cost</div></section>'+
+'<section class="feederGrid"><article class="feederCard"><div class="feederPhoto">East Feeder</div><strong>East Plot Feeder</strong><div class="row">Type: timed spin feeder</div><div class="row">Season used: 410 lb</div><div class="row">Status: battery low</div><button class="badge needsAttention">Needs Attention</button></article><article class="feederCard"><div class="feederPhoto">Creek Feeder</div><strong>Creek Crossing Feeder</strong><div class="row">Type: gravity feeder</div><div class="row">Season used: 280 lb</div><div class="row">Status: good</div><button class="badge2">Open</button></article><article class="feederCard"><div class="feederPhoto">West Feeder</div><strong>West Clover Feeder</strong><div class="row">Type: protein feeder</div><div class="row">Season used: 190 lb</div><div class="row">Status: refill soon</div><button class="badge2">Open</button></article></section>'+
+'<section class="grid2"><div class="card"><h2>Feed Usage / Cost Display</h2><div class="feedBarChart"><div class="feedBar" style="height:92%"><span>East 410</span></div><div class="feedBar" style="height:64%"><span>Creek 280</span></div><div class="feedBar" style="height:44%"><span>West 190</span></div><div class="feedBar" style="height:78%"><span>South 350</span></div></div><div class="row">Track feed ordered, feed on hand, feed used per feeder, per season, and total costs.</div></div><div class="card"><h2>Feed Inventory / Order Log</h2><input placeholder="Feed type / brand"><input placeholder="Quantity ordered pounds"><input placeholder="Quantity on hand pounds"><input placeholder="Cost"><input placeholder="Vendor / contact"><select><option>Assign to season: 2026</option><option>2025</option></select><textarea placeholder="Notes / delivery / feeder allocation"></textarea><button class="badge">Save Feed Order</button></div></section>'+
+'<section class="grid2"><div class="card"><h2>Feeder Usage Record</h2><select><option>Feeder: East Plot Feeder</option><option>Creek Crossing Feeder</option><option>West Clover Feeder</option></select><input placeholder="Amount added / used pounds"><input placeholder="Date"><input placeholder="Feed type"><input placeholder="Cost allocation"><textarea placeholder="Feeder notes, battery, timer, camera activity"></textarea><button class="badge">Save Feeder Usage</button></div><div class="card"><h2>Linked Records</h2><div class="row">Feeder data links to stand activity, deer movement, camera events, property costs, season archive, and AI Intel.</div><div class="row">Feed usage can help compare deer activity by feeder, crop, stand, weather and season.</div></div></section>';
+}
+
 function content(){
   try{
     var routes={
@@ -1772,7 +1873,7 @@ function content(){
       gallery:function(){return gallery()},
       storage:function(){return storageVault()},
       hunter:function(){return hunter()},
-      property:function(){return property()},
+      property:function(){return propertyManagementSuite()},
       stands:function(){return standManagementSuite()},
       comms:function(){return comms()},
       seasons:function(){return seasonArchive()},
@@ -1810,7 +1911,8 @@ var qt=document.getElementById("quickToggle");if(qt){qt.addEventListener("click"
 document.querySelectorAll("[data-settings]").forEach(function(b){b.addEventListener("click",function(){settingsSub=b.getAttribute("data-settings");render();window.scrollTo(0,0)})});
 document.querySelectorAll("[data-huntertab]").forEach(function(b){b.addEventListener("click",function(){hunterSub=b.getAttribute("data-huntertab");render();window.scrollTo(0,0)})});
 document.querySelectorAll("[data-hcm]").forEach(function(b){b.addEventListener("click",function(){hcmSub=b.getAttribute("data-hcm");render();window.scrollTo(0,0)})});
-document.querySelectorAll("[data-standtab]").forEach(function(b){b.addEventListener("click",function(){standSub=b.getAttribute("data-standtab");render();window.scrollTo(0,0)})});document.querySelectorAll("[data-pref]").forEach(function(i){i.addEventListener("change",function(){activePrefs[i.getAttribute("data-pref")]=i.checked;render()})});
+document.querySelectorAll("[data-standtab]").forEach(function(b){b.addEventListener("click",function(){standSub=b.getAttribute("data-standtab");render();window.scrollTo(0,0)})});
+document.querySelectorAll("[data-pmtab]").forEach(function(b){b.addEventListener("click",function(){propertySub=b.getAttribute("data-pmtab");page="property";render();window.scrollTo(0,0)})});document.querySelectorAll("[data-pref]").forEach(function(i){i.addEventListener("change",function(){activePrefs[i.getAttribute("data-pref")]=i.checked;render()})});
 var ss=document.getElementById("sosStart");if(ss){ss.addEventListener("click",function(){sosConfirm=true;render();});}
 var sy=document.getElementById("sosYes");if(sy){sy.addEventListener("click",function(){sosActive=true;sosConfirm=false;render();});}
 var sn=document.getElementById("sosNo");if(sn){sn.addEventListener("click",function(){sosConfirm=false;render();});}
@@ -1833,13 +1935,23 @@ var tl=document.getElementById("trackLost");if(tl){tl.addEventListener("click",f
 var tc=document.getElementById("trackContinue");if(tc){tc.addEventListener("click",function(){trackStatus="active";render();});}
 
 }
+
 function render(){
-  var fb=document.getElementById("fallbackLoad");
-  if(fb){fb.remove();}
-  renderNav();
-  document.getElementById("main").innerHTML=opsBar()+pageLogoHeader()+content()+quickActions();
-  bind();
+  try{
+    renderNav();
+    var main=document.getElementById("main");
+    if(!main){return;}
+    main.innerHTML=opsBar()+pageLogoHeader()+content()+quickActions();
+    bind();
+  }catch(err){
+    var main=document.getElementById("main");
+    if(main){
+      main.innerHTML='<section class="hero"><div><p class="muted">GitHub Load Fix</p><h1>VT Tracer Render Recovery</h1><p>A page component failed to load, but the app shell is still available.</p><p class="muted">'+esc(err.message||err)+'</p></div><div class="pill">v4.4.9.2</div></section><section class="card"><h2>Recovery Actions</h2><button class="badge" data-page="command">Command</button> <button class="badge2" data-page="active">Active Hunt</button> <button class="badge2" data-page="property">Property</button></section>';
+      try{bind();}catch(e){}
+    }
+  }
 }
+
 render();
 })();
 </script>
